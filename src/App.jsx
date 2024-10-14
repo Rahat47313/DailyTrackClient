@@ -1,11 +1,13 @@
-import Login from "./login/Login";
+import Navbar from "./components/Navbar";
+// import Login from "./login/Login";
 
 function App() {
 
   return (
     <>
     <div className="font-inter">
-      <Login />
+      {/* <Login /> */}
+      <Navbar />
     </div>
     </>
   )
