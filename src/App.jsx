@@ -1,4 +1,6 @@
+import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 // import Login from "./login/Login";
 
 function App() {
@@ -8,6 +10,8 @@ function App() {
     <div className="font-inter">
       {/* <Login /> */}
       <Navbar />
+      <Sidebar />
+      <Dashboard />
     </div>
     </>
   )
