@@ -13,7 +13,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg viewBox="0 0 500 500">
@@ -31,7 +31,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg viewBox="0 0 500 500">
@@ -52,17 +52,14 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
-                  </svg>
+                  <div className="w-5 h-5 fill-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
+                    <svg viewBox="0 0 500 500">
+                      <path d="M71.36 35.15c.1-5.77.18-11.52.23-17.25C71.72 5.23 80.77-1.42 92.74.3c17.89 2.57 14.16 22.22 14.45 34.71.01.49.26.74.75.74h70.04c.36 0 .54-.18.54-.54.08-6.21.1-12.35.06-18.41-.17-21.84 35.41-23.05 35.64.54.06 6.04.09 11.99.08 17.86 0 .31.24.56.55.56h70.3c.37 0 .56-.19.56-.56.03-7.58-.93-18.45 1.14-24.4 5.87-16.93 34.68-13.07 34.56 5.7-.04 6.17-.02 12.34.07 18.52.01.49.26.74.75.74h70.07c.36 0 .54-.18.55-.55.04-6.09.06-12.13.03-18.12-.09-22.52 35.7-23.16 35.67.54-.01 5.84.01 11.69.07 17.53 0 .39.2.59.59.59 12.96.01 26.63-1.15 38.97 4.29 15.55 6.84 26.73 20.23 30.41 36.84.94 4.24 1.41 11.65 1.42 22.23.01 111.97.01 223.95 0 335.93 0 11.04-.35 18.46-1.04 22.24-4.61 25.23-26.62 42.66-52.53 42.67-130.86.07-261.72.07-392.57.02-25.52-.01-47.23-16.39-52.52-41.61C.44 454.12 0 446.72 0 436.13V89.31c0-24.75 15.74-45.66 39.79-51.83 9.23-2.37 20.69-1.85 30.94-1.72.41.01.62-.2.63-.61zm249.22 60.19c-5.35 17.75-34.2 15.35-34.59-4.94-.12-5.98-.24-12.06-.37-18.24-.01-.47-.25-.7-.71-.7h-70.04c-.35 0-.53.17-.54.52-.17 7.48.95 17.41-1.14 23.67-3.91 11.69-18.04 14.73-27.46 8.39-4.51-3.04-6.83-7.86-6.96-14.46-.12-5.95-.2-11.82-.25-17.59 0-.36-.18-.54-.54-.54h-70.27c-.35 0-.53.17-.54.52-.1 4.58-.1 9.18-.02 13.81.21 11.76-4.39 21.37-17.71 21.33-7.78-.03-14.44-3.64-16.96-11.09-1.98-5.86-1.04-16.46-1.07-23.92-.01-.41-.22-.62-.62-.62-4.27-.04-8.53-.05-12.78-.04-9.69.03-17.32 1.23-20.88 10.37-.9 2.31-1.37 6.09-1.41 11.34-.12 16.23-.09 32.57.08 49.04 0 .47.24.7.71.7H463.7c.36 0 .54-.18.54-.55.06-16.03.07-32.07.03-48.11-.02-10.13-1.17-18.29-11.13-21.64-6.08-2.05-16.47-1.12-23.96-1.13-.39 0-.58.19-.59.58-.13 7.5.98 17.58-1.22 23.88-4 11.42-17.87 14.34-27.2 8.24-4.61-3.01-6.98-7.87-7.12-14.58-.12-5.9-.2-11.68-.26-17.34-.01-.43-.36-.78-.79-.78h-70.03c-.37 0-.56.19-.56.56.01 5.06 0 10.08-.04 15.06-.02 3.81-.29 6.56-.79 8.26zM35.74 446.92c.01 10.41 7.63 17.43 17.83 17.43 129.63-.03 259.27-.04 388.9-.04 5.24 0 9.1-.52 11.57-1.57 6.82-2.9 10.23-8.89 10.23-17.96V179.43c0-.55-.28-.83-.83-.83H36.28c-.36 0-.55.18-.55.55-.05 89.31-.05 178.57.01 267.77z" />
+                      <path d="M403.83 346.46h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM309.94 346.46h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM216.06 346.46h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM122.17 346.46h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM403.83 413.29h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM309.94 413.29h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM216.06 413.29h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM122.17 413.29h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM403.83 279.63h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM309.94 279.63h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM216.06 279.63h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12zM122.17 279.63h-26c-6.6 0-12-5.4-12-12v-26c0-6.6 5.4-12 12-12h26c6.6 0 12 5.4 12 12v26c0 6.6-5.4 12-12 12z" />
+                    </svg>
+                  </div>
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Calendar
                   </span>
@@ -74,17 +71,27 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 18"
-                  >
-                    <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                  </svg>
+                  <div className="w-5 h-5 fill-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
+                    <svg
+                      id="Layer_1"
+                      x="0"
+                      y="0"
+                      version="1.1"
+                      viewBox="0 0 500 500"
+                    >
+                      <switch>
+                        <g>
+                          <path d="M314.87 435.63H79.5c-3.23 0-5.86-2.63-5.86-5.86V70.24c0-3.23 2.62-5.86 5.86-5.86h341c3.23 0 5.86 2.62 5.86 5.86v253.89c0 1.56-.62 3.04-1.72 4.15L319.01 433.91c-1.1 1.1-2.59 1.72-4.14 1.72zM85.36 423.91h227.08l102.19-102.2V76.1H85.36v347.81z" />
+                          <path d="M314.87 435.63c-.76 0-1.52-.15-2.24-.45-2.19-.91-3.62-3.04-3.62-5.41L309 324.13c0-1.55.62-3.04 1.72-4.15 1.1-1.1 2.59-1.72 4.14-1.72H420.5c2.37 0 4.5 1.43 5.41 3.62.91 2.19.41 4.7-1.27 6.38L319.01 433.91c-1.12 1.12-2.62 1.72-4.14 1.72zm5.85-105.64v85.64l85.63-85.64h-85.63z" />
+                          <path d="M315.42 500c-1.03 0-2.03-.26-2.93-.79l-111.5-64.37c-2.29-1.33-3.41-4.03-2.73-6.59.69-2.56 3.01-4.34 5.66-4.34h108.52l87.52-87.53c2.09-2.09 5.37-2.29 7.72-.5 2.33 1.79 2.98 5.03 1.51 7.58L320.5 497.07c-.77 1.35-2.06 2.32-3.56 2.73-.51.13-1.01.2-1.52.2zm-89.63-64.37 87.48 50.51 63.5-110-57.76 57.77c-1.1 1.1-2.59 1.72-4.14 1.72h-89.08zM79.5 363.79c-1.02 0-2.02-.26-2.93-.78L2.93 320.49c-2.8-1.61-3.76-5.2-2.14-8l73.64-127.55c1.33-2.29 4.04-3.41 6.59-2.73 2.56.69 4.34 3.01 4.34 5.66v170.07c0 2.09-1.12 4.03-2.93 5.07-.91.53-1.92.78-2.93.78zm-65.64-50.52 59.78 34.51V209.74L13.86 313.27zM420.5 318c-.5 0-1.02-.07-1.52-.2-2.56-.68-4.34-3-4.34-5.66V142.07c0-2.09 1.12-4.03 2.93-5.07 1.81-1.05 4.05-1.05 5.86 0l73.64 42.52c1.35.78 2.32 2.05 2.73 3.56.41 1.5.19 3.1-.59 4.45l-73.64 127.54c-1.07 1.84-3.02 2.93-5.07 2.93zm5.85-165.78v138.05l59.78-103.54-59.78-34.51zM296.16 76.1H147.41c-2.1 0-4.03-1.11-5.07-2.93-1.05-1.81-1.05-4.05 0-5.86l37.17-64.38c.78-1.35 2.05-2.33 3.56-2.73 1.5-.4 3.1-.19 4.45.59l110.95 64.06c2.09.89 3.55 2.97 3.55 5.39 0 3.24-2.62 5.86-5.86 5.86zm-138.6-11.72h116.65l-87.49-50.51-29.16 50.51zM364.74 133.54H135.26c-3.23 0-5.86-2.62-5.86-5.86s2.63-5.86 5.86-5.86h229.48c3.23 0 5.86 2.62 5.86 5.86s-2.63 5.86-5.86 5.86zM364.74 194.71H135.26c-3.23 0-5.86-2.62-5.86-5.86 0-3.23 2.63-5.86 5.86-5.86h229.48c3.23 0 5.86 2.62 5.86 5.86 0 3.23-2.63 5.86-5.86 5.86zM364.74 255.86H135.26c-3.23 0-5.86-2.62-5.86-5.86 0-3.23 2.63-5.86 5.86-5.86h229.48c3.23 0 5.86 2.63 5.86 5.86 0 3.24-2.63 5.86-5.86 5.86zM283.04 317.02H135.26c-3.23 0-5.86-2.63-5.86-5.86 0-3.23 2.63-5.86 5.86-5.86h147.78c3.23 0 5.86 2.63 5.86 5.86 0 3.23-2.63 5.86-5.86 5.86zM283.04 378.18H135.26c-3.23 0-5.86-2.63-5.86-5.86 0-3.23 2.63-5.86 5.86-5.86h147.78c3.23 0 5.86 2.63 5.86 5.86 0 3.24-2.63 5.86-5.86 5.86z" />
+                          <path d="M261.38 99.58c3.07 1.78 7.04.71 8.82-2.36l19.37-33.54c1.78-3.07.71-7.04-2.36-8.82-3.07-1.78-7.04-.71-8.82 2.36l-19.37 33.54c-1.77 3.08-.71 7.05 2.36 8.82z" />
+                          <path d="M300.1 0c-17.83 0-32.28 14.45-32.28 32.28 0 17.83 14.45 32.28 32.28 32.28 17.83 0 32.28-14.45 32.28-32.28C332.37 14.45 317.92 0 300.1 0zm0 51.64c-10.7 0-19.37-8.67-19.37-19.37 0-10.7 8.67-19.37 19.37-19.37 10.7 0 19.37 8.67 19.37 19.37-.01 10.7-8.68 19.37-19.37 19.37z" />
+                        </g>
+                      </switch>
+                    </svg>
+                  </div>
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Sticky Wall
                   </span>
@@ -98,17 +105,9 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 17 20"
-                  >
-                    <path d="M7.958 19.393a7.7 7.7 0 0 1-6.715-3.439c-2.868-4.832 0-9.376.944-10.654l.091-.122a3.286 3.286 0 0 0 .765-3.288A1 1 0 0 1 4.6.8c.133.1.313.212.525.347A10.451 10.451 0 0 1 10.6 9.3c.5-1.06.772-2.213.8-3.385a1 1 0 0 1 1.592-.758c1.636 1.205 4.638 6.081 2.019 10.441a8.177 8.177 0 0 1-7.053 3.795Z" />
-                  </svg>
+                  <div className="w-5 h-5 rounded-md bg-red-500"></div>
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Personal
                   </span>
@@ -120,17 +119,9 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 16 20"
-                  >
-                    <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z" />
-                  </svg>
+                  <div className="w-5 h-5 rounded-md bg-yellow-500"></div>
                   <span className="flex-1 ms-3 whitespace-nowrap">Work</span>
                   <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
                     4
@@ -140,7 +131,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <span className="">+ Add New List</span>
                 </a>
@@ -152,34 +143,42 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 17 20"
-                  >
-                    <path d="M7.958 19.393a7.7 7.7 0 0 1-6.715-3.439c-2.868-4.832 0-9.376.944-10.654l.091-.122a3.286 3.286 0 0 0 .765-3.288A1 1 0 0 1 4.6.8c.133.1.313.212.525.347A10.451 10.451 0 0 1 10.6 9.3c.5-1.06.772-2.213.8-3.385a1 1 0 0 1 1.592-.758c1.636 1.205 4.638 6.081 2.019 10.441a8.177 8.177 0 0 1-7.053 3.795Z" />
-                  </svg>
+                  <div className="w-5 h-5 fill-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
+                    <svg viewBox="0 0 500 500">
+                      <switch>
+                        <g>
+                          <path d="m494.56 311.25-47.91-38.83c-1.27-1.03-2.46-2.16-3.54-3.38-11.01-12.38-9.43-30.94 3.54-41.46l47.91-38.83c4.76-3.85 6.61-10.07 4.69-15.73-11.38-33.59-30.13-64.43-54.86-90.56-4.18-4.42-10.74-5.99-16.62-3.99l-59.11 20.17c-1.57.54-3.19.95-4.84 1.24-16.74 2.91-32.79-7.68-35.84-23.66l-11.29-59.01c-1.12-5.86-5.84-10.5-11.95-11.74C286.88 1.85 268.56 0 250 0c-18.57 0-36.9 1.85-54.78 5.48-6.11 1.24-10.83 5.88-11.95 11.75l-11.26 59c-.3 1.57-.73 3.11-1.3 4.62-5.73 15.3-23.36 23.27-39.38 17.8L72.22 78.47c-5.87-2.01-12.44-.43-16.62 3.99-24.73 26.13-43.48 56.97-54.86 90.56-1.92 5.67-.07 11.88 4.69 15.73l47.91 38.83c1.28 1.03 2.46 2.16 3.54 3.38 11.01 12.38 9.43 30.94-3.54 41.46l-47.9 38.83C.68 315.1-1.17 321.32.75 326.98c11.38 33.59 30.12 64.43 54.86 90.56 4.18 4.42 10.74 5.99 16.62 3.99l59.11-20.17c1.57-.54 3.19-.95 4.84-1.24 16.74-2.91 32.79 7.68 35.84 23.66l11.26 59c1.12 5.86 5.84 10.5 11.95 11.75 17.87 3.62 36.2 5.47 54.77 5.47 18.56 0 36.88-1.85 54.74-5.47 6.11-1.24 10.83-5.88 11.95-11.74l11.29-59.01c.3-1.58.73-3.12 1.3-4.63 5.73-15.29 23.36-23.26 39.38-17.8l59.11 20.17c5.87 2 12.43.43 16.62-3.99 24.73-26.13 43.48-56.96 54.86-90.56 1.92-5.66.07-11.87-4.69-15.72zm-244.57 11.69c-40.28 0-72.94-32.66-72.94-72.94s32.66-72.94 72.94-72.94 72.94 32.66 72.94 72.94-32.65 72.94-72.94 72.94z" />
+                        </g>
+                      </switch>
+                    </svg>
+                  </div>
                   <span className="ms-3">Settings</span>
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 16 20"
-                  >
-                    <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z" />
-                  </svg>
+                  <div className="w-5 h-5 fill-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
+                    <svg
+                      id="Layer_1"
+                      x="0"
+                      y="0"
+                      version="1.1"
+                      viewBox="0 0 500 500"
+                    >
+                      <switch>
+                        <g>
+                          <path d="M357.42 374.48c-5.69 0-11.38-2.15-15.76-6.45-8.86-8.71-8.98-22.94-.27-31.8L426.15 250l-84.76-86.22c-8.71-8.86-8.58-23.09.27-31.8s23.09-8.59 31.8.27l100.26 101.99c8.6 8.75 8.6 22.78 0 31.53L373.46 367.75c-4.4 4.48-10.22 6.73-16.04 6.73z" />
+                          <path d="M450.52 272.49H214.19c-12.42 0-22.49-10.07-22.49-22.49s10.07-22.49 22.49-22.49h236.33c12.42 0 22.49 10.07 22.49 22.49s-10.07 22.49-22.49 22.49z" />
+                          <path d="M343.1 500H99.61c-43.99 0-79.78-38.24-79.78-85.25V85.25C19.83 38.24 55.62 0 99.61 0H343.1c12.42 0 22.49 10.07 22.49 22.49s-10.07 22.49-22.49 22.49H99.61c-19.19 0-34.81 18.07-34.81 40.28v329.5c0 22.21 15.61 40.28 34.81 40.28H343.1c12.42 0 22.49 10.07 22.49 22.49 0 12.4-10.07 22.47-22.49 22.47z" />
+                        </g>
+                      </switch>
+                    </svg>
+                  </div>
                   <span className="ms-3">Sign Out</span>
                 </a>
               </li>
