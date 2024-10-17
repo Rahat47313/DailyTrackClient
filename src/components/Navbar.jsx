@@ -1,7 +1,13 @@
-import DailyTrack from "../assets/logo/DailyTrack.svg";
+// import PropTypes from "prop-types";
+import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
+import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
 import ProfilePic from "../assets/profile/profile.svg";
+import { useThemeMode } from "flowbite-react";
+// import { IoIosSunny } from "react-icons/io";
+// import { IoIosMoon } from "react-icons/io";
 
 export default function Navbar() {
+  const { computedMode } = useThemeMode(); // Detect the current theme mode
   return (
     <>
       <div>
@@ -33,7 +39,7 @@ export default function Navbar() {
                 </button>
                 <a href="#" className="flex ms-2 md:me-24">
                   <img
-                    src={DailyTrack}
+                    src={computedMode === "dark" ? DailyTrack_dark : DailyTrack_light}
                     className="h-8 me-3"
                     alt="DailyTrack Logo"
                   />
@@ -41,7 +47,23 @@ export default function Navbar() {
               </div>
               <div className="flex items-center">
                 <div className="flex items-center ms-3">
-                  <div>
+                  <div className="flex items-center gap-5">
+                    {/* <label className="cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only toggle-check"
+                        onClick={toggleTheme}
+                      /> */}
+                      {/* sr-only peer */}
+                      {/* <div className="toggle-button flex items-center">
+                        <div className="sun absolute z-[100] text-[22px]">
+                          <IoIosSunny />
+                        </div>
+                        <div className="moon absolute z-[100] text-[22px]">
+                          <IoIosMoon />
+                        </div>
+                      </div>
+                    </label> */}
                     <button
                       type="button"
                       className="flex text-sm bg-white rounded-full border-red-600 border-[2px] focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -122,3 +144,7 @@ export default function Navbar() {
     </>
   );
 }
+
+// Navbar.propTypes = {
+//   toggleTheme: PropTypes.func,
+// };

@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* theme toggle button */
+
+.toggle-button{
+    width:70px;
+    height:32px;
+    position: relative;
+    background: #ebebeb;
+    border-radius: 200px;
+    box-shadow: inset 0px 5px 5px rgba(0,0,0,0.4), inset 0px -5px 5px rgba(255,255,255,0.4);
+  }
+  
+  .toggle-button::after{
+    content: "";
+    width:28px;
+    height: 28px;
+    position: absolute;
+    top:2px;
+    left:2px;
+    background: linear-gradient(180deg,#ffcc89,#d8860b);
+    border-radius: 200px;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+  }
+  
+  .toggle-check:checked + .toggle-button {
+    background: #242424;
+  }
+  
+  .toggle-check:checked + .toggle-button:after {
+    left:68px;
+    transform: translateX(-100%);
+    background: linear-gradient(180deg,#777,#3a3a3a);
+  }
+  
+  .toggle-button, .toggle-button:after {
+    transition: 0.3s
+  }
+  
+  .toggle-button:active:after{ 
+    width: 36px; 
+  }
+  
+  .toggle-button .sun {
+    left:5px;
+    color:#fff;
+    transition: 0.3s;
+  }
+  .toggle-button .moon {
+    left:43px;
+    color:#7e7e7e;
+    transition: 0.3s;
+  }
+  .toggle-check:checked + .toggle-button .sun {
+    color:#7e7e7e;
+  }
+  .toggle-check:checked + .toggle-button .moon {
+    color:#fff;
+  }
+  
+  /* theme toggle button */

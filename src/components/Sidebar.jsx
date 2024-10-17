@@ -6,14 +6,14 @@ export default function Sidebar() {
         className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
         aria-label="Sidebar"
       >
-        <div className="h-full text-sm px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <div className="h-full text-sm px-3 pb-4 overflow-y-auto rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-800">
           <div className="space-y-2 font-medium">
             <div>TASKS</div>
             <ul>
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2  hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg viewBox="0 0 500 500">
@@ -31,7 +31,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg viewBox="0 0 500 500">
@@ -52,7 +52,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg viewBox="0 0 500 500">
@@ -71,7 +71,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg
@@ -105,7 +105,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 rounded-md bg-red-500"></div>
                   <span className="flex-1 ms-3 whitespace-nowrap">
@@ -119,7 +119,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 rounded-md bg-yellow-500"></div>
                   <span className="flex-1 ms-3 whitespace-nowrap">Work</span>
@@ -131,7 +131,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <span className="">+ Add New List</span>
                 </a>
@@ -143,7 +143,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg viewBox="0 0 500 500">
@@ -160,7 +160,7 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <svg
