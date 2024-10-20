@@ -3,7 +3,7 @@ export default function Sidebar() {
     <>
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+        className="fixed top-0 left-0 z-10 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
         aria-label="Sidebar"
       >
         <div className="h-full text-sm px-3 pb-4 overflow-y-auto rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-800">
@@ -63,7 +63,7 @@ export default function Sidebar() {
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Calendar
                   </span>
-                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-white">
                     3
                   </span>
                 </a>
@@ -111,7 +111,7 @@ export default function Sidebar() {
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Personal
                   </span>
-                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-white">
                     3
                   </span>
                 </a>
@@ -123,7 +123,7 @@ export default function Sidebar() {
                 >
                   <div className="w-5 h-5 rounded-md bg-yellow-500"></div>
                   <span className="flex-1 ms-3 whitespace-nowrap">Work</span>
-                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-white">
                     4
                   </span>
                 </a>

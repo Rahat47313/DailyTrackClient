@@ -1,17 +1,14 @@
-// import PropTypes from "prop-types";
 import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
 import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
 import ProfilePic from "../assets/profile/profile.svg";
 import { useThemeMode } from "flowbite-react";
-// import { IoIosSunny } from "react-icons/io";
-// import { IoIosMoon } from "react-icons/io";
 
 export default function Navbar() {
   const { computedMode } = useThemeMode(); // Detect the current theme mode
   return (
     <>
       <div>
-        <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <nav className="fixed top-0 z-20 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
           <div className="px-3 py-3 lg:px-5 lg:pl-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-start rtl:justify-end">
@@ -20,7 +17,7 @@ export default function Navbar() {
                   data-drawer-toggle="logo-sidebar"
                   aria-controls="logo-sidebar"
                   type="button"
-                  className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                  className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                 >
                   <span className="sr-only">Open sidebar</span>
                   <svg
@@ -48,22 +45,6 @@ export default function Navbar() {
               <div className="flex items-center">
                 <div className="flex items-center ms-3">
                   <div className="flex items-center gap-5">
-                    {/* <label className="cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only toggle-check"
-                        onClick={toggleTheme}
-                      /> */}
-                      {/* sr-only peer */}
-                      {/* <div className="toggle-button flex items-center">
-                        <div className="sun absolute z-[100] text-[22px]">
-                          <IoIosSunny />
-                        </div>
-                        <div className="moon absolute z-[100] text-[22px]">
-                          <IoIosMoon />
-                        </div>
-                      </div>
-                    </label> */}
                     <button
                       type="button"
                       className="flex text-sm bg-white rounded-full border-red-600 border-[2px] focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -79,7 +60,7 @@ export default function Navbar() {
                     </button>
                   </div>
                   <div
-                    className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="z-30 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                     id="dropdown-user"
                   >
                     <div className="px-4 py-3" role="none">
@@ -144,7 +125,3 @@ export default function Navbar() {
     </>
   );
 }
-
-// Navbar.propTypes = {
-//   toggleTheme: PropTypes.func,
-// };
