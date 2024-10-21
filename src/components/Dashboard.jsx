@@ -1,18 +1,28 @@
 import { Checkbox } from "flowbite-react";
 import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
+import SidebarRight from "./SidebarRight";
 
 export default function Dashboard() {
   return (
     <>
       <div className="p-4 md:ml-64 text-gray-900 dark:text-white">
+        <div className="fixed top-0 right-0 z-40 w-[400px] h-screen">
+          <SidebarRight />
+        </div>
         <div className="p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700 mt-[60px]">
           <div className="font-bold text-2xl mb-4">Today</div>
           <button className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full">
             <TiPlus />
             <div>Add New Task</div>
           </button>
-          <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
+          <button
+            type="button"
+            data-drawer-target="drawer-navigation"
+            data-drawer-show="drawer-navigation"
+            aria-controls="drawer-navigation"
+            className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full"
+          >
             <div className="flex items-center gap-4">
               <Checkbox />
               <div>Research content ideas</div>
@@ -21,7 +31,13 @@ export default function Dashboard() {
               <IoIosArrowForward />
             </div>
           </button>
-          <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full">
+          <button
+            type="button"
+            data-drawer-target="drawer-navigation"
+            data-drawer-show="drawer-navigation"
+            aria-controls="drawer-navigation"
+            className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
+          >
             <div className="flex items-center gap-4">
               <Checkbox />
               <div>Create a database of guest authors</div>
@@ -30,7 +46,13 @@ export default function Dashboard() {
               <IoIosArrowForward />
             </div>
           </button>
-          <button className="flex flex-col border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
+          <button
+            type="button"
+            data-drawer-target="drawer-navigation"
+            data-drawer-show="drawer-navigation"
+            aria-controls="drawer-navigation"
+            className="flex flex-col border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full"
+          >
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-4">
                 <Checkbox />
@@ -62,7 +84,13 @@ export default function Dashboard() {
               </div>
             </div>
           </button>
-          <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full">
+          <button
+            type="button"
+            data-drawer-target="drawer-navigation"
+            data-drawer-show="drawer-navigation"
+            aria-controls="drawer-navigation"
+            className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
+          >
             <div className="flex items-center gap-4">
               <Checkbox />
               <div>Consult accountant</div>
@@ -79,7 +107,13 @@ export default function Dashboard() {
               <TiPlus />
               <div>Add New Task</div>
             </button>
-            <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
+            <button
+              type="button"
+              data-drawer-target="drawer-navigation"
+              data-drawer-show="drawer-navigation"
+              aria-controls="drawer-navigation"
+              className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full"
+            >
               <div className="flex items-center gap-4">
                 <Checkbox />
                 <div>Create job posting for SEO specialist</div>
@@ -88,7 +122,13 @@ export default function Dashboard() {
                 <IoIosArrowForward />
               </div>
             </button>
-            <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
+            <button
+              type="button"
+              data-drawer-target="drawer-navigation"
+              data-drawer-show="drawer-navigation"
+              aria-controls="drawer-navigation"
+              className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full"
+            >
               <div className="flex items-center gap-4">
                 <Checkbox />
                 <div>Request design assets for landing page</div>
@@ -104,7 +144,13 @@ export default function Dashboard() {
               <TiPlus />
               <div>Add New Task</div>
             </button>
-            <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
+            <button
+              type="button"
+              data-drawer-target="drawer-navigation"
+              data-drawer-show="drawer-navigation"
+              aria-controls="drawer-navigation"
+              className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full"
+            >
               <div className="flex items-center gap-4">
                 <Checkbox />
                 <div>Research content ideas</div>
@@ -113,7 +159,13 @@ export default function Dashboard() {
                 <IoIosArrowForward />
               </div>
             </button>
-            <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
+            <button
+              type="button"
+              data-drawer-target="drawer-navigation"
+              data-drawer-show="drawer-navigation"
+              aria-controls="drawer-navigation"
+              className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full"
+            >
               <div className="flex items-center gap-4">
                 <Checkbox />
                 <div>Create a database of guest authors</div>
@@ -122,7 +174,13 @@ export default function Dashboard() {
                 <IoIosArrowForward />
               </div>
             </button>
-            <button className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
+            <button
+              type="button"
+              data-drawer-target="drawer-navigation"
+              data-drawer-show="drawer-navigation"
+              aria-controls="drawer-navigation"
+              className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full"
+            >
               <div className="flex items-center gap-4">
                 <Checkbox />
                 <div>Renew driver&apos;s license</div>

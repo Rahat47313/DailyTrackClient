@@ -23,7 +23,7 @@ function App() {
         <Navbar />
         <Sidebar />
         <Dashboard />
-        <SidebarRight />
+        {/* <SidebarRight /> */}
         <div className="fixed z-30 top-2 right-[80px]">
           {/* Dark theme toggle button */}
           <DarkThemeToggle
