@@ -29,6 +29,7 @@ export default {
     extend: {
       fontFamily: {
         'inter': ['Inter', 'sans-serif'],
+        'gloria': ['Gloria Hallelujah', 'cursive'],
       }
     },
   },
