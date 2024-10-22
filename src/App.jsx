@@ -3,7 +3,6 @@ import { DarkThemeToggle, Flowbite } from "flowbite-react";
 import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import SidebarRight from "./components/SidebarRight";
 // import Login from "./login/Login";
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
         <Navbar />
         <Sidebar />
         <Dashboard />
-        {/* <SidebarRight /> */}
         <div className="fixed z-30 top-2 right-[80px]">
           {/* Dark theme toggle button */}
           <DarkThemeToggle

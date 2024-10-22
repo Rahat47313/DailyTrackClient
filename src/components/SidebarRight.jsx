@@ -4,7 +4,7 @@ import { TiPlus } from "react-icons/ti";
 export default function SidebarRight() {
   const customTheme = {
     root: {
-      base: "absolute w-full", // Styling the outer wrapper
+      base: "w-full", // Styling the outer wrapper
     },
     triggerButton: {
       base: "text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 font-medium rounded-lg text-sm text-center flex justify-center items-center dark:bg-gray-700 dark:hover:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
@@ -17,7 +17,7 @@ export default function SidebarRight() {
     <>
       <div
         id="drawer-navigation"
-        className="h-screen p-8 overflow-y-auto transition-transform translate-x-[100%] bg-white dark:bg-gray-800"
+        className="pointer-events-auto h-screen text-start p-8 overflow-y-auto transition-transform translate-x-[100%] bg-white dark:bg-gray-800"
         tabIndex={-1}
         aria-labelledby="drawer-navigation-label"
       >
@@ -128,7 +128,7 @@ export default function SidebarRight() {
                 <TiPlus />
                 <div>Add New Subtask</div>
               </button>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 pl-1">
                 <Checkbox />
                 <div>Research content ideas</div>
               </div>
