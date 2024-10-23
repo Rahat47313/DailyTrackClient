@@ -82,26 +82,26 @@ export default function Day() {
         <div className="flex items-center">
           <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
             <div
-              className="pointer-events-none absolute inset-0 rounded-md ring-1 ring-inset ring-gray-300"
+              className="pointer-events-none absolute inset-0 rounded-md ring-1 ring-inset ring-gray-300 dark:ring-gray-600"
               aria-hidden="true"
             />
             <button
               type="button"
-              className="flex items-center justify-center rounded-l-md py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+              className="flex items-center justify-center rounded-l-md py-2.5 pl-3 pr-4 text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 focus:relative md:w-9 md:px-2 bg-white dark:bg-gray-800 md:hover:bg-gray-50 md:hover:dark:bg-gray-700"
             >
               <span className="sr-only">Previous day</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <button
               type="button"
-              className="hidden px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block"
+              className="hidden px-3.5 py-2.5 text-sm font-semibold text-gray-900 dark:text-white bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 focus:relative md:block"
             >
               Today
             </button>
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
               type="button"
-              className="flex items-center justify-center rounded-r-md py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+              className="flex items-center justify-center rounded-r-md py-2.5 pl-4 pr-3 text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 focus:relative md:w-9 md:px-2 bg-white dark:bg-gray-800 md:hover:bg-gray-50 md:hover:dark:bg-gray-700"
             >
               <span className="sr-only">Next day</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
@@ -111,7 +111,7 @@ export default function Day() {
             <Menu as="div" className="relative">
               <Menu.Button
                 type="button"
-                className="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                className="text-gray-900 bg-white hover:bg-gray-50 border border-gray-300 font-semibold rounded-lg text-sm p-2.5 text-center flex justify-center items-center dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
               >
                 Day view
                 <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
