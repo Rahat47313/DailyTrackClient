@@ -10,6 +10,7 @@ export default function Upcoming() {
         <div className="pointer-events-none fixed top-0 right-0 z-40 w-[400px] h-screen">
           <SidebarRight />
         </div>
+        <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">Upcoming Tasks</div>
         <div className="p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
           <div className="font-bold text-2xl mb-4">Today</div>
           <button
