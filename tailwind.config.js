@@ -30,7 +30,10 @@ export default {
       fontFamily: {
         'inter': ['Inter', 'sans-serif'],
         'gloria': ['Gloria Hallelujah', 'cursive'],
-      }
+      },
+      gridTemplateRows: {
+        '24': 'repeat(24, minmax(0, 1fr))',
+      },
     },
   },
   plugins: [
