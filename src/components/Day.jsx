@@ -74,7 +74,7 @@ export default function Day() {
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">
-      <header className="flex flex-none items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
+      {/* <header className="flex flex-none items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div>
           <h1 className="text-base font-semibold leading-6">
             <time dateTime="2022-01-22" className="sm:hidden">
@@ -84,7 +84,9 @@ export default function Day() {
               January 22, 2022
             </time>
           </h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Saturday</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Saturday
+          </p>
         </div>
         <div className="flex items-center">
           <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
@@ -326,7 +328,7 @@ export default function Day() {
             </Transition>
           </Menu>
         </div>
-      </header>
+      </header> */}
       <div className="isolate flex flex-auto overflow-hidden">
         <div ref={container} className="flex flex-auto flex-col overflow-auto">
           <div

@@ -29,7 +29,7 @@ export default function Week() {
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">
-      <header className="flex flex-none items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
+      {/* <header className="flex flex-none items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <h1 className="text-base font-semibold leading-6">
           <time dateTime="2022-01">January 2022</time>
         </h1>
@@ -273,7 +273,7 @@ export default function Week() {
             </Transition>
           </Menu>
         </div>
-      </header>
+      </header> */}
       <div
         ref={container}
         className="isolate flex flex-auto flex-col overflow-auto"
