@@ -1,12 +1,6 @@
-import { Fragment } from "react";
 import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
   ClockIcon,
-  EllipsisHorizontalIcon,
 } from "@heroicons/react/20/solid";
-import { Menu, Transition } from "@headlessui/react";
 
 const days = [
   { date: "2021-12-27", events: [] },
