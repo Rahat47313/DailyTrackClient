@@ -72,19 +72,22 @@ export default function Calendar() {
         break;
       case VIEW_OPTIONS.WEEK:
         // Set to the start of the current week
-        const weekStart = new Date(today);
-        weekStart.setDate(today.getDate() - today.getDay());
-        setCurrentDate(weekStart);
+        // const weekStart = new Date(today);
+        // weekStart.setDate(today.getDate() - today.getDay());
+        // setCurrentDate(weekStart);
+        setCurrentDate(today);
         break;
       case VIEW_OPTIONS.MONTH:
         // Set to the first day of the current month
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        setCurrentDate(monthStart);
+        // const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        // setCurrentDate(monthStart);
+        setCurrentDate(today);
         break;
       case VIEW_OPTIONS.YEAR:
         // Set to the first day of the current year
-        const yearStart = new Date(today.getFullYear(), 0, 1);
-        setCurrentDate(yearStart);
+        // const yearStart = new Date(today.getFullYear(), 0, 1);
+        // setCurrentDate(yearStart);
+        setCurrentDate(today);
         break;
     }
   }, [calendarView]);
@@ -100,19 +103,19 @@ export default function Calendar() {
       case VIEW_OPTIONS.WEEK:
         return {
           previous: "Previous week",
-          current: "This Week",
+          current: "Today",
           next: "Next week"
         };
       case VIEW_OPTIONS.MONTH:
         return {
           previous: "Previous month",
-          current: "This Month",
+          current: "Today",
           next: "Next month"
         };
       case VIEW_OPTIONS.YEAR:
         return {
           previous: "Previous year",
-          current: "This Year",
+          current: "Today",
           next: "Next year"
         };
       default:
