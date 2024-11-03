@@ -35,17 +35,94 @@ export default function Calendar() {
     return classes.filter(Boolean).join(" ");
   }, []);
 
-  const navigateDate = useCallback((days) => {
+  const navigateDate = useCallback((amount, unit) => {
     setCurrentDate(prev => {
       const newDate = new Date(prev);
-      newDate.setDate(prev.getDate() + days);
+      switch (unit) {
+        case 'day':
+          newDate.setDate(prev.getDate() + amount);
+          break;
+        case 'week':
+          newDate.setDate(prev.getDate() + (amount * 7));
+          break;
+        case 'month':
+          newDate.setMonth(prev.getMonth() + amount);
+          break;
+        case 'year':
+          newDate.setFullYear(prev.getFullYear() + amount);
+          break;
+      }
       return newDate;
     });
   }, []);
 
-  const handleNextDay = useCallback(() => navigateDate(1), [navigateDate]);
-  const handlePreviousDay = useCallback(() => navigateDate(-1), [navigateDate]);
-  const handleToday = useCallback(() => setCurrentDate(new Date()), []);
+  const handleNext = useCallback(() => {
+    navigateDate(1, calendarView);
+  }, [navigateDate, calendarView]);
+
+  const handlePrevious = useCallback(() => {
+    navigateDate(-1, calendarView);
+  }, [navigateDate, calendarView]);
+
+  const handleToday = useCallback(() => {
+    const today = new Date();
+    switch (calendarView) {
+      case VIEW_OPTIONS.DAY:
+        setCurrentDate(today);
+        break;
+      case VIEW_OPTIONS.WEEK:
+        // Set to the start of the current week
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay());
+        setCurrentDate(weekStart);
+        break;
+      case VIEW_OPTIONS.MONTH:
+        // Set to the first day of the current month
+        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        setCurrentDate(monthStart);
+        break;
+      case VIEW_OPTIONS.YEAR:
+        // Set to the first day of the current year
+        const yearStart = new Date(today.getFullYear(), 0, 1);
+        setCurrentDate(yearStart);
+        break;
+    }
+  }, [calendarView]);
+
+  const getNavigationLabels = useCallback(() => {
+    switch (calendarView) {
+      case VIEW_OPTIONS.DAY:
+        return {
+          previous: "Previous day",
+          current: "Today",
+          next: "Next day"
+        };
+      case VIEW_OPTIONS.WEEK:
+        return {
+          previous: "Previous week",
+          current: "This Week",
+          next: "Next week"
+        };
+      case VIEW_OPTIONS.MONTH:
+        return {
+          previous: "Previous month",
+          current: "This Month",
+          next: "Next month"
+        };
+      case VIEW_OPTIONS.YEAR:
+        return {
+          previous: "Previous year",
+          current: "This Year",
+          next: "Next year"
+        };
+      default:
+        return {
+          previous: "Previous",
+          current: "Current",
+          next: "Next"
+        };
+    }
+  }, [calendarView]);
 
   const initializeGoogleAPI = useCallback(async () => {
     try {
@@ -268,11 +345,11 @@ export default function Calendar() {
         <div className="flex items-center">
           <div className="relative flex items-center rounded-md ring-1 ring-gray-300 dark:ring-gray-600 shadow-sm md:items-stretch">
             <button
-              onClick={handlePreviousDay}
+              onClick={handlePrevious}
               className="flex items-center justify-center rounded-l-md py-2.5 pl-3 pr-4 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 focus:relative md:w-9 md:px-2"
               disabled={isLoading}
             >
-              <span className="sr-only">Previous day</span>
+              <span className="sr-only">{getNavigationLabels().previous}</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <button
@@ -280,15 +357,15 @@ export default function Calendar() {
               className="hidden px-3.5 py-2.5 text-sm font-semibold bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 focus:relative md:block"
               disabled={isLoading}
             >
-              Today
+              {getNavigationLabels().current}
             </button>
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
-              onClick={handleNextDay}
+              onClick={handleNext}
               className="flex items-center justify-center rounded-r-md py-2.5 pl-4 pr-3 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 focus:relative md:w-9 md:px-2"
               disabled={isLoading}
             >
-              <span className="sr-only">Next day</span>
+              <span className="sr-only">{getNavigationLabels().next}</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
