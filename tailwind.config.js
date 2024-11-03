@@ -28,8 +28,8 @@ export default {
     // },
     extend: {
       fontFamily: {
-        'inter': ['Inter', 'sans-serif'],
         'gloria': ['Gloria Hallelujah', 'cursive'],
+        'shantell': ['Shantell Sans', 'cursive']
       },
       gridTemplateRows: {
         '24': 'repeat(24, minmax(0, 1fr))',
