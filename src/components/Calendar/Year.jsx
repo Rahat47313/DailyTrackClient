@@ -162,7 +162,7 @@ export default function Year() {
                       dayIdx === 6 && "rounded-tr-lg",
                       dayIdx === month.days.length - 7 && "rounded-bl-lg",
                       dayIdx === month.days.length - 1 && "rounded-br-lg",
-                      "py-1.5 hover:bg-gray-100 focus:z-10"
+                      "py-1.5 hover:bg-red-300 hover:dark:bg-red-950 focus:z-10"
                     )}
                   >
                     <time
