@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import yourReducer from './slices/mySlice';
+import calendarReducer from './slices/calendarSlice';
 
 const store = configureStore({
   reducer: {
-    yourSliceName: yourReducer,
+    calendar: calendarReducer,
   },
 });
 
-export default store;
+export default store

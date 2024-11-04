@@ -168,9 +168,9 @@ export default function Month() {
                   key={day.date}
                   className={classNames(
                     day.isCurrentMonth
-                      ? "bg-white dark:bg-gray-800"
+                      ? "bg-white dark:bg-gray-900"
                       : "bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
-                    "relative px-3 py-2"
+                    "relative px-3 py-2 hover:bg-red-300 hover:dark:bg-red-950"
                   )}
                 >
                   <time
@@ -219,7 +219,7 @@ export default function Month() {
                   onClick={() => setSelectedDay(day)}
                   className={classNames(
                     day.isCurrentMonth
-                      ? "bg-white dark:bg-gray-800"
+                      ? "bg-white dark:bg-gray-900"
                       : "bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
                     (day === selectedDay || day.isToday) && "font-semibold",
                     day === selectedDay && "text-white dark:text-black",
@@ -232,7 +232,7 @@ export default function Month() {
                       !day.isCurrentMonth &&
                       !day.isToday &&
                       "text-gray-500",
-                    "flex h-14 flex-col px-3 py-2 hover:bg-gray-100 focus:z-10"
+                    "flex h-14 flex-col px-3 py-2 hover:bg-red-300 hover:dark:bg-red-950 focus:z-10"
                   )}
                 >
                   <time
