@@ -1,8 +1,8 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<!-- # $\text{\color{red}DailyTrack}$ -->
+<!-- ${\textsf{\color{red}D}}$ aily ${\color{red}T}$ rack -->
+<picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./src/assets/logo/DailyTrack_dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="./src/assets/logo/DailyTrack_light.svg">
+      <img alt="Shows a black logo in light color mode and a white one in dark color mode.">
+</picture>
+A web application to track attendance and daily tasks
