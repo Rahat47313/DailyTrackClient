@@ -138,7 +138,7 @@ export default function Month() {
     <div className="bg-gradient-to-t from-gray-100 dark:from-gray-700 to-transparent rounded-md lg:invisible">
       <div className="flex h-full flex-col text-gray-900 dark:text-white lg:visible">
         <div className="shadow ring-1 ring-black ring-opacity-5 flex flex-auto flex-col">
-          <div className="grid grid-cols-7 gap-px border-b border-gray-300 dark:border-gray-600 text-center text-xs font-semibold leading-6 text-gray-700 dark:text-gray-200 lg:flex-none">
+          <div className="grid grid-cols-7 gap-px border-b border-gray-300 dark:border-gray-600 text-center text-md font-semibold leading-6 text-gray-700 dark:text-gray-200 lg:flex-none">
             <div className="py-2">
               S<span className="sr-only sm:not-sr-only">un</span>
             </div>
@@ -161,7 +161,7 @@ export default function Month() {
               S<span className="sr-only sm:not-sr-only">at</span>
             </div>
           </div>
-          <div className="flex bg-gray-300 dark:bg-gray-600 text-xs leading-6 text-gray-700 dark:text-gray-200 flex-auto">
+          <div className="flex bg-gray-300 dark:bg-gray-600 text-md leading-6 text-gray-700 dark:text-gray-200 flex-auto">
             <div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
               {days.map((day) => (
                 <div
@@ -189,12 +189,12 @@ export default function Month() {
                       {day.events.slice(0, 2).map((event) => (
                         <li key={event.id}>
                           <a href={event.href} className="group flex">
-                            <p className="flex-auto truncate font-medium text-gray-900 dark:text-white group-hover:text-indigo-600">
+                            <p className="flex-auto truncate font-medium text-gray-900 dark:text-white group-hover:text-red-900 group-hover:dark:text-red-200">
                               {event.name}
                             </p>
                             <time
                               dateTime={event.datetime}
-                              className="ml-3 hidden flex-none text-gray-900 dark:text-white group-hover:text-indigo-600 xl:block"
+                              className="ml-3 hidden flex-none text-gray-900 dark:text-white group-hover:text-red-900 group-hover:dark:text-red-200 xl:block"
                             >
                               {event.time}
                             </time>
@@ -223,7 +223,7 @@ export default function Month() {
                       : "bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
                     (day === selectedDay || day.isToday) && "font-semibold",
                     day === selectedDay && "text-white dark:text-black",
-                    !selectedDay && day.isToday && "text-indigo-600",
+                    !selectedDay && day.isToday && "text-red-500",
                     !selectedDay &&
                       day.isCurrentMonth &&
                       !day.isToday &&
@@ -239,11 +239,11 @@ export default function Month() {
                     dateTime={day.date}
                     className={classNames(
                       day === selectedDay &&
-                        "flex h-6 w-6 items-center justify-center rounded-full",
-                      day === selectedDay && day.isToday && "bg-indigo-600",
+                        "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center rounded-full",
+                      day === selectedDay && day.isToday && "bg-gray-900 dark:bg-white",
                       day === selectedDay &&
                         !day.isToday &&
-                        "bg-gray-900 dark:bg-gray-50",
+                        "bg-red-500",
                       "ml-auto"
                     )}
                   >
@@ -255,7 +255,7 @@ export default function Month() {
                       {day.events.map((event) => (
                         <span
                           key={event.id}
-                          className="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"
+                          className="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-red-600"
                         />
                       ))}
                     </span>

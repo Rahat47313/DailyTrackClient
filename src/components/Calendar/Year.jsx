@@ -1,4 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { 
+  selectMonths, 
+  selectCurrentDate,
+  selectIsAuthenticated 
+} from "../../redux/store/selectors/calendarSelectors";
+import { setMonths } from "../../redux/store/slices/calendarSlice";
 import { gapi } from "gapi-script";
 
 function classNames(...classes) {
@@ -15,10 +22,10 @@ const isToday = (date) => {
 };
 
 const isCurrentMonth = (date) => {
-  const currentMonth = new Date();
+  const currentDate = new Date();
   return (
-    currentMonth.getFullYear() === date.getFullYear() &&
-    currentMonth.getMonth() === date.getMonth()
+    currentDate.getFullYear() === date.getFullYear() &&
+    currentDate.getMonth() === date.getMonth()
   );
 };
 
@@ -76,11 +83,20 @@ const generateDaysInMonth = (month, year) => {
 };
 
 export default function Year() {
-  const [months, setMonths] = useState([]);
-  const currentYear = new Date().getFullYear();
+  const dispatch = useDispatch();
+  const months = useSelector(selectMonths);
+  const currentDate = useSelector(selectCurrentDate);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  
+  const currentYear = currentDate.getFullYear();
 
   useEffect(() => {
     const fetchYearData = async () => {
+      if (!isAuthenticated) {
+        console.warn('User is not authenticated');
+        return;
+      }
+
       const calendarId = "primary";
       const startDate = new Date(currentYear, 0, 1).toISOString();
       const endDate = new Date(currentYear, 11, 31).toISOString();
@@ -101,8 +117,7 @@ export default function Year() {
           const days = generateDaysInMonth(monthIndex, currentYear);
 
           events?.forEach((event) => {
-            const eventDate =
-              event.start.date || event.start.dateTime.split("T")[0];
+            const eventDate = event.start.date || event.start.dateTime.split("T")[0];
             const day = days.find((day) => day.date === eventDate);
             if (day) {
               day.events.push(event);
@@ -117,71 +132,72 @@ export default function Year() {
           };
         });
 
-        setMonths(monthsData);
+        dispatch(setMonths(monthsData));
       } catch (error) {
         console.error("Error fetching events", error);
       }
     };
 
     fetchYearData();
-  }, [currentYear]);
+  }, [currentYear, dispatch, isAuthenticated]);
 
   return (
-    <>
-      <div className="">
-        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
-          {months.map((month) => (
-            <section key={month.name} className="text-center">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {month.name}
-              </h2>
-              <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500 dark:text-gray-400">
-                <div>S</div>
-                <div>M</div>
-                <div>T</div>
-                <div>W</div>
-                <div>T</div>
-                <div>F</div>
-                <div>S</div>
-              </div>
-              <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-300 dark:bg-gray-600 text-sm shadow ring-1 ring-gray-200 dark:ring-gray-700">
-                {month.days.map((day, dayIdx) => (
-                  <button
-                    key={day.date || `empty-${dayIdx}`}
-                    type="button"
+    <div className="">
+      <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
+        {months.map((month) => (
+          <section key={month.name} className="text-center">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {month.name}
+            </h2>
+            <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500 dark:text-gray-400">
+              <div>S</div>
+              <div>M</div>
+              <div>T</div>
+              <div>W</div>
+              <div>T</div>
+              <div>F</div>
+              <div>S</div>
+            </div>
+            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-300 dark:bg-gray-600 text-sm shadow ring-1 ring-gray-200 dark:ring-gray-700">
+              {month.days.map((day, dayIdx) => (
+                <button
+                  key={day.date || `empty-${dayIdx}`}
+                  type="button"
+                  className={classNames(
+                    // Current month styling (takes precedence)
+                    day.isCurrentMonth
+                      ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                      : // This month but not current month 
+                      day.isThisMonth
+                      ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      : // Adjacent months
+                      "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                    dayIdx === 0 && "rounded-tl-lg",
+                    dayIdx === 6 && "rounded-tr-lg",
+                    dayIdx === month.days.length - 7 && "rounded-bl-lg",
+                    dayIdx === month.days.length - 1 && "rounded-br-lg",
+                    "py-1.5 hover:bg-red-300 hover:dark:bg-red-950 focus:z-10"
+                  )}
+                >
+                  <time
+                    dateTime={day.date}
                     className={classNames(
-                      // Current month styling (takes precedence)
-                      day.isCurrentMonth
-                        ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-                        : // This month but not current month
-                        day.isThisMonth
-                        ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-                        : // Adjacent months
-                          "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
-                      dayIdx === 0 && "rounded-tl-lg",
-                      dayIdx === 6 && "rounded-tr-lg",
-                      dayIdx === month.days.length - 7 && "rounded-bl-lg",
-                      dayIdx === month.days.length - 1 && "rounded-br-lg",
-                      "py-1.5 hover:bg-red-300 hover:dark:bg-red-950 focus:z-10"
+                      day.isToday &&
+                        "bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
+                      "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
                     )}
                   >
-                    <time
-                      dateTime={day.date}
-                      className={classNames(
-                        day.isToday &&
-                          "bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
-                        "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
-                      )}
-                    >
-                      {day.dayNumber}
-                    </time>
-                  </button>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+                    {day.dayNumber}
+                  </time>
+                  {day.events.length > 0 && (
+                    <div className="w-1 h-1 mx-auto mt-1 rounded-full bg-red-600" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
-    </>
+    </div>
   );
 }
