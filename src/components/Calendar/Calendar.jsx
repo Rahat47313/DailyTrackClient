@@ -215,7 +215,7 @@ export default function Calendar() {
       {/* Calendar Header */}
       <header className="flex flex-none items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div>
-          <h1 className="text-base font-semibold leading-6">
+          <p className="text-base font-semibold leading-6">
             <time dateTime={currentDate.toISOString()} className="sm:hidden">
               {currentDate.toLocaleDateString()}
             </time>
@@ -229,7 +229,7 @@ export default function Calendar() {
                 year: "numeric",
               })}
             </time>
-          </h1>
+          </p>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {currentDate.toLocaleString("default", { weekday: "long" })}
           </p>
