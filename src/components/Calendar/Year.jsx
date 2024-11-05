@@ -4,8 +4,8 @@ import {
   selectMonths, 
   selectCurrentDate,
   selectIsAuthenticated 
-} from "../../redux/store/selectors/calendarSelectors";
-import { setMonths } from "../../redux/store/slices/calendarSlice";
+} from "../../redux/calendar/calendarSelectors";
+import { setMonths } from "../../redux/calendar/calendarSlice";
 import { gapi } from "gapi-script";
 
 function classNames(...classes) {

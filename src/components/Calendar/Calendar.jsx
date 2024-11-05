@@ -15,14 +15,14 @@ import {
   setCalendarView,
   setCurrentDate,
   setIsAuthenticated,
-} from "../../redux/store/slices/calendarSlice";
+} from "../../redux/calendar/calendarSlice";
 import {
   initializeGoogleAPI,
   fetchEvents,
   createEvent,
   updateEvent,
   deleteEvent,
-} from "../../redux/store/thunks/calendarThunks";
+} from "../../redux/calendar/calendarThunks";
 import {
   selectCalendarView,
   selectCurrentDate,
@@ -30,7 +30,7 @@ import {
   selectIsLoading,
   selectError,
   selectIsAuthenticated,
-} from "../../redux/store/selectors/calendarSelectors";
+} from "../../redux/calendar/calendarSelectors";
 
 const VIEW_OPTIONS = {
   DAY: "day",

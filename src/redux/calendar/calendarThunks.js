@@ -5,7 +5,7 @@ import {
   setError,
   setIsAuthenticated,
   setMonths,
-} from '../slices/calendarSlice';
+} from './calendarSlice';
 
 const CALENDAR_ID = 'primary';
 
