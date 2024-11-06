@@ -99,7 +99,7 @@ export default function Month() {
         });
 
         const events = response.result.items;
-        const daysInMonth = generateDaysInMonth(
+        const days = generateDaysInMonth(
           currentDate.getMonth(),
           currentDate.getFullYear()
         );
@@ -108,7 +108,7 @@ export default function Month() {
         events?.forEach((event) => {
           const eventDate =
             event.start.date || event.start.dateTime.split("T")[0];
-          const day = daysInMonth.find((day) => day.date === eventDate);
+          const day = days.find((day) => day.date === eventDate);
           if (day) {
             day.events.push({
               id: event.id,
@@ -125,7 +125,7 @@ export default function Month() {
           }
         });
 
-        setDays(daysInMonth);
+        setDays(days);
       } catch (error) {
         console.error("Error fetching events", error);
       }
@@ -240,10 +240,10 @@ export default function Month() {
                     className={classNames(
                       day === selectedDay &&
                         "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center rounded-full",
-                      day === selectedDay && day.isToday && "bg-gray-900 dark:bg-white",
                       day === selectedDay &&
-                        !day.isToday &&
-                        "bg-red-500",
+                        day.isToday &&
+                        "bg-gray-900 dark:bg-white",
+                      day === selectedDay && !day.isToday && "bg-red-500",
                       "ml-auto"
                     )}
                   >

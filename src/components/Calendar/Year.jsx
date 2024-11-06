@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { 
-  selectMonths, 
+import {
+  selectMonths,
   selectCurrentDate,
-  selectIsAuthenticated 
+  selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
 import { setMonths } from "../../redux/calendar/calendarSlice";
 import { gapi } from "gapi-script";
@@ -46,8 +46,8 @@ const generateDaysInMonth = (month, year) => {
       date: prevMonthDate.toISOString().split("T")[0],
       dayNumber: prevMonthDay,
       isThisMonth: false,
-      isCurrentMonth: false, //isCurrentMonth(prevMonthDate),
-      isToday: false, //isToday(prevMonthDate),
+      isCurrentMonth: isCurrentMonth(prevMonthDate),
+      isToday: isToday(prevMonthDate),
       events: [],
     });
   }
@@ -73,8 +73,8 @@ const generateDaysInMonth = (month, year) => {
       date: nextMonthDate.toISOString().split("T")[0],
       dayNumber: i,
       isThisMonth: false,
-      isCurrentMonth: false, //isCurrentMonth(nextMonthDate),
-      isToday: false, //isToday(nextMonthDate),
+      isCurrentMonth: isCurrentMonth(nextMonthDate),
+      isToday: isToday(nextMonthDate),
       events: [],
     });
   }
@@ -87,13 +87,13 @@ export default function Year() {
   const months = useSelector(selectMonths);
   const currentDate = useSelector(selectCurrentDate);
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  
+
   const currentYear = currentDate.getFullYear();
 
   useEffect(() => {
     const fetchYearData = async () => {
       if (!isAuthenticated) {
-        console.warn('User is not authenticated');
+        console.warn("User is not authenticated");
         return;
       }
 
@@ -117,7 +117,8 @@ export default function Year() {
           const days = generateDaysInMonth(monthIndex, currentYear);
 
           events?.forEach((event) => {
-            const eventDate = event.start.date || event.start.dateTime.split("T")[0];
+            const eventDate =
+              event.start.date || event.start.dateTime.split("T")[0];
             const day = days.find((day) => day.date === eventDate);
             if (day) {
               day.events.push(event);
@@ -167,11 +168,11 @@ export default function Year() {
                     // Current month styling (takes precedence)
                     day.isCurrentMonth
                       ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-                      : // This month but not current month 
+                      : // This month but not current month
                       day.isThisMonth
                       ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                       : // Adjacent months
-                      "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                        "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
                     dayIdx === 0 && "rounded-tl-lg",
                     dayIdx === 6 && "rounded-tr-lg",
                     dayIdx === month.days.length - 7 && "rounded-bl-lg",
