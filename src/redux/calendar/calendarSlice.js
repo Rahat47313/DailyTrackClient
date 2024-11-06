@@ -20,15 +20,6 @@ const calendarSlice = createSlice({
     setCalendarView: (state, action) => {
       state.calendarView = action.payload;
     },
-    setCurrentDate: (state, action) => {
-      state.currentDate = action.payload;
-    },
-    setCurrentMonth: (state, action) => {
-      state.currentMonth = action.payload;
-    },
-    setCurrentYear: (state, action) => {
-      state.currentYear = action.payload;
-    },
     setNavigationDate: (state, action) => {
       state.navigationDate = action.payload;
     },
@@ -52,9 +43,6 @@ const calendarSlice = createSlice({
 
 export const {
   setCalendarView,
-  setCurrentDate,
-  setCurrentMonth,
-  setCurrentYear,
   setNavigationDate,
   setEvents,
   setIsLoading,

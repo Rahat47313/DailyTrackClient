@@ -1,7 +1,7 @@
 export const selectCalendarView = (state) => state.calendar.calendarView;
 export const selectCurrentDate = (state) => new Date(state.calendar.currentDate);
-export const selectCurrentMonth = (state) => new Date(state.calendar.currentMonth);
-export const selectCurrentYear = (state) => new Date(state.calendar.currentYear);
+export const selectCurrentMonth = (state) => state.calendar.currentMonth;
+export const selectCurrentYear = (state) => state.calendar.currentYear;
 export const selectNavigationDate = (state) => new Date(state.calendar.navigationDate);
 export const selectEvents = (state) => state.calendar.events;
 export const selectIsLoading = (state) => state.calendar.isLoading;

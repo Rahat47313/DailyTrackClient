@@ -26,6 +26,8 @@ import {
 import {
   selectCalendarView,
   selectCurrentDate,
+  selectCurrentMonth,
+  selectCurrentYear,
   selectNavigationDate,
   selectEvents,
   selectIsLoading,
@@ -46,13 +48,28 @@ const isCurrentDate = (date) => {
     today.getFullYear() === date.getFullYear() &&
     today.getMonth() === date.getMonth() &&
     today.getDate() === date.getDate()
-  )
-}
+  );
+};
+
+const isCurrentMonth = (date) => {
+  const currentDate = new Date();
+  return (
+    currentDate.getFullYear() === date.getFullYear() &&
+    currentDate.getMonth() === date.getMonth()
+  );
+};
+
+const isCurrentYear = (date) => {
+  const currentDate = new Date();
+  return currentDate.getFullYear() === date.getFullYear();
+};
 
 export default function Calendar() {
   const dispatch = useDispatch();
   const calendarView = useSelector(selectCalendarView);
   const currentDate = useSelector(selectCurrentDate);
+  const currentMonth = useSelector(selectCurrentMonth);
+  const currentYear = useSelector(selectCurrentYear);
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEvents);
   const isLoading = useSelector(selectIsLoading);
@@ -234,35 +251,45 @@ export default function Calendar() {
       )}
 
       {/* Calendar Header */}
-      <header className="flex flex-none items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
-        <div>
-          <p className="text-base font-semibold leading-6">
-            <time dateTime={navigationDate.toISOString()} className="sm:hidden">
+      <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
+        <div className="w-full">
+          <p className="flex items-center justify-center text-base font-semibold leading-6 w-full">
+            <time dateTime={navigationDate.toISOString()} className="mt-3 sm:hidden">
               {navigationDate.toLocaleDateString()}
             </time>
             <time
               dateTime={navigationDate.toISOString()}
-              className="hidden sm:inline"
+              className="hidden sm:flex w-full"
             >
-              <p>
-                Calendar showing: {""}
-                {navigationDate.toLocaleDateString("default", {
-                  year: "numeric",
-                })}
-              </p>
-              <p>
-                Today: {""}
-                {currentDate.toLocaleDateString("default", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
+              <div>
+                <p>
+                  Today: {""}
+                  {currentDate.toLocaleDateString("default", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </p>
+                {currentYear === navigationDate.getFullYear() &&
+                currentMonth === navigationDate.getMonth() &&
+                currentDate.getDate() === navigationDate.getDate() ? (
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    {currentDate.toLocaleString("default", { weekday: "long" })}
+                  </p>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="flex flex-col items-center justify-center mx-auto">
+                <p>Calendar showing:</p>
+                <p>
+                  {navigationDate.toLocaleDateString("default", {
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
             </time>
           </p>
-          {isCurrentDate? <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {currentDate.toLocaleString("default", { weekday: "long" })}
-          </p> : ""}
         </div>
 
         {/* Navigation Controls */}
@@ -295,7 +322,7 @@ export default function Calendar() {
 
           {/* View Selector */}
           <Menu as="div" className="relative ml-4">
-            <Menu.Button className="text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 rounded-lg px-3 py-2.5 ">
+            <Menu.Button className="text-sm w-max font-semibold shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 rounded-lg px-3 py-2.5 ">
               {calendarView.charAt(0).toUpperCase() + calendarView.slice(1)}{" "}
               view
               <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400 inline-block" />
