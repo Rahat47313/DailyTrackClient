@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectMonths,
-  selectCurrentDate,
+  selectNavigationDate,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
 import { setMonths } from "../../redux/calendar/calendarSlice";
@@ -12,7 +12,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const isToday = (date) => {
+const isCurrentDate = (date) => {
   const today = new Date();
   return (
     today.getFullYear() === date.getFullYear() &&
@@ -29,66 +29,119 @@ const isCurrentMonth = (date) => {
   );
 };
 
-const generateDaysInMonth = (month, year) => {
-  const days = [];
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfMonth = new Date(year, month + 1, 0);
+// const generateDaysInMonth = (month, year) => {
+//   const days = [];
+//   const firstDayOfMonth = new Date(year, month, 1);
+//   const lastDayOfMonth = new Date(year, month + 1, 0);
 
-  const firstDayIndex = firstDayOfMonth.getDay();
-  const lastDateOfMonth = lastDayOfMonth.getDate();
+//   const firstDayIndex = firstDayOfMonth.getDay();
+//   const lastDateOfMonth = lastDayOfMonth.getDate();
 
-  // Fill in the days from the previous month
-  const prevMonthLastDay = new Date(year, month, 0).getDate();
-  for (let i = firstDayIndex - 1; i >= 0; i--) {
-    const prevMonthDay = prevMonthLastDay - i;
-    const prevMonthDate = new Date(year, month - 1, prevMonthDay);
-    days.push({
-      date: prevMonthDate.toISOString().split("T")[0],
-      dayNumber: prevMonthDay,
-      isThisMonth: false,
-      isCurrentMonth: isCurrentMonth(prevMonthDate),
-      isToday: isToday(prevMonthDate),
-      events: [],
-    });
-  }
+//   // Fill in the days from the previous month
+//   const prevMonthLastDay = new Date(year, month, 0).getDate();
+//   for (let i = firstDayIndex - 1; i >= 0; i--) {
+//     const prevMonthDay = prevMonthLastDay - i;
+//     const prevMonthDate = new Date(year, month - 1, prevMonthDay);
+//     days.push({
+//       date: prevMonthDate.toISOString().split("T")[0],
+//       dayNumber: prevMonthDay,
+//       isThisMonth: false,
+//       isCurrentMonth: isCurrentMonth(prevMonthDate),
+//       isToday: isToday(prevMonthDate),
+//       events: [],
+//     });
+//   }
 
-  // Fill in the days for this month
-  for (let day = 1; day <= lastDateOfMonth; day++) {
-    const currentDate = new Date(year, month, day);
-    days.push({
-      date: currentDate.toISOString().split("T")[0],
-      dayNumber: day,
-      isThisMonth: true,
-      isCurrentMonth: isCurrentMonth(currentDate),
-      isToday: isToday(currentDate),
-      events: [],
-    });
-  }
+//   // Fill in the days for this month
+//   for (let day = 1; day <= lastDateOfMonth; day++) {
+//     const currentDate = new Date(year, month, day);
+//     days.push({
+//       date: currentDate.toISOString().split("T")[0],
+//       dayNumber: day,
+//       isThisMonth: true,
+//       isCurrentMonth: isCurrentMonth(currentDate),
+//       isToday: isToday(currentDate),
+//       events: [],
+//     });
+//   }
 
-  // Fill in the remaining days from the next month
-  const remainingDays = 42 - days.length;
-  for (let i = 1; i <= remainingDays; i++) {
-    const nextMonthDate = new Date(year, month + 1, i);
-    days.push({
-      date: nextMonthDate.toISOString().split("T")[0],
-      dayNumber: i,
-      isThisMonth: false,
-      isCurrentMonth: isCurrentMonth(nextMonthDate),
-      isToday: isToday(nextMonthDate),
-      events: [],
-    });
-  }
+//   // Fill in the remaining days from the next month
+//   const remainingDays = 42 - days.length;
+//   for (let i = 1; i <= remainingDays; i++) {
+//     const nextMonthDate = new Date(year, month + 1, i);
+//     days.push({
+//       date: nextMonthDate.toISOString().split("T")[0],
+//       dayNumber: i,
+//       isThisMonth: false,
+//       isCurrentMonth: isCurrentMonth(nextMonthDate),
+//       isToday: isToday(nextMonthDate),
+//       events: [],
+//     });
+//   }
 
-  return days;
-};
+//   return days;
+// };
 
 export default function Year() {
   const dispatch = useDispatch();
   const months = useSelector(selectMonths);
-  const currentDate = useSelector(selectCurrentDate);
+  const navigationDate = useSelector(selectNavigationDate)
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  const currentYear = currentDate.getFullYear();
+  const navigationYear = navigationDate.getFullYear();
+
+  const generateDaysInMonth = (month, year) => {
+    const days = [];
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+  
+    const firstDayIndex = firstDayOfMonth.getDay();
+    const lastDateOfMonth = lastDayOfMonth.getDate();
+  
+    // Fill in the days from the previous month
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+    for (let i = firstDayIndex - 1; i >= 0; i--) {
+      const prevMonthDay = prevMonthLastDay - i;
+      const prevMonthDate = new Date(year, month - 1, prevMonthDay);
+      days.push({
+        date: prevMonthDate.toISOString().split("T")[0],
+        dayNumber: prevMonthDay,
+        isThisMonth: false,
+        isCurrentMonth: isCurrentMonth(prevMonthDate),
+        isToday: isCurrentDate(prevMonthDate),
+        events: [],
+      });
+    }
+  
+    // Fill in the days for this month
+    for (let day = 1; day <= lastDateOfMonth; day++) {
+      const currentDate = new Date(year, month, day);
+      days.push({
+        date: currentDate.toISOString().split("T")[0],
+        dayNumber: day,
+        isThisMonth: true,
+        isCurrentMonth: isCurrentMonth(currentDate),
+        isToday: isCurrentDate(currentDate),
+        events: [],
+      });
+    }
+  
+    // Fill in the remaining days from the next month
+    const remainingDays = 42 - days.length;
+    for (let i = 1; i <= remainingDays; i++) {
+      const nextMonthDate = new Date(year, month + 1, i);
+      days.push({
+        date: nextMonthDate.toISOString().split("T")[0],
+        dayNumber: i,
+        isThisMonth: false,
+        isCurrentMonth: isCurrentMonth(nextMonthDate),
+        isToday: isCurrentDate(nextMonthDate),
+        events: [],
+      });
+    }
+  
+    return days;
+  };
 
   useEffect(() => {
     const fetchYearData = async () => {
@@ -98,8 +151,8 @@ export default function Year() {
       }
 
       const calendarId = "primary";
-      const startDate = new Date(currentYear, 0, 1).toISOString();
-      const endDate = new Date(currentYear, 11, 31).toISOString();
+      const startDate = new Date(navigationYear, 0, 1).toISOString();
+      const endDate = new Date(navigationYear, 11, 31).toISOString();
 
       try {
         const response = await gapi.client.calendar.events.list({
@@ -114,7 +167,7 @@ export default function Year() {
         const events = response.result.items;
 
         const monthsData = Array.from({ length: 12 }, (_, monthIndex) => {
-          const days = generateDaysInMonth(monthIndex, currentYear);
+          const days = generateDaysInMonth(monthIndex, navigationYear);
 
           events?.forEach((event) => {
             const eventDate =
@@ -126,7 +179,7 @@ export default function Year() {
           });
 
           return {
-            name: new Date(currentYear, monthIndex).toLocaleString("default", {
+            name: new Date(navigationYear, monthIndex).toLocaleString("default", {
               month: "long",
             }),
             days,
@@ -140,10 +193,10 @@ export default function Year() {
     };
 
     fetchYearData();
-  }, [currentYear, dispatch, isAuthenticated]);
+  }, [navigationYear, dispatch, isAuthenticated]);
 
   return (
-    <div className="">
+    <div>
       <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
         {months.map((month) => (
           <section key={month.name} className="text-center">

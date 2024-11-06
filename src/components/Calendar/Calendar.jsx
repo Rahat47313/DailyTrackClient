@@ -13,7 +13,7 @@ import Month from "./Month";
 import Year from "./Year";
 import {
   setCalendarView,
-  setCurrentDate,
+  setNavigationDate,
   setIsAuthenticated,
 } from "../../redux/calendar/calendarSlice";
 import {
@@ -26,6 +26,7 @@ import {
 import {
   selectCalendarView,
   selectCurrentDate,
+  selectNavigationDate,
   selectEvents,
   selectIsLoading,
   selectError,
@@ -39,10 +40,20 @@ const VIEW_OPTIONS = {
   YEAR: "year",
 };
 
+const isCurrentDate = (date) => {
+  const today = new Date();
+  return (
+    today.getFullYear() === date.getFullYear() &&
+    today.getMonth() === date.getMonth() &&
+    today.getDate() === date.getDate()
+  )
+}
+
 export default function Calendar() {
   const dispatch = useDispatch();
   const calendarView = useSelector(selectCalendarView);
   const currentDate = useSelector(selectCurrentDate);
+  const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEvents);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
@@ -54,24 +65,24 @@ export default function Calendar() {
 
   const navigateDate = useCallback(
     (amount, unit) => {
-      const newDate = new Date(currentDate);
+      const newDate = new Date(navigationDate);
       switch (unit) {
         case "day":
-          newDate.setDate(currentDate.getDate() + amount);
+          newDate.setDate(navigationDate.getDate() + amount);
           break;
         case "week":
-          newDate.setDate(currentDate.getDate() + amount * 7);
+          newDate.setDate(navigationDate.getDate() + amount * 7);
           break;
         case "month":
-          newDate.setMonth(currentDate.getMonth() + amount);
+          newDate.setMonth(navigationDate.getMonth() + amount);
           break;
         case "year":
-          newDate.setFullYear(currentDate.getFullYear() + amount);
+          newDate.setFullYear(navigationDate.getFullYear() + amount);
           break;
       }
-      dispatch(setCurrentDate(newDate.toISOString()));
+      dispatch(setNavigationDate(newDate.toISOString()));
     },
-    [dispatch, currentDate]
+    [dispatch, navigationDate]
   );
 
   const handleNext = useCallback(() => {
@@ -83,7 +94,7 @@ export default function Calendar() {
   }, [navigateDate, calendarView]);
 
   const handleToday = useCallback(() => {
-    dispatch(setCurrentDate(new Date().toISOString()));
+    dispatch(setNavigationDate(new Date().toISOString()));
   }, [dispatch]);
 
   const getNavigationLabels = useCallback(() => {
@@ -155,7 +166,7 @@ export default function Calendar() {
 
   const renderCalendarView = () => {
     const viewProps = {
-      currentDate,
+      navigationDate,
       events,
       isLoading,
       onCreateEvent: (eventDetails) => dispatch(createEvent(eventDetails)),
@@ -183,6 +194,16 @@ export default function Calendar() {
       <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
         Calendar
       </div>
+
+      {/* <p>
+        Present Date with .toISOString = {new Date().toISOString()}
+      </p>
+      <p>
+       Present Date with .getDate() = {new Date().getDate()}
+      </p>
+      <p>
+       Present Date with .toString = {new Date().toString()}
+      </p> */}
 
       {/* Authentication and Action Buttons */}
       <div className="flex gap-4 mb-4">
@@ -216,23 +237,32 @@ export default function Calendar() {
       <header className="flex flex-none items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div>
           <p className="text-base font-semibold leading-6">
-            <time dateTime={currentDate.toISOString()} className="sm:hidden">
-              {currentDate.toLocaleDateString()}
+            <time dateTime={navigationDate.toISOString()} className="sm:hidden">
+              {navigationDate.toLocaleDateString()}
             </time>
             <time
-              dateTime={currentDate.toISOString()}
+              dateTime={navigationDate.toISOString()}
               className="hidden sm:inline"
             >
-              {currentDate.toLocaleDateString("default", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
+              <p>
+                Calendar showing: {""}
+                {navigationDate.toLocaleDateString("default", {
+                  year: "numeric",
+                })}
+              </p>
+              <p>
+                Today: {""}
+                {currentDate.toLocaleDateString("default", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </p>
             </time>
           </p>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          {isCurrentDate? <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {currentDate.toLocaleString("default", { weekday: "long" })}
-          </p>
+          </p> : ""}
         </div>
 
         {/* Navigation Controls */}
