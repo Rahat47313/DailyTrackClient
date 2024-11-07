@@ -6,7 +6,9 @@ import Sidebar from "./components/Sidebar";
 // import Login from "./login/Login";
 
 function App() {
-  const [darkMode, setDarkMode] = useState(() => (localStorage.getItem("flowbite-theme-mode"))==="dark"? true: false);
+  const [darkMode, setDarkMode] = useState(() =>
+    localStorage.getItem("flowbite-theme-mode") === "dark" ? true : false
+  );
 
   useEffect(() => {
     // Toggle the 'dark' class on the root HTML element

@@ -36,7 +36,11 @@ export default function Navbar() {
                 </button>
                 <a href="#" className="flex ms-2 md:me-24">
                   <img
-                    src={computedMode === "dark" ? DailyTrack_dark : DailyTrack_light}
+                    src={
+                      computedMode === "dark"
+                        ? DailyTrack_dark
+                        : DailyTrack_light
+                    }
                     className="h-8 me-3"
                     alt="DailyTrack Logo"
                   />

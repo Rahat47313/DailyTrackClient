@@ -212,16 +212,6 @@ export default function Calendar() {
         Calendar
       </div>
 
-      {/* <p>
-        Present Date with .toISOString = {new Date().toISOString()}
-      </p>
-      <p>
-       Present Date with .getDate() = {new Date().getDate()}
-      </p>
-      <p>
-       Present Date with .toString = {new Date().toString()}
-      </p> */}
-
       {/* Authentication and Action Buttons */}
       <div className="flex gap-4 mb-4">
         {!isAuthenticated ? (
@@ -254,7 +244,10 @@ export default function Calendar() {
       <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div className="w-full">
           <p className="flex items-center justify-center text-base font-semibold leading-6 w-full">
-            <time dateTime={navigationDate.toISOString()} className="mt-3 sm:hidden">
+            <time
+              dateTime={navigationDate.toISOString()}
+              className="mt-3 sm:hidden"
+            >
               {navigationDate.toLocaleDateString()}
             </time>
             <time
@@ -270,15 +263,9 @@ export default function Calendar() {
                     year: "numeric",
                   })}
                 </p>
-                {currentYear === navigationDate.getFullYear() &&
-                currentMonth === navigationDate.getMonth() &&
-                currentDate.getDate() === navigationDate.getDate() ? (
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    {currentDate.toLocaleString("default", { weekday: "long" })}
-                  </p>
-                ) : (
-                  ""
-                )}
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  {currentDate.toLocaleString("default", { weekday: "long" })}
+                </p>
               </div>
               <div className="flex flex-col items-center justify-center mx-auto">
                 <p>Calendar showing:</p>

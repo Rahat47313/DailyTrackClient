@@ -11,7 +11,7 @@ export default function SidebarRight() {
     },
     popup: {
       base: "absolute top-10 z-50 block pt-2",
-    }
+    },
   };
   return (
     <>
