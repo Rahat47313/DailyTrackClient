@@ -11,6 +11,7 @@ const initialState = {
   error: null,
   isAuthenticated: false,
   months: [],
+  days: [],
 };
 
 const calendarSlice = createSlice({
@@ -38,6 +39,9 @@ const calendarSlice = createSlice({
     setMonths: (state, action) => {
       state.months = action.payload;
     },
+    setDays: (state, action) => {
+      state.months = action.payload;
+    },
   },
 });
 
@@ -49,6 +53,7 @@ export const {
   setError,
   setIsAuthenticated,
   setMonths,
+  setDays,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;

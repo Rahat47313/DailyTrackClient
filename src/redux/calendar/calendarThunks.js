@@ -7,6 +7,9 @@ import {
 } from "./calendarSlice";
 
 const CALENDAR_ID = "primary";
+// const currentYear = new Date().getFullYear();
+const startDate = new Date(Date.UTC(1000, 10, 15));
+const endDate = new Date(Date.UTC(9999, 11, 31));
 
 export const initializeGoogleAPI = () => async (dispatch) => {
   try {
@@ -23,9 +26,6 @@ export const initializeGoogleAPI = () => async (dispatch) => {
     dispatch(setIsAuthenticated(isSignedIn));
 
     if (isSignedIn) {
-      const currentYear = new Date().getFullYear();
-      const startDate = new Date(currentYear, 0, 1);
-      const endDate = new Date(currentYear, 11, 31);
       dispatch(fetchEvents(startDate, endDate));
     }
   } catch (error) {
@@ -43,9 +43,10 @@ export const fetchEvents = (startDate, endDate) => async (dispatch) => {
       calendarId: CALENDAR_ID,
       timeMin: startDate.toISOString(),
       timeMax: endDate.toISOString(),
+      timeZone: "UTC",
       showDeleted: false,
       singleEvents: true,
-      maxResults: 10,
+      maxResults: 9999,
       orderBy: "startTime",
     });
 
@@ -68,9 +69,8 @@ export const createEvent = (eventDetails) => async (dispatch) => {
       resource: eventDetails,
     });
 
-    const currentYear = new Date().getFullYear();
     await dispatch(
-      fetchEvents(new Date(currentYear, 0, 1), new Date(currentYear, 11, 31))
+      fetchEvents(startDate, endDate)
     );
     return response;
   } catch (error) {
@@ -93,9 +93,8 @@ export const updateEvent =
         resource: updatedEventDetails,
       });
 
-      const currentYear = new Date().getFullYear();
       await dispatch(
-        fetchEvents(new Date(currentYear, 0, 1), new Date(currentYear, 11, 31))
+        fetchEvents(startDate, endDate)
       );
       return response;
     } catch (error) {
@@ -116,9 +115,8 @@ export const deleteEvent = (eventId) => async (dispatch) => {
       eventId,
     });
 
-    const currentYear = new Date().getFullYear();
     await dispatch(
-      fetchEvents(new Date(currentYear, 0, 1), new Date(currentYear, 11, 31))
+      fetchEvents(startDate, endDate)
     );
   } catch (error) {
     dispatch(setError("Failed to delete event"));

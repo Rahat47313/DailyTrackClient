@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  selectNavigationDate,
   selectEvents,
   selectCurrentDate,
+  selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
 import { ClockIcon } from "@heroicons/react/20/solid";
 
@@ -10,113 +12,133 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const isToday = (date) => {
-  const today = new Date();
+const isCurrentDate = (date) => {
+  const currentDate = new Date();
   return (
-    today.getFullYear() === date.getFullYear() &&
-    today.getMonth() === date.getMonth() &&
-    today.getDate() === date.getDate()
+    currentDate.getFullYear() === date.getFullYear() &&
+    currentDate.getMonth() === date.getMonth() &&
+    currentDate.getDate() === date.getDate()
   );
 };
 
-// Generates days in the month and assigns events to the appropriate days
-const generateDaysInMonth = (month, year, monthEvents) => {
-  const days = [];
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfMonth = new Date(year, month + 1, 0);
-
-  const firstDayIndex = firstDayOfMonth.getDay();
-  const lastDateOfMonth = lastDayOfMonth.getDate();
-
-  // Fill in the days from the previous month
-  const prevMonthLastDay = new Date(year, month, 0).getDate();
-  for (let i = firstDayIndex - 1; i >= 0; i--) {
-    const prevMonthDay = prevMonthLastDay - i;
-    const prevMonthDate = new Date(Date.UTC(year, month - 1, prevMonthDay));
-    days.push({
-      date: prevMonthDate.toISOString().split("T")[0],
-      events: [],
-      isCurrentMonth: false,
-      isToday: isToday(prevMonthDate),
-    });
-  }
-
-  // Fill in the days for this month
-  for (let day = 1; day <= lastDateOfMonth; day++) {
-    const currentDate = new Date(Date.UTC(year, month, day));
-    const currentMonthEvents = monthEvents.filter(event => (event.start.date === currentDate || event.start.dateTime?.split("T")[0] === currentDate))
-    days.push({
-      date: currentDate.toISOString().split("T")[0],
-      events: currentMonthEvents,
-      isCurrentMonth: true,
-      isToday: isToday(currentDate),
-    });
-  }
-
-  // Fill in the remaining days from the next month
-  const remainingDays = 42 - days.length; // 6 rows × 7 days = 42
-  for (let i = 1; i <= remainingDays; i++) {
-    const nextMonthDate = new Date(Date.UTC(year, month + 1, i));
-    days.push({
-      date: nextMonthDate.toISOString().split("T")[0],
-      events: [],
-      isCurrentMonth: false,
-      isToday: isToday(nextMonthDate),
-    });
-  }
-
-  return days;
+const isCurrentMonth = (date) => {
+  const currentDate = new Date();
+  return (
+    currentDate.getFullYear() === date.getFullYear() &&
+    currentDate.getMonth() === date.getMonth()
+  );
 };
 
 export default function Month() {
+  const dispatch = useDispatch();
+  const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEvents);
-  const currentDate = useSelector(selectCurrentDate);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const navigationMonth = navigationDate.getMonth();
   const [days, setDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
 
+  // Generates days in the month and assigns events to the appropriate days
+  const generateDaysInMonth = (month, year, monthEvents) => {
+    const days = [];
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+
+    const firstDayIndex = firstDayOfMonth.getDay();
+    const lastDateOfMonth = lastDayOfMonth.getDate();
+
+    // Fill in the days from the previous month
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+    for (let i = firstDayIndex - 1; i >= 0; i--) {
+      const prevMonthDay = prevMonthLastDay - i;
+      const prevMonthDate = new Date(Date.UTC(year, month - 1, prevMonthDay));
+      const prevMonthEvents = monthEvents.filter(
+        (event) =>
+          event.start.date === prevMonthDate.toISOString().split("T")[0] ||
+          event.start.dateTime?.split("T")[0] ===
+            prevMonthDate.toISOString().split("T")[0]
+      );
+      days.push({
+        date: prevMonthDate.toISOString().split("T")[0],
+        dayNumber: prevMonthDay,
+        isThisMonth: false,
+        isCurrentMonth: isCurrentMonth(prevMonthDate),
+        isToday: isCurrentDate(prevMonthDate),
+        events: prevMonthEvents,
+      });
+    }
+
+    // Fill in the days for this month
+    for (let day = 1; day <= lastDateOfMonth; day++) {
+      const currentDate = new Date(Date.UTC(year, month, day));
+      const currentMonthEvents = monthEvents.filter(
+        (event) =>
+          event.start.date === currentDate.toISOString().split("T")[0] ||
+          event.start.dateTime?.split("T")[0] ===
+            currentDate.toISOString().split("T")[0]
+      );
+      days.push({
+        date: currentDate.toISOString().split("T")[0],
+        dayNumber: day,
+        isThisMonth: true,
+        isCurrentMonth: isCurrentMonth(currentDate),
+        isToday: isCurrentDate(currentDate),
+        events: currentMonthEvents,
+      });
+    }
+
+    // Fill in the remaining days from the next month
+    const remainingDays = 42 - days.length; // 6 rows × 7 days = 42
+    for (let i = 1; i <= remainingDays; i++) {
+      const nextMonthDate = new Date(Date.UTC(year, month + 1, i));
+      const nextMonthEvents = monthEvents.filter(
+        (event) =>
+          event.start.date === nextMonthDate.toISOString().split("T")[0] ||
+          event.start.dateTime?.split("T")[0] ===
+            nextMonthDate.toISOString().split("T")[0]
+      );
+      days.push({
+        date: nextMonthDate.toISOString().split("T")[0],
+        dayNumber: i,
+        isThisMonth: false,
+        isCurrentMonth: isCurrentMonth(nextMonthDate),
+        isToday: isCurrentDate(nextMonthDate),
+        events: nextMonthEvents,
+      });
+    }
+
+    return days;
+  };
+
   useEffect(() => {
+    if (!isAuthenticated) {
+      console.warn("User is not authenticated");
+      return;
+    }
+
     // Filter events for the current month and year
-    const monthEvents = events.filter(event => {
+    const monthEvents = events.filter((event) => {
       const eventDate = new Date(event.start.date || event.start.dateTime);
       return (
-        eventDate.getFullYear() === currentDate.getFullYear() &&
-        eventDate.getMonth() === currentDate.getMonth()
+        eventDate.getFullYear() === navigationDate.getFullYear() &&
+        (eventDate.getMonth() === navigationMonth ||
+          eventDate.getMonth() === navigationMonth + 1 ||
+          eventDate.getMonth() === navigationMonth - 1)
       );
     });
-
+    
     // Generate days and associate events
-    const daysInMonth = generateDaysInMonth(
-      currentDate.getMonth(),
-      currentDate.getFullYear(),
+    const days = generateDaysInMonth(
+      navigationMonth,
+      navigationDate.getFullYear(),
       monthEvents
     );
-    setDays(daysInMonth);
-  }, [events, currentDate]);
-
+    setDays(days);
+  }, [events, navigationDate, isAuthenticated]);
 
   // useEffect(() => {
   //   const fetchMonthData = async () => {
-  //     const calendarId = "primary";
-  //     const startDate = new Date(
-  //       currentDate.getFullYear(),
-  //       currentDate.getMonth(),
-  //       1
-  //     ).toISOString();
-  //     const endDate = new Date(
-  //       currentDate.getFullYear(),
-  //       currentDate.getMonth() + 1,
-  //       0
-  //     ).toISOString();
 
-  //     try {
-  //       const response = await gapi.client.calendar.events.list({
-  //         calendarId,
-  //         timeMin: startDate,
-  //         timeMax: endDate,
-  //         showDeleted: false,
-  //         singleEvents: true,
-  //         orderBy: "startTime",
-  //       });
 
   //       const events = response.result.items;
   //       const days = generateDaysInMonth(
@@ -160,25 +182,25 @@ export default function Month() {
         <div className="shadow ring-1 ring-black ring-opacity-5 flex flex-auto flex-col">
           <div className="grid grid-cols-7 gap-px border-b border-gray-300 dark:border-gray-600 text-center text-md font-semibold leading-6 text-gray-700 dark:text-gray-200 lg:flex-none">
             <div className="py-2">
-              S<span className="sr-only sm:not-sr-only">un</span>
+              S<span className="sr-only sm:not-sr-only">un</span><span className="sr-only lg:not-sr-only">day</span>
             </div>
             <div className="py-2">
-              M<span className="sr-only sm:not-sr-only">on</span>
+              M<span className="sr-only sm:not-sr-only">on</span><span className="sr-only lg:not-sr-only">day</span>
             </div>
             <div className="py-2">
-              T<span className="sr-only sm:not-sr-only">ue</span>
+              T<span className="sr-only sm:not-sr-only">ue</span><span className="sr-only lg:not-sr-only">sday</span>
             </div>
             <div className="py-2">
-              W<span className="sr-only sm:not-sr-only">ed</span>
+              W<span className="sr-only sm:not-sr-only">ed</span><span className="sr-only lg:not-sr-only">nesday</span>
             </div>
             <div className="py-2">
-              T<span className="sr-only sm:not-sr-only">hu</span>
+              T<span className="sr-only sm:not-sr-only">hu</span><span className="sr-only lg:not-sr-only">rsday</span>
             </div>
             <div className="py-2">
-              F<span className="sr-only sm:not-sr-only">ri</span>
+              F<span className="sr-only sm:not-sr-only">ri</span><span className="sr-only lg:not-sr-only">day</span>
             </div>
             <div className="py-2">
-              S<span className="sr-only sm:not-sr-only">at</span>
+              S<span className="sr-only sm:not-sr-only">at</span><span className="sr-only lg:not-sr-only">urday</span>
             </div>
           </div>
           <div className="flex bg-gray-300 dark:bg-gray-600 text-md leading-6 text-gray-700 dark:text-gray-200 flex-auto">
@@ -188,24 +210,27 @@ export default function Month() {
                   key={day.date}
                   className={classNames(
                     day.isCurrentMonth
-                      ? "bg-white dark:bg-gray-900"
-                      : "bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                      ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                      : // This month but not current month "bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                      day.isThisMonth
+                      ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      : // Adjacent months
+                      "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
                     "relative px-3 py-2 hover:bg-red-300 hover:dark:bg-red-950"
                   )}
                 >
                   <time
                     dateTime={day.date}
                     className={classNames(
-                      day.isToday
-                        ? "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-gray-50 font-semibold text-white dark:text-black"
-                        : undefined,
-                      "block"
+                      day.isToday &&
+                        "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
+                      "mx-auto flex h-7 w-7 items-center justify-center rounded-full",
                     )}
                   >
                     {day.date.split("-").pop().replace(/^0/, "")}
                   </time>
                   {day.events.length > 0 && (
-                    <ol className="mt-2">
+                    <ol className="my-2">
                       {day.events.slice(0, 2).map((event) => (
                         <li key={event.id}>
                           <a href={event.href} className="group flex">
@@ -214,7 +239,7 @@ export default function Month() {
                             </p>
                             <time
                               dateTime={event.datetime}
-                              className="ml-3 hidden flex-none text-gray-900 dark:text-white group-hover:text-red-900 group-hover:dark:text-red-200 xl:block"
+                              className="ml-3 hidden flex-none text-gray-900 dark:text-white group-hover:text-red-900 group-hover:dark:text-red-200 lg:block"
                             >
                               {event.time}
                             </time>
@@ -238,9 +263,14 @@ export default function Month() {
                   type="button"
                   onClick={() => setSelectedDay(day)}
                   className={classNames(
+                    // Current month styling (takes precedence)
                     day.isCurrentMonth
-                      ? "bg-white dark:bg-gray-900"
-                      : "bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                      ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                      : // This month but not current month "bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                      day.isThisMonth
+                      ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      : // Adjacent months
+                      "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
                     (day === selectedDay || day.isToday) && "font-semibold",
                     day === selectedDay && "text-white dark:text-black",
                     !selectedDay && day.isToday && "text-red-500",
@@ -262,7 +292,7 @@ export default function Month() {
                         "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center rounded-full",
                       day === selectedDay &&
                         day.isToday &&
-                        "bg-gray-900 dark:bg-white",
+                        "bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
                       day === selectedDay && !day.isToday && "bg-red-500",
                       "ml-auto"
                     )}

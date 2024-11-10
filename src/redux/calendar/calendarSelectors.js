@@ -10,3 +10,4 @@ export const selectIsLoading = (state) => state.calendar.isLoading;
 export const selectError = (state) => state.calendar.error;
 export const selectIsAuthenticated = (state) => state.calendar.isAuthenticated;
 export const selectMonths = (state) => state.calendar.months;
+export const selectDays = (state) => state.calendar.days;

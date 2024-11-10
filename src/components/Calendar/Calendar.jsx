@@ -243,7 +243,7 @@ export default function Calendar() {
       {/* Calendar Header */}
       <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div className="w-full">
-          <p className="flex items-center justify-center text-base font-semibold leading-6 w-full">
+          <div className="flex items-center justify-center text-base font-semibold leading-6 w-full">
             <time
               dateTime={navigationDate.toISOString()}
               className="mt-3 sm:hidden"
@@ -258,9 +258,9 @@ export default function Calendar() {
                 <p>
                   Today: {""}
                   {currentDate.toLocaleDateString("default", {
+                    year: "numeric",
                     month: "long",
                     day: "numeric",
-                    year: "numeric",
                   })}
                 </p>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -270,13 +270,35 @@ export default function Calendar() {
               <div className="flex flex-col items-center justify-center mx-auto">
                 <p>Calendar showing:</p>
                 <p>
-                  {navigationDate.toLocaleDateString("default", {
-                    year: "numeric",
-                  })}
+                  {
+                    (calendarView === "year" && navigationDate.toLocaleDateString("default", {
+                      year: "numeric",
+                    }))
+                  }
+                  {
+                    (calendarView === "month" && navigationDate.toLocaleDateString("default", {
+                      year: "numeric",
+                      month: "long",
+                    }))
+                  }
+                  {
+                    (calendarView === "week" && navigationDate.toLocaleDateString("default", {
+                      year: "numeric",
+                      month: "long",
+                      week: "numeric",
+                    }))
+                  }
+                  {
+                    (calendarView === "day" && navigationDate.toLocaleDateString("default", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }))
+                  }
                 </p>
               </div>
             </time>
-          </p>
+          </div>
         </div>
 
         {/* Navigation Controls */}

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectDays,
   selectMonths,
   selectNavigationDate,
   selectEvents,
@@ -32,11 +33,11 @@ const isCurrentMonth = (date) => {
 
 export default function Year() {
   const dispatch = useDispatch();
+  const days = useSelector(selectDays)
   const months = useSelector(selectMonths);
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEvents);
   const isAuthenticated = useSelector(selectIsAuthenticated);
-
   const navigationYear = navigationDate.getFullYear();
 
   const generateDaysInMonth = (month, year, monthEvents) => {
@@ -88,7 +89,7 @@ export default function Year() {
     }
 
     // Fill in the remaining days from the next month
-    const remainingDays = 42 - days.length;
+    const remainingDays = 42 - days.length; // 6 rows × 7 days = 42
     for (let i = 1; i <= remainingDays; i++) {
       const nextMonthDate = new Date(Date.UTC(year, month + 1, i));
       const nextMonthEvents = monthEvents.filter(
@@ -127,6 +128,7 @@ export default function Year() {
         );
       });
 
+      // Generate days and associate events
       const days = generateDaysInMonth(monthIndex, navigationYear, monthEvents);
 
       return {
@@ -140,79 +142,9 @@ export default function Year() {
     dispatch(setMonths(monthsData));
   }, [navigationYear, events, dispatch, isAuthenticated]);
 
-  // const generateDaysInMonth = (month, year) => {
-  //   const days = [];
-  //   const firstDayOfMonth = new Date(year, month, 1);
-  //   const lastDayOfMonth = new Date(year, month + 1, 0);
-
-  //   const firstDayIndex = firstDayOfMonth.getDay();
-  //   const lastDateOfMonth = lastDayOfMonth.getDate();
-
-  //   // Fill in the days from the previous month
-  //   const prevMonthLastDay = new Date(year, month, 0).getDate();
-  //   for (let i = firstDayIndex - 1; i >= 0; i--) {
-  //     const prevMonthDay = prevMonthLastDay - i;
-  //     const prevMonthDate = new Date(year, month - 1, prevMonthDay);
-  //     days.push({
-  //       date: prevMonthDate.toISOString().split("T")[0],
-  //       dayNumber: prevMonthDay,
-  //       isThisMonth: false,
-  //       isCurrentMonth: isCurrentMonth(prevMonthDate),
-  //       isToday: isCurrentDate(prevMonthDate),
-  //       events: [],
-  //     });
-  //   }
-
-  //   // Fill in the days for this month
-  //   for (let day = 1; day <= lastDateOfMonth; day++) {
-  //     const currentDate = new Date(year, month, day);
-  //     days.push({
-  //       date: currentDate.toISOString().split("T")[0],
-  //       dayNumber: day,
-  //       isThisMonth: true,
-  //       isCurrentMonth: isCurrentMonth(currentDate),
-  //       isToday: isCurrentDate(currentDate),
-  //       events: [],
-  //     });
-  //   }
-
-  //   // Fill in the remaining days from the next month
-  //   const remainingDays = 42 - days.length;
-  //   for (let i = 1; i <= remainingDays; i++) {
-  //     const nextMonthDate = new Date(year, month + 1, i);
-  //     days.push({
-  //       date: nextMonthDate.toISOString().split("T")[0],
-  //       dayNumber: i,
-  //       isThisMonth: false,
-  //       isCurrentMonth: isCurrentMonth(nextMonthDate),
-  //       isToday: isCurrentDate(nextMonthDate),
-  //       events: [],
-  //     });
-  //   }
-
-  //   return days;
-  // };
-
   // useEffect(() => {
   //   const fetchYearData = async () => {
-  //     if (!isAuthenticated) {
-  //       console.warn("User is not authenticated");
-  //       return;
-  //     }
 
-  //     const calendarId = "primary";
-  //     const startDate = new Date(navigationYear, 0, 1).toISOString();
-  //     const endDate = new Date(navigationYear, 11, 31).toISOString();
-
-  //     try {
-  //       const response = await gapi.client.calendar.events.list({
-  //         calendarId,
-  //         timeMin: startDate,
-  //         timeMax: endDate,
-  //         showDeleted: false,
-  //         singleEvents: true,
-  //         orderBy: "startTime",
-  //       });
 
   //       const events = response.result.items;
 
