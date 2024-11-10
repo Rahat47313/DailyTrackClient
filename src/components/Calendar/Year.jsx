@@ -51,7 +51,7 @@ export default function Year() {
     const prevMonthLastDay = new Date(year, month, 0).getDate();
     for (let i = firstDayIndex - 1; i >= 0; i--) {
       const prevMonthDay = prevMonthLastDay - i;
-      const prevMonthDate = new Date(year, month - 1, prevMonthDay);
+      const prevMonthDate = new Date(Date.UTC(year, month - 1, prevMonthDay));
       const prevMonthEvents = monthEvents.filter(
         (event) =>
           event.start.date === prevMonthDate.toISOString().split("T")[0] ||
@@ -70,7 +70,7 @@ export default function Year() {
 
     // Fill in the days for this month
     for (let day = 1; day <= lastDateOfMonth; day++) {
-      const currentDate = new Date(year, month, day);
+      const currentDate = new Date(Date.UTC(year, month, day));
       const currentMonthEvents = monthEvents.filter(
         (event) =>
           event.start.date === currentDate.toISOString().split("T")[0] ||
@@ -90,7 +90,7 @@ export default function Year() {
     // Fill in the remaining days from the next month
     const remainingDays = 42 - days.length;
     for (let i = 1; i <= remainingDays; i++) {
-      const nextMonthDate = new Date(year, month + 1, i);
+      const nextMonthDate = new Date(Date.UTC(year, month + 1, i));
       const nextMonthEvents = monthEvents.filter(
         (event) =>
           event.start.date === nextMonthDate.toISOString().split("T")[0] ||

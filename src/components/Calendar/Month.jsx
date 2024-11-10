@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { gapi } from "gapi-script";
+import { useSelector } from "react-redux";
+import {
+  selectEvents,
+  selectCurrentDate,
+} from "../../redux/calendar/calendarSelectors";
 import { ClockIcon } from "@heroicons/react/20/solid";
 
 function classNames(...classes) {
@@ -15,14 +19,8 @@ const isToday = (date) => {
   );
 };
 
-const isCurrentMonth = (date, currentDate) => {
-  return (
-    currentDate.getFullYear() === date.getFullYear() &&
-    currentDate.getMonth() === date.getMonth()
-  );
-};
-
-const generateDaysInMonth = (month, year) => {
+// Generates days in the month and assigns events to the appropriate days
+const generateDaysInMonth = (month, year, monthEvents) => {
   const days = [];
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
@@ -46,9 +44,10 @@ const generateDaysInMonth = (month, year) => {
   // Fill in the days for this month
   for (let day = 1; day <= lastDateOfMonth; day++) {
     const currentDate = new Date(Date.UTC(year, month, day));
+    const currentMonthEvents = monthEvents.filter(event => (event.start.date === currentDate || event.start.dateTime?.split("T")[0] === currentDate))
     days.push({
       date: currentDate.toISOString().split("T")[0],
-      events: [],
+      events: currentMonthEvents,
       isCurrentMonth: true,
       isToday: isToday(currentDate),
     });
@@ -70,69 +69,90 @@ const generateDaysInMonth = (month, year) => {
 };
 
 export default function Month() {
+  const events = useSelector(selectEvents);
+  const currentDate = useSelector(selectCurrentDate);
   const [days, setDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [currentDate] = useState(new Date());
 
   useEffect(() => {
-    const fetchMonthData = async () => {
-      const calendarId = "primary";
-      const startDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        1
-      ).toISOString();
-      const endDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1,
-        0
-      ).toISOString();
+    // Filter events for the current month and year
+    const monthEvents = events.filter(event => {
+      const eventDate = new Date(event.start.date || event.start.dateTime);
+      return (
+        eventDate.getFullYear() === currentDate.getFullYear() &&
+        eventDate.getMonth() === currentDate.getMonth()
+      );
+    });
 
-      try {
-        const response = await gapi.client.calendar.events.list({
-          calendarId,
-          timeMin: startDate,
-          timeMax: endDate,
-          showDeleted: false,
-          singleEvents: true,
-          orderBy: "startTime",
-        });
+    // Generate days and associate events
+    const daysInMonth = generateDaysInMonth(
+      currentDate.getMonth(),
+      currentDate.getFullYear(),
+      monthEvents
+    );
+    setDays(daysInMonth);
+  }, [events, currentDate]);
 
-        const events = response.result.items;
-        const days = generateDaysInMonth(
-          currentDate.getMonth(),
-          currentDate.getFullYear()
-        );
 
-        // Add events to corresponding days
-        events?.forEach((event) => {
-          const eventDate =
-            event.start.date || event.start.dateTime.split("T")[0];
-          const day = days.find((day) => day.date === eventDate);
-          if (day) {
-            day.events.push({
-              id: event.id,
-              name: event.summary,
-              time: new Date(
-                event.start.dateTime || event.start.date
-              ).toLocaleTimeString([], {
-                hour: "numeric",
-                minute: "2-digit",
-              }),
-              datetime: event.start.dateTime || event.start.date,
-              href: event.htmlLink,
-            });
-          }
-        });
+  // useEffect(() => {
+  //   const fetchMonthData = async () => {
+  //     const calendarId = "primary";
+  //     const startDate = new Date(
+  //       currentDate.getFullYear(),
+  //       currentDate.getMonth(),
+  //       1
+  //     ).toISOString();
+  //     const endDate = new Date(
+  //       currentDate.getFullYear(),
+  //       currentDate.getMonth() + 1,
+  //       0
+  //     ).toISOString();
 
-        setDays(days);
-      } catch (error) {
-        console.error("Error fetching events", error);
-      }
-    };
+  //     try {
+  //       const response = await gapi.client.calendar.events.list({
+  //         calendarId,
+  //         timeMin: startDate,
+  //         timeMax: endDate,
+  //         showDeleted: false,
+  //         singleEvents: true,
+  //         orderBy: "startTime",
+  //       });
 
-    fetchMonthData();
-  }, [currentDate]);
+  //       const events = response.result.items;
+  //       const days = generateDaysInMonth(
+  //         currentDate.getMonth(),
+  //         currentDate.getFullYear()
+  //       );
+
+  //       // Add events to corresponding days
+  //       events?.forEach((event) => {
+  //         const eventDate =
+  //           event.start.date || event.start.dateTime.split("T")[0];
+  //         const day = days.find((day) => day.date === eventDate);
+  //         if (day) {
+  //           day.events.push({
+  //             id: event.id,
+  //             name: event.summary,
+  //             time: new Date(
+  //               event.start.dateTime || event.start.date
+  //             ).toLocaleTimeString([], {
+  //               hour: "numeric",
+  //               minute: "2-digit",
+  //             }),
+  //             datetime: event.start.dateTime || event.start.date,
+  //             href: event.htmlLink,
+  //           });
+  //         }
+  //       });
+
+  //       setDays(days);
+  //     } catch (error) {
+  //       console.error("Error fetching events", error);
+  //     }
+  //   };
+
+  //   fetchMonthData();
+  // }, [currentDate]);
 
   return (
     <div className="bg-gradient-to-t from-gray-100 dark:from-gray-700 to-transparent rounded-md lg:invisible">
