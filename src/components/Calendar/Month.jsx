@@ -126,7 +126,7 @@ export default function Month() {
           eventDate.getMonth() === navigationMonth - 1)
       );
     });
-    
+
     // Generate days and associate events
     const days = generateDaysInMonth(
       navigationMonth,
@@ -138,7 +138,6 @@ export default function Month() {
 
   // useEffect(() => {
   //   const fetchMonthData = async () => {
-
 
   //       const events = response.result.items;
   //       const days = generateDaysInMonth(
@@ -177,30 +176,37 @@ export default function Month() {
   // }, [currentDate]);
 
   return (
-    <div className="bg-gradient-to-t from-gray-100 dark:from-gray-700 to-transparent rounded-md lg:invisible">
+    <div className="bg-gradient-to-t from-gray-100 dark:from-gray-700 to-transparent rounded-md lg:invisibled">
       <div className="flex h-full flex-col text-gray-900 dark:text-white lg:visible">
         <div className="shadow ring-1 ring-black ring-opacity-5 flex flex-auto flex-col">
           <div className="grid grid-cols-7 gap-px border-b border-gray-300 dark:border-gray-600 text-center text-md font-semibold leading-6 text-gray-700 dark:text-gray-200 lg:flex-none">
             <div className="py-2">
-              S<span className="sr-only sm:not-sr-only">un</span><span className="sr-only lg:not-sr-only">day</span>
+              S<span className="sr-only sm:not-sr-only">un</span>
+              <span className="sr-only lg:not-sr-only">day</span>
             </div>
             <div className="py-2">
-              M<span className="sr-only sm:not-sr-only">on</span><span className="sr-only lg:not-sr-only">day</span>
+              M<span className="sr-only sm:not-sr-only">on</span>
+              <span className="sr-only lg:not-sr-only">day</span>
             </div>
             <div className="py-2">
-              T<span className="sr-only sm:not-sr-only">ue</span><span className="sr-only lg:not-sr-only">sday</span>
+              T<span className="sr-only sm:not-sr-only">ue</span>
+              <span className="sr-only lg:not-sr-only">sday</span>
             </div>
             <div className="py-2">
-              W<span className="sr-only sm:not-sr-only">ed</span><span className="sr-only lg:not-sr-only">nesday</span>
+              W<span className="sr-only sm:not-sr-only">ed</span>
+              <span className="sr-only lg:not-sr-only">nesday</span>
             </div>
             <div className="py-2">
-              T<span className="sr-only sm:not-sr-only">hu</span><span className="sr-only lg:not-sr-only">rsday</span>
+              T<span className="sr-only sm:not-sr-only">hu</span>
+              <span className="sr-only lg:not-sr-only">rsday</span>
             </div>
             <div className="py-2">
-              F<span className="sr-only sm:not-sr-only">ri</span><span className="sr-only lg:not-sr-only">day</span>
+              F<span className="sr-only sm:not-sr-only">ri</span>
+              <span className="sr-only lg:not-sr-only">day</span>
             </div>
             <div className="py-2">
-              S<span className="sr-only sm:not-sr-only">at</span><span className="sr-only lg:not-sr-only">urday</span>
+              S<span className="sr-only sm:not-sr-only">at</span>
+              <span className="sr-only lg:not-sr-only">urday</span>
             </div>
           </div>
           <div className="flex bg-gray-300 dark:bg-gray-600 text-md leading-6 text-gray-700 dark:text-gray-200 flex-auto">
@@ -208,6 +214,7 @@ export default function Month() {
               {days.map((day) => (
                 <div
                   key={day.date}
+                  onClick={() => setSelectedDay(day)}
                   className={classNames(
                     day.isCurrentMonth
                       ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
@@ -215,16 +222,29 @@ export default function Month() {
                       day.isThisMonth
                       ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                       : // Adjacent months
-                      "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                        "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                    (day === selectedDay || day.isToday) && "font-semibold",
+                    day === selectedDay && "text-white dark:text-black",
+                    !selectedDay && day.isToday && "text-red-500",
+                    !selectedDay &&
+                      day.isCurrentMonth &&
+                      !day.isToday &&
+                      "text-gray-700 dark:text-gray-200",
+                    !selectedDay &&
+                      !day.isCurrentMonth &&
+                      !day.isToday &&
+                      "text-gray-500",
                     "relative px-3 py-2 hover:bg-red-300 hover:dark:bg-red-950"
                   )}
                 >
                   <time
                     dateTime={day.date}
                     className={classNames(
+                      day === selectedDay &&
+                        "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center p-4 rounded-full",
                       day.isToday &&
                         "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
-                      "mx-auto flex h-7 w-7 items-center justify-center rounded-full",
+                      "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
                     )}
                   >
                     {day.date.split("-").pop().replace(/^0/, "")}
@@ -233,15 +253,24 @@ export default function Month() {
                     <ol className="my-2">
                       {day.events.slice(0, 2).map((event) => (
                         <li key={event.id}>
-                          <a href={event.href} className="group flex">
+                          <a
+                            href={event.htmlLink}
+                            target="_blank"
+                            className="group flex"
+                          >
                             <p className="flex-auto truncate font-medium text-gray-900 dark:text-white group-hover:text-red-900 group-hover:dark:text-red-200">
-                              {event.name}
+                              {event.summary}
                             </p>
                             <time
-                              dateTime={event.datetime}
+                              dateTime={event.start.datetime}
                               className="ml-3 hidden flex-none text-gray-900 dark:text-white group-hover:text-red-900 group-hover:dark:text-red-200 lg:block"
                             >
-                              {event.time}
+                              {new Date(
+                                event.start.dateTime || event.start.date
+                              ).toLocaleTimeString([], {
+                                hour: "numeric",
+                                minute: "2-digit",
+                              })}
                             </time>
                           </a>
                         </li>
@@ -270,7 +299,7 @@ export default function Month() {
                       day.isThisMonth
                       ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                       : // Adjacent months
-                      "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+                        "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
                     (day === selectedDay || day.isToday) && "font-semibold",
                     day === selectedDay && "text-white dark:text-black",
                     !selectedDay && day.isToday && "text-red-500",
@@ -289,12 +318,10 @@ export default function Month() {
                     dateTime={day.date}
                     className={classNames(
                       day === selectedDay &&
-                        "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center rounded-full",
-                      day === selectedDay &&
-                        day.isToday &&
-                        "bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
-                      day === selectedDay && !day.isToday && "bg-red-500",
-                      "ml-auto"
+                        "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center p-4 rounded-full",
+                      day.isToday &&
+                        "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
+                      "ml-auto flex h-7 w-7 items-center justify-center rounded-full"
                     )}
                   >
                     {day.date.split("-").pop().replace(/^0/, "")}
@@ -316,8 +343,8 @@ export default function Month() {
           </div>
         </div>
         {selectedDay?.events.length > 0 && (
-          <div className="px-4 py-10 sm:px-6 lg:hidden">
-            <ol className="divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-sm shadow ring-1 ring-black ring-opacity-5">
+          <div className="px-4 py-10 sm:px-6">
+            <ol className="divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-sm shadow ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-5">
               {selectedDay.events.map((event) => (
                 <li
                   key={event.id}
@@ -325,24 +352,48 @@ export default function Month() {
                 >
                   <div className="flex-auto">
                     <p className="font-semibold text-gray-900 dark:text-white">
-                      {event.name}
+                      {event.summary}
                     </p>
-                    <time
-                      dateTime={event.datetime}
-                      className="mt-2 flex items-center text-gray-700 dark:text-gray-200"
-                    >
-                      <ClockIcon
-                        className="mr-2 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      {event.time}
-                    </time>
+                    <div className="flex items-center">
+                      <time
+                        dateTime={event.start.datetime}
+                        className="mt-2 flex items-center text-gray-700 dark:text-gray-200"
+                      >
+                        <ClockIcon
+                          className="mr-2 h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        {event.start.date && "all day"}
+                        {event.start.dateTime &&
+                          new Date(event.start.dateTime).toLocaleTimeString(
+                            [],
+                            { hour: "numeric", minute: "2-digit" }
+                          )}
+                      </time>
+                      {!event.end.date && (
+                        <time
+                          dateTime={event.end.datetime}
+                          className="mt-2 flex items-center text-gray-700 dark:text-gray-200"
+                        >
+                          <p>&nbsp;~&nbsp;</p>
+                          <ClockIcon
+                            className="mr-2 h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          {event.end.dateTime &&
+                            new Date(event.end.dateTime).toLocaleTimeString(
+                              [],
+                              { hour: "numeric", minute: "2-digit" }
+                            )}
+                        </time>
+                      )}
+                    </div>
                   </div>
                   <a
-                    href={event.href}
+                    href={event.htmlLink}
                     className="ml-6 flex-none self-center rounded-md bg-white px-3 py-2 font-semibold text-gray-900 opacity-0 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400 focus:opacity-100 group-hover:opacity-100"
                   >
-                    Edit<span className="sr-only">, {event.name}</span>
+                    Edit<span className="sr-only">, {event.summary}</span>
                   </a>
                 </li>
               ))}
