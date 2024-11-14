@@ -1,0 +1,1 @@
+export const selectPage = (state) => state.pages.page;

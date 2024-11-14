@@ -1,24 +1,23 @@
+import { useDispatch } from "react-redux";
 import { Checkbox } from "flowbite-react";
 import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
 import SidebarRight from "./SidebarRight";
+import { setVisibility } from "../redux/sidebarRight/sidebarRightSlice";
 
 export default function Upcoming() {
+  const dispatch = useDispatch();
   return (
     <>
       <div>
-        <div className="pointer-events-none fixed top-0 right-0 z-40 w-[400px] h-screen">
-          <SidebarRight />
-        </div>
+        <SidebarRight />
         <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
           Upcoming Tasks
         </div>
         <div className="p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
           <div className="font-bold text-2xl mb-4">Today</div>
           <button
-            data-drawer-target="drawer-navigation"
-            data-drawer-show="drawer-navigation"
-            aria-controls="drawer-navigation"
+            onClick={() => dispatch(setVisibility(true))}
             className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
           >
             <TiPlus />
@@ -31,9 +30,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              data-drawer-target="drawer-navigation"
-              data-drawer-show="drawer-navigation"
-              aria-controls="drawer-navigation"
+              onClick={() => dispatch(setVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -48,9 +45,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              data-drawer-target="drawer-navigation"
-              data-drawer-show="drawer-navigation"
-              aria-controls="drawer-navigation"
+              onClick={() => dispatch(setVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -88,9 +83,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              data-drawer-target="drawer-navigation"
-              data-drawer-show="drawer-navigation"
-              aria-controls="drawer-navigation"
+              onClick={() => dispatch(setVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -105,9 +98,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              data-drawer-target="drawer-navigation"
-              data-drawer-show="drawer-navigation"
-              aria-controls="drawer-navigation"
+              onClick={() => dispatch(setVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -120,9 +111,7 @@ export default function Upcoming() {
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
             <div className="font-bold text-2xl mb-4">Tomorrow</div>
             <button
-              data-drawer-target="drawer-navigation"
-              data-drawer-show="drawer-navigation"
-              aria-controls="drawer-navigation"
+              onClick={() => dispatch(setVisibility(true))}
               className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
             >
               <TiPlus />
@@ -135,9 +124,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                data-drawer-target="drawer-navigation"
-                data-drawer-show="drawer-navigation"
-                aria-controls="drawer-navigation"
+                onClick={() => dispatch(setVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -152,9 +139,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                data-drawer-target="drawer-navigation"
-                data-drawer-show="drawer-navigation"
-                aria-controls="drawer-navigation"
+                onClick={() => dispatch(setVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -166,9 +151,7 @@ export default function Upcoming() {
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
             <div className="font-bold text-2xl mb-4">This Week</div>
             <button
-              data-drawer-target="drawer-navigation"
-              data-drawer-show="drawer-navigation"
-              aria-controls="drawer-navigation"
+              onClick={() => dispatch(setVisibility(true))}
               className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
             >
               <TiPlus />
@@ -181,9 +164,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                data-drawer-target="drawer-navigation"
-                data-drawer-show="drawer-navigation"
-                aria-controls="drawer-navigation"
+                onClick={() => dispatch(setVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -198,9 +179,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                data-drawer-target="drawer-navigation"
-                data-drawer-show="drawer-navigation"
-                aria-controls="drawer-navigation"
+                onClick={() => dispatch(setVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -215,9 +194,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                data-drawer-target="drawer-navigation"
-                data-drawer-show="drawer-navigation"
-                aria-controls="drawer-navigation"
+                onClick={() => dispatch(setVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">

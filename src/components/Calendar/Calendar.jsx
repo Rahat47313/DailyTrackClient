@@ -26,8 +26,8 @@ import {
 import {
   selectCalendarView,
   selectCurrentDate,
-  selectCurrentMonth,
-  selectCurrentYear,
+  // selectCurrentMonth,
+  // selectCurrentYear,
   selectNavigationDate,
   selectEvents,
   selectIsLoading,
@@ -42,34 +42,34 @@ const VIEW_OPTIONS = {
   YEAR: "year",
 };
 
-const isCurrentDate = (date) => {
-  const today = new Date();
-  return (
-    today.getFullYear() === date.getFullYear() &&
-    today.getMonth() === date.getMonth() &&
-    today.getDate() === date.getDate()
-  );
-};
+// const isCurrentDate = (date) => {
+//   const today = new Date();
+//   return (
+//     today.getFullYear() === date.getFullYear() &&
+//     today.getMonth() === date.getMonth() &&
+//     today.getDate() === date.getDate()
+//   );
+// };
 
-const isCurrentMonth = (date) => {
-  const currentDate = new Date();
-  return (
-    currentDate.getFullYear() === date.getFullYear() &&
-    currentDate.getMonth() === date.getMonth()
-  );
-};
+// const isCurrentMonth = (date) => {
+//   const currentDate = new Date();
+//   return (
+//     currentDate.getFullYear() === date.getFullYear() &&
+//     currentDate.getMonth() === date.getMonth()
+//   );
+// };
 
-const isCurrentYear = (date) => {
-  const currentDate = new Date();
-  return currentDate.getFullYear() === date.getFullYear();
-};
+// const isCurrentYear = (date) => {
+//   const currentDate = new Date();
+//   return currentDate.getFullYear() === date.getFullYear();
+// };
 
 export default function Calendar() {
   const dispatch = useDispatch();
   const calendarView = useSelector(selectCalendarView);
   const currentDate = useSelector(selectCurrentDate);
-  const currentMonth = useSelector(selectCurrentMonth);
-  const currentYear = useSelector(selectCurrentYear);
+  // const currentMonth = useSelector(selectCurrentMonth);
+  // const currentYear = useSelector(selectCurrentYear);
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEvents);
   const isLoading = useSelector(selectIsLoading);
