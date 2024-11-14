@@ -3,8 +3,8 @@ import { selectNotes } from "../redux/stickyWall/stickyWallSelectors";
 import { setNotes } from "../redux/stickyWall/stickyWallSlice";
 
 export default function StickyWall() {
-  const dispatch = useDispatch()
-  const notes = useSelector(selectNotes)
+  const dispatch = useDispatch();
+  const notes = useSelector(selectNotes);
 
   const createNewNote = () => {
     const newNote = {
@@ -15,7 +15,7 @@ export default function StickyWall() {
   };
 
   const updateNoteContent = (id, content) => {
-    const updatedNotes = notes.map(note => 
+    const updatedNotes = notes.map((note) =>
       note.id === id ? { ...note, content } : note
     );
     dispatch(setNotes(updatedNotes));
@@ -31,7 +31,7 @@ export default function StickyWall() {
           <textarea
             key={note.id}
             value={note.content}
-            onChange={e => updateNoteContent(note.id, e.target.value)}
+            onChange={(e) => updateNoteContent(note.id, e.target.value)}
             className="text-[20px] font-gloria leading-[1.5] border-0 rounded-[3px] bg-[linear-gradient(#f9efaf,#f7e98d)] shadow-[0_4px_6px_rgba(0,0,0,0.1)] overflow-hidden transition-shadow duration-500 ease-in-out subpixel-antialiased max-w-[520px] max-h-[250px] hover:shadow-[0_5px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_5px_12px_rgba(0,0,0,0.2)] outline-none w-[250px] h-[250px] m-[0px_20px_20px_0px] p-[25px_25px_40px]"
           />
         ))}
