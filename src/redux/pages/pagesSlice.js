@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  page: "upcoming",
+  page: "sticky wall",
 };
 
 const pagesSlice = createSlice({
