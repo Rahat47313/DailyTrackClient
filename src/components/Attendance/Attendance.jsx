@@ -1,5 +1,5 @@
 import { Button, Tabs } from "flowbite-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { selectCurrentDate } from "../../redux/calendar/calendarSelectors";
@@ -7,6 +7,7 @@ import { selectCurrentDate } from "../../redux/calendar/calendarSelectors";
 export default function Attendance() {
   const tabsRef = useRef(null);
   const [activeTab, setActiveTab] = useState(0);
+  const [currentTime, setCurrentTime] = useState(new Date().toISOString().split("T")[1]);
   const currentDate = useSelector(selectCurrentDate);
   const tabTheme = {
     base: "flex flex-col gap-2",
@@ -38,24 +39,31 @@ export default function Attendance() {
     },
     tabpanel: "py-3",
   };
+
+  useEffect(() => {
+    setInterval(() => {
+      setCurrentTime(new Date().toISOString().split("T")[1])
+    }, 1000)
+  }, []);
   return (
     <div>
       <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
         Attendance
       </div>
-      <div>
-                <p>
-                  Today: {""}
-                  {currentDate.toLocaleDateString("default", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  {currentDate.toLocaleString("default", { weekday: "long" })}
-                </p>
-              </div>
+      <div className="mb-4">
+        <p>
+          {currentDate.toLocaleDateString("default", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          {currentDate.toLocaleString("default", { weekday: "long" })}
+        </p>
+        <p>{currentTime}</p>
+      </div>
+      <p className="text-4xl">Welcome, User</p>
       <div className="flex flex-col gap-3">
         <Tabs
           variant="underline"
@@ -64,9 +72,17 @@ export default function Attendance() {
           onActiveTabChange={(tab) => setActiveTab(tab)}
         >
           <Tabs.Item active title="Personal Attendance" icon={BsPersonFill}>
+            <div className="flex justify-center items-center gap-20">
+              <button className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+                Clock In
+              </button>
+              <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                Clock Out
+              </button>
+            </div>
             This is{" "}
             <span className="font-medium text-gray-800 dark:text-white">
-              Profile tab's associated content
+              Profile tab&apos;s associated content
             </span>
             . Clicking another tab will toggle the visibility of this one for
             the next. The tab JavaScript swaps classes to control the content
@@ -75,7 +91,7 @@ export default function Attendance() {
           <Tabs.Item title="Office Overview" icon={BsPeopleFill}>
             This is{" "}
             <span className="font-medium text-gray-800 dark:text-white">
-              Dashboard tab's associated content
+              Dashboard tab&apos;s associated content
             </span>
             . Clicking another tab will toggle the visibility of this one for
             the next. The tab JavaScript swaps classes to control the content

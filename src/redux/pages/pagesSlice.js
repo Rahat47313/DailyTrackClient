@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  page: "calendar",
+  page: "attendance",
 };
 
 const pagesSlice = createSlice({
