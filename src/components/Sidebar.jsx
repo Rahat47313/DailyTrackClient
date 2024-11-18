@@ -1,29 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Datepicker } from "flowbite-react";
+import { useDispatch } from "react-redux";
 import { setPage } from "../redux/pages/pagesSlice";
-import { selectPage } from "../redux/pages/pagesSelectors";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const page = useSelector(selectPage)
 
-  const customTheme = {
-    root: {
-      base: "w-full", // Styling the outer wrapper
-    },
-    triggerButton: {
-      base: "text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 font-medium rounded-lg text-sm text-center flex justify-center items-center dark:bg-gray-700 dark:hover:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-    },
-    popup: {
-      base: "absolute top-10 z-50 block pt-2",
-    },
-  };
-
-  function generateRandomColor() {
-    var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-    return randomColor;
-    //random color will be freshly served
-  }
+  // function generateRandomColor() {
+  //   var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+  //   return randomColor;
+  //   //random color will be freshly served
+  // }
 
   return (
     <>
@@ -125,12 +110,6 @@ export default function Sidebar() {
               </li>
             </ul>
           </div>
-          {page === "calendar" && 
-          <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-            <div>DATEPICKER</div>
-            <Datepicker id="datepick" theme={customTheme} />
-          </div>
-          }
           <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
             <div>LISTS</div>
             <ul>

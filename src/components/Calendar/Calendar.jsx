@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { gapi } from "gapi-script";
+import { Datepicker } from "flowbite-react";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -79,6 +80,12 @@ export default function Calendar() {
   const classNames = useCallback((...classes) => {
     return classes.filter(Boolean).join(" ");
   }, []);
+
+  const datepickerTheme = {
+    root: {
+      input: "bg-pink-800"
+    },
+  };
 
   const navigateDate = useCallback(
     (amount, unit) => {
@@ -270,31 +277,27 @@ export default function Calendar() {
               <div className="flex flex-col items-center justify-center mx-auto">
                 <p>Calendar showing:</p>
                 <p>
-                  {
-                    (calendarView === "year" && navigationDate.toLocaleDateString("default", {
+                  {calendarView === "year" &&
+                    navigationDate.toLocaleDateString("default", {
                       year: "numeric",
-                    }))
-                  }
-                  {
-                    (calendarView === "month" && navigationDate.toLocaleDateString("default", {
+                    })}
+                  {calendarView === "month" &&
+                    navigationDate.toLocaleDateString("default", {
                       year: "numeric",
                       month: "long",
-                    }))
-                  }
-                  {
-                    (calendarView === "week" && navigationDate.toLocaleDateString("default", {
+                    })}
+                  {calendarView === "week" &&
+                    navigationDate.toLocaleDateString("default", {
                       year: "numeric",
                       month: "long",
                       week: "numeric",
-                    }))
-                  }
-                  {
-                    (calendarView === "day" && navigationDate.toLocaleDateString("default", {
+                    })}
+                  {calendarView === "day" &&
+                    navigationDate.toLocaleDateString("default", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
-                    }))
-                  }
+                    })}
                 </p>
               </div>
             </time>
@@ -302,7 +305,13 @@ export default function Calendar() {
         </div>
 
         {/* Navigation Controls */}
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
+          {(calendarView === "day" || calendarView === "week") && (
+            <div>
+              <Datepicker id="datepick" theme={datepickerTheme} className="[&_input]:bg-pink-800" />
+            </div>
+          )}
+
           <div className="relative flex items-center rounded-md ring-1 ring-gray-300 dark:ring-gray-600 shadow-sm md:items-stretch">
             <button
               onClick={handlePrevious}
@@ -330,7 +339,7 @@ export default function Calendar() {
           </div>
 
           {/* View Selector */}
-          <Menu as="div" className="relative ml-4">
+          <Menu as="div" className="relative">
             <Menu.Button className="text-sm w-max font-semibold shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 rounded-lg px-3 py-2.5 ">
               {calendarView.charAt(0).toUpperCase() + calendarView.slice(1)}{" "}
               view
