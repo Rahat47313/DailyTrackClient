@@ -7,7 +7,7 @@ import { selectCurrentDate } from "../../redux/calendar/calendarSelectors";
 export default function Attendance() {
   const tabsRef = useRef(null);
   const [activeTab, setActiveTab] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date().toISOString().split("T")[1]);
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
   const currentDate = useSelector(selectCurrentDate);
   const tabTheme = {
     base: "flex flex-col gap-2",
@@ -18,7 +18,7 @@ export default function Attendance() {
           "-mb-px flex-wrap justify-center border-b border-gray-200 dark:border-gray-700",
       },
       tabitem: {
-        base: "flex items-center justify-center rounded-t-lg p-4 text-sm font-medium first:ml-0 focus:outline-none focus:ring-1 focus:ring-gray-300 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
+        base: "flex items-center justify-center rounded-t-lg p-4 text-sm font-medium first:ml-0 focus:outline-none focus:ring-1 focus:ring-gray-300 focus:dark:ring-gray-600 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
         variant: {
           underline: {
             base: "rounded-t-lg",
@@ -42,7 +42,7 @@ export default function Attendance() {
 
   useEffect(() => {
     setInterval(() => {
-      setCurrentTime(new Date().toISOString().split("T")[1])
+      setCurrentTime(new Date().toLocaleTimeString())
     }, 1000)
   }, []);
   return (
