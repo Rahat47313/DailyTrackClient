@@ -1,13 +1,16 @@
 import { Button, Tabs } from "flowbite-react";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { selectCurrentDate } from "../../redux/calendar/calendarSelectors";
+import PersonalAttendanceGrid from "./PersonalAttendanceGrid";
 
 export default function Attendance() {
   const tabsRef = useRef(null);
   const [activeTab, setActiveTab] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString()
+  );
   const currentDate = useSelector(selectCurrentDate);
   const tabTheme = {
     base: "flex flex-col gap-2",
@@ -42,8 +45,8 @@ export default function Attendance() {
 
   useEffect(() => {
     setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString())
-    }, 1000)
+      setCurrentTime(new Date().toLocaleTimeString());
+    }, 1000);
   }, []);
   return (
     <div>
@@ -72,21 +75,65 @@ export default function Attendance() {
           onActiveTabChange={(tab) => setActiveTab(tab)}
         >
           <Tabs.Item active title="Personal Attendance" icon={BsPersonFill}>
-            <div className="flex justify-center items-center gap-20">
-              <button className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-                Clock In
-              </button>
-              <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-                Clock Out
-              </button>
+            <div className="my-10">
+              <div className="flex justify-center items-center gap-20">
+                <button className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+                  Clock In
+                </button>
+                <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                  Clock Out
+                </button>
+              </div>
             </div>
-            This is{" "}
-            <span className="font-medium text-gray-800 dark:text-white">
-              Profile tab&apos;s associated content
-            </span>
-            . Clicking another tab will toggle the visibility of this one for
-            the next. The tab JavaScript swaps classes to control the content
-            visibility and styling.
+
+            {/* grid starts */}
+
+            <PersonalAttendanceGrid />
+            {/* <div className="flex h-full flex-col text-gray-900 dark:text-white">
+              <div className="isolate flex flex-auto flex-col overflow-auto">
+                <div className="grid grid-cols-[repeat(13,1fr)] text-sm leading-6 divide-x divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
+                  <div className="col-start-1 row-start-1 sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 shadow text-center font-semibold">
+                    Date
+                  </div>
+                  {[
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                  ].map((month) => (
+                    <div
+                      key={month}
+                      className="sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 shadow text-center font-semibold"
+                    >
+                      {month}
+                    </div>
+                  ))}
+                  {[...Array(31)].map((_, rowIndex) => (
+                    <Fragment key={rowIndex}>
+                      <div className="text-right font-semibold bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 pr-2">
+                        {rowIndex + 1}
+                      </div>
+                      {[...Array(12)].map((_, colIndex) => (
+                        <div
+                          key={`${rowIndex}-${colIndex}`}
+                          className="h-14 text-center border-b border-gray-200 dark:border-gray-700"
+                        ></div>
+                      ))}
+                    </Fragment>
+                  ))}
+                </div>
+              </div>
+            </div> */}
+
+            {/* grid ends */}
           </Tabs.Item>
           <Tabs.Item title="Office Overview" icon={BsPeopleFill}>
             This is{" "}
