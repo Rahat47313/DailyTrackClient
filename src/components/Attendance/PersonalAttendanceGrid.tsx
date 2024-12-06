@@ -104,7 +104,18 @@ export default function PersonalAttendanceGrid({
                         parseInt(day) <= daysInMonth
                             ? currentYearAttendance[month]?.[day] || "-"
                             : "-";
+                        
+                        // Function to format status for display
+                        const formatStatus = (status: string) => {
+                          switch(status) {
+                            case 'Present': return { full: 'Present', abbr: 'P' };
+                            case 'Absent': return { full: 'Absent', abbr: 'A' };
+                            default: return { full: '-', abbr: '-' };
+                          }
+                        };
 
+                        const formattedStatus = formatStatus(status);
+                        
                         return (
                           <div
                             key={month}
@@ -113,10 +124,11 @@ export default function PersonalAttendanceGrid({
                                 ? "text-green-500"
                                 : status === "Absent"
                                 ? "text-red-500"
-                                : "text-gray-300"
+                                : "text-gray-300 dark:text-gray-600"
                             }`}
                           >
-                            {status}
+                            <span className="hidden lg:inline">{formattedStatus.full}</span>
+                            <span className="lg:hidden">{formattedStatus.abbr}</span>
                           </div>
                         );
                       })}

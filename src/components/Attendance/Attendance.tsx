@@ -12,6 +12,8 @@ export default function Attendance() {
     new Date().toLocaleTimeString()
   );
   const currentDate = useSelector(selectCurrentDate);
+  const [clockingInTime, setClockingInTime] = useState("");
+  const [clockingOutTime, setClockingOutTime] = useState("");
   const tabTheme = {
     base: "flex flex-col gap-2",
     tablist: {
@@ -54,20 +56,42 @@ export default function Attendance() {
       <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
         Attendance
       </div>
-      <div className="mb-4">
-        <p>
-          {currentDate.toLocaleDateString("default", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </p>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          {currentDate.toLocaleString("default", { weekday: "long" })}
-        </p>
-        <p>{currentTime}</p>
+      <div className="flex items-center">
+        <div>
+          <p>
+            {currentDate.toLocaleDateString("default", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            {currentDate.toLocaleString("default", { weekday: "long" })}
+          </p>
+          <p>{currentTime}</p>
+        </div>
+        <p className="flex text-4xl mx-auto">Welcome, User</p>
+        <div className="flex flex-col items-center">
+          <div className="flex justify-center items-center gap-10 mb-3">
+            <button
+              onClick={() => setClockingInTime(new Date().toLocaleTimeString())}
+              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+            >
+              Clock In
+            </button>
+            <button
+              onClick={() =>
+                setClockingOutTime(new Date().toLocaleTimeString())
+              }
+              className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
+              Clock Out
+            </button>
+          </div>
+          {clockingInTime && <p>Clocked in at {clockingInTime}</p>}
+          {clockingOutTime && <p>Clocked out at {clockingOutTime}</p>}
+        </div>
       </div>
-      <p className="text-4xl">Welcome, User</p>
       <div className="flex flex-col gap-3">
         <Tabs
           variant="underline"

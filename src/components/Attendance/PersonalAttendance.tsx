@@ -28,19 +28,9 @@ export default function PersonalAttendance() {
 
   return (
     <>
-      <div className="my-10">
-        <div className="flex justify-center items-center gap-20">
-          <button className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-            Clock In
-          </button>
-          <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-            Clock Out
-          </button>
-        </div>
-      </div>
       <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div className="flex flex-col items-center justify-center mx-auto">
-          <p>Calendar showing:</p>
+          <p>Year</p>
           <p>{navigationDate.getFullYear()}</p>
         </div>
         {/* Navigation Controls */}
