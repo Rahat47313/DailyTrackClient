@@ -5,6 +5,13 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 // import Login from "./login/Login";
 
+// Define the interface for DarkThemeToggle props
+interface DarkThemeToggleInterface {
+  checked: boolean;
+  onChange: () => void;
+  className: string;
+}
+
 function App() {
   const [darkMode, setDarkMode] = useState(() =>
     localStorage.getItem("flowbite-theme-mode") === "dark" ? true : false
@@ -18,6 +25,14 @@ function App() {
       document.documentElement.classList.remove("dark");
     }
   }, [darkMode]);
+
+  // Ensure props for DarkThemeToggle are typed correctly
+  const darkThemeToggleProps: DarkThemeToggleInterface = {
+    checked: darkMode,
+    onChange: () => setDarkMode(!darkMode),
+    className: "focus:ring-0",
+  };
+
   return (
     <>
       <Flowbite>
@@ -26,11 +41,7 @@ function App() {
         <Dashboard />
         <div className="fixed z-30 top-2 right-[80px]">
           {/* Dark theme toggle button */}
-          <DarkThemeToggle
-            checked={darkMode}
-            onChange={() => setDarkMode(!darkMode)}
-            className="focus:ring-0"
-          />
+          <DarkThemeToggle {...darkThemeToggleProps} />
         </div>
       </Flowbite>
     </>

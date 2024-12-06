@@ -1,17 +1,19 @@
 import { useMemo } from "react";
+import attendanceData from "./Attendance.json";
 
 // Types to improve type safety
 type AttendanceStatus = 'Present' | 'Absent' | '-';
-type MonthAttendance = { [day: number]: AttendanceStatus };
-type YearAttendance = { [month: string]: MonthAttendance };
-
+type MonthAttendance = { [day: string]: AttendanceStatus | string };
+type YearAttendance = { [year: string]: { [month: string]: MonthAttendance } };
+//type AttendanceData = { [year: string]: { [month: string]: { [day: string]: string} } };
 export default function PersonalAttendanceGrid({ 
   navigationDate, 
-  attendanceData 
 }: { 
   navigationDate: Date, 
-  attendanceData: YearAttendance 
 }) {
+  // Explicitly type the imported attendanceData
+  const typedAttendanceData: YearAttendance = attendanceData;
+
   // Generate an array of months in a fixed order
   const months = [
     "JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
@@ -24,27 +26,34 @@ export default function PersonalAttendanceGrid({
     return new Date(year, monthIndex + 1, 0).getDate();
   };
 
+  // Type guard to check if a status is valid
+  const isValidStatus = (status: string): status is AttendanceStatus => {
+    return ['Present', 'Absent', '-'].includes(status);
+  };
+
   // Memoized attendance data for the current year
   const currentYearAttendance = useMemo(() => {
-    const year = navigationDate.getFullYear();
+    const year = navigationDate.getFullYear().toString();
     // Create a complete year's attendance structure
-    const yearAttendance: YearAttendance = {};
+    const yearAttendance: { [month: string]: MonthAttendance } = {};
     
     months.forEach(month => {
       yearAttendance[month] = {};
-      const daysInMonth = getDaysInMonth(year, month);
+      const daysInMonth = getDaysInMonth(navigationDate.getFullYear(), month);
       
       // Check if we have existing data for this month
-      const existingMonthData = attendanceData[month] || {};
+      const existingMonthData = typedAttendanceData[year]?.[month] || {};
       
       // Populate attendance for each day
       for (let day = 1; day <= daysInMonth; day++) {
-        yearAttendance[month][day] = existingMonthData[day] || '-';
+        const dayStr = day.toString();
+        const dayStatus = existingMonthData[dayStr];
+        yearAttendance[month][dayStr] = isValidStatus(dayStatus) ? dayStatus : '-';
       }
     });
     
     return yearAttendance;
-  }, [navigationDate, attendanceData]);
+  }, [navigationDate]);
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">
@@ -76,7 +85,7 @@ export default function PersonalAttendanceGrid({
                 }}
               >
                 {[...Array(31)].map((_, rowIndex) => {
-                  const day = rowIndex + 1;
+                  const day = (rowIndex + 1).toString();
                   return (
                     <div
                       key={rowIndex}
@@ -92,7 +101,7 @@ export default function PersonalAttendanceGrid({
                         // Only show status if the day exists in that month
                         const daysInMonth = getDaysInMonth(navigationDate.getFullYear(), month);
                         const status =
-                          day <= daysInMonth
+                        parseInt(day) <= daysInMonth
                             ? currentYearAttendance[month]?.[day] || "-"
                             : "-";
 
