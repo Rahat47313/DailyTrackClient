@@ -1,14 +1,14 @@
 import { useState, useCallback } from "react";
-import PersonalAttendanceGrid from "./PersonalAttendanceGrid";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import OfficeOverviewGrid from "./OfficeOverviewGrid";
 
-export default function PersonalAttendance() {
+export default function OfficeOverview() {
   const [navigationDate, setNavigationDate] = useState(new Date());
 
   const navigateDate = useCallback(
     (amount: number) => {
       const newDate = new Date(navigationDate);
-      newDate.setFullYear(navigationDate.getFullYear() + amount);
+      newDate.setMonth(navigationDate.getMonth() + amount);
       setNavigationDate(newDate);
     },
     [navigationDate]
@@ -30,7 +30,10 @@ export default function PersonalAttendance() {
     <>
       <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div className="flex items-center justify-center mx-auto">
-          Year {navigationDate.getFullYear()}
+          {navigationDate.toLocaleDateString("default", {
+              year: "numeric",
+              month: "long",
+            })}
         </div>
         {/* Navigation Controls */}
         <div className="flex items-center gap-4">
@@ -39,7 +42,7 @@ export default function PersonalAttendance() {
               onClick={handlePrevious}
               className="flex items-center justify-center rounded-l-md py-2.5 pl-3 pr-4 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 focus:relative md:w-9 md:px-2"
             >
-              <span className="sr-only">Previous year</span>
+              <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <button
@@ -52,13 +55,13 @@ export default function PersonalAttendance() {
               onClick={handleNext}
               className="flex items-center justify-center rounded-r-md py-2.5 pl-4 pr-3 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 bg-white dark:bg-gray-800 hover:bg-gray-50 hover:dark:bg-gray-700 focus:relative md:w-9 md:px-2"
             >
-              <span className="sr-only">Next year</span>
+              <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
         </div>
       </header>
-      <PersonalAttendanceGrid navigationDate={navigationDate} />
+      <OfficeOverviewGrid navigationDate={navigationDate} />
     </>
   );
 }

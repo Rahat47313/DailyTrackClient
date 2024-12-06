@@ -4,6 +4,7 @@ import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { selectCurrentDate } from "../../redux/calendar/calendarSelectors";
 import PersonalAttendance from "./PersonalAttendance";
+import OfficeOverview from "./OfficeOverview";
 
 export default function Attendance() {
   const tabsRef = useRef(null);
@@ -103,13 +104,7 @@ export default function Attendance() {
             <PersonalAttendance />
           </Tabs.Item>
           <Tabs.Item title="Office Overview" icon={BsPeopleFill}>
-            This is{" "}
-            <span className="font-medium text-gray-800 dark:text-white">
-              Dashboard tab&apos;s associated content
-            </span>
-            . Clicking another tab will toggle the visibility of this one for
-            the next. The tab JavaScript swaps classes to control the content
-            visibility and styling.
+            <OfficeOverview />
           </Tabs.Item>
         </Tabs>
         {/* <div className="text-sm text-gray-500 dark:text-gray-400">

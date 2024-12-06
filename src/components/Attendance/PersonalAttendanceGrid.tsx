@@ -1,18 +1,19 @@
 import { useMemo } from "react";
-import attendanceData from "./Attendance.json";
+import PersonalAttendanceData from "./PersonalAttendanceData.json";
 
 // Types to improve type safety
 type AttendanceStatus = 'Present' | 'Absent' | '-';
 type MonthAttendance = { [day: string]: AttendanceStatus | string };
 type YearAttendance = { [year: string]: { [month: string]: MonthAttendance } };
 //type AttendanceData = { [year: string]: { [month: string]: { [day: string]: string} } };
+
 export default function PersonalAttendanceGrid({ 
   navigationDate, 
 }: { 
   navigationDate: Date, 
 }) {
-  // Explicitly type the imported attendanceData
-  const typedAttendanceData: YearAttendance = attendanceData;
+  // Explicitly type the imported PersonalAttendanceData
+  const typedAttendanceData: YearAttendance = PersonalAttendanceData;
 
   // Generate an array of months in a fixed order
   const months = [
