@@ -1,7 +1,40 @@
+import { useCallback, useEffect } from "react";
+import { gapi } from "gapi-script";
+import { useDispatch } from "react-redux";
+import { setIsAuthenticated } from "../redux/calendar/calendarSlice";
+import { initializeGoogleAPI, fetchEvents } from "../redux/calendar/calendarThunks";
+import { NavLink } from "react-router-dom";
+import { setNavAndSideVisibility } from "../redux/navAndSide/navAndSideSlice";
 import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
 import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
-export default function Login({funcNav}) {
-  funcNav(false)
+
+export default function Login() {
+  const dispatch = useDispatch()
+  dispatch(setNavAndSideVisibility(false))
+
+  useEffect(() => {
+    gapi.load("client:auth2", () => dispatch(initializeGoogleAPI()));
+  }, [dispatch]);
+
+  const handleAuthChange = useCallback(
+    async (isSignedIn) => {
+      dispatch(setIsAuthenticated(isSignedIn));
+      if (isSignedIn) {
+        dispatch(fetchEvents());
+      }
+    },
+    [dispatch]
+  );
+
+  const handleSignIn = useCallback(async () => {
+    try {
+      await gapi.auth2.getAuthInstance().signIn();
+      handleAuthChange(true);
+    } catch (error) {
+      console.error("Sign in error:", error);
+    }
+  }, [handleAuthChange]);
+
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -80,9 +113,10 @@ export default function Login({funcNav}) {
                 </div>
                 <button
                   type="submit"
+                  onClick={handleSignIn}
                   className="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                 >
-                  Sign in
+                  <NavLink to="/upcoming" onClick={() => dispatch(setShowNavAndSide(true))}>Sign in</NavLink>
                 </button>
                 {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{" "}

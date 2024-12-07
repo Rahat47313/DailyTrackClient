@@ -160,33 +160,33 @@ export default function Calendar() {
     gapi.load("client:auth2", () => dispatch(initializeGoogleAPI()));
   }, [dispatch]);
 
-  const handleAuthChange = useCallback(
-    async (isSignedIn) => {
-      dispatch(setIsAuthenticated(isSignedIn));
-      if (isSignedIn) {
-        dispatch(fetchEvents());
-      }
-    },
-    [dispatch]
-  );
+  // const handleAuthChange = useCallback(
+  //   async (isSignedIn) => {
+  //     dispatch(setIsAuthenticated(isSignedIn));
+  //     if (isSignedIn) {
+  //       dispatch(fetchEvents());
+  //     }
+  //   },
+  //   [dispatch]
+  // );
 
-  const handleSignIn = useCallback(async () => {
-    try {
-      await gapi.auth2.getAuthInstance().signIn();
-      handleAuthChange(true);
-    } catch (error) {
-      console.error("Sign in error:", error);
-    }
-  }, [handleAuthChange]);
+  // const handleSignIn = useCallback(async () => {
+  //   try {
+  //     await gapi.auth2.getAuthInstance().signIn();
+  //     handleAuthChange(true);
+  //   } catch (error) {
+  //     console.error("Sign in error:", error);
+  //   }
+  // }, [handleAuthChange]);
 
-  const handleSignOut = useCallback(async () => {
-    try {
-      await gapi.auth2.getAuthInstance().signOut();
-      handleAuthChange(false);
-    } catch (error) {
-      console.error("Sign out error:", error);
-    }
-  }, [handleAuthChange]);
+  // const handleSignOut = useCallback(async () => {
+  //   try {
+  //     await gapi.auth2.getAuthInstance().signOut();
+  //     handleAuthChange(false);
+  //   } catch (error) {
+  //     console.error("Sign out error:", error);
+  //   }
+  // }, [handleAuthChange]);
 
   const renderCalendarView = () => {
     const viewProps = {
@@ -221,10 +221,10 @@ export default function Calendar() {
       </div>
 
       {/* Authentication and Action Buttons */}
-      <div className="flex gap-4 mb-4">
+      {/* <div className="flex gap-4 mb-4">
         {!isAuthenticated ? (
           <button
-            onClick={handleSignIn}
+            // onClick={handleSignIn}
             className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             disabled={isLoading}
           >
@@ -232,14 +232,14 @@ export default function Calendar() {
           </button>
         ) : (
           <button
-            onClick={handleSignOut}
+            // onClick={handleSignOut}
             className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             disabled={isLoading}
           >
             Sign Out
           </button>
         )}
-      </div>
+      </div> */}
 
       {/* Error Display */}
       {error && (

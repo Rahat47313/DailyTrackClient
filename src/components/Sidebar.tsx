@@ -1,15 +1,23 @@
-import { useDispatch } from "react-redux";
-import { setPage } from "../redux/pages/pagesSlice";
+import { gapi } from "gapi-script";
+import { useCallback } from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
-  const dispatch = useDispatch();
 
   // function generateRandomColor() {
   //   var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
   //   return randomColor;
   //   //random color will be freshly served
   // }
+
+
+  const handleSignOut = useCallback(async () => {
+    try {
+      await gapi.auth2.getAuthInstance().signOut();
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  }, []);
 
   return (
     <>
@@ -25,7 +33,6 @@ export default function Sidebar() {
               <li>
                 <NavLink
                   to="/upcoming"
-                  onClick={() => dispatch(setPage("upcoming"))}
                   className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
@@ -176,8 +183,8 @@ export default function Sidebar() {
               </li>
               <li>
                 <NavLink
-                  to="/"
-                  onClick={() => dispatch(setPage("sticky wall"))}
+                  to="/login"
+                  onClick={handleSignOut}
                   className="w-full flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
