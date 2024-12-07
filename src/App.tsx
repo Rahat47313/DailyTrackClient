@@ -1,6 +1,8 @@
+import { BrowserRouter } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { DarkThemeToggle, Flowbite } from "flowbite-react";
-import Dashboard from "./components/Dashboard";
+import axios from "axios";
+import AppRoutes from "./AppRoutes"
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 // import Login from "./login/Login";
@@ -11,6 +13,12 @@ interface DarkThemeToggleInterface {
   onChange: () => void;
   className: string;
 }
+
+const apiCall = () => {
+  axios.get("http://localhost:3000").then((data) => {
+    console.log(data);
+  });
+};
 
 function App() {
   const [darkMode, setDarkMode] = useState(() =>
@@ -35,15 +43,21 @@ function App() {
 
   return (
     <>
-      <Flowbite>
-        <Navbar />
-        <Sidebar />
-        <Dashboard />
-        <div className="fixed z-30 top-2 right-[80px]">
-          {/* Dark theme toggle button */}
-          <DarkThemeToggle {...darkThemeToggleProps} />
-        </div>
-      </Flowbite>
+      <BrowserRouter>
+        <Flowbite>
+          <AppRoutes />
+          <div className="fixed z-30 top-2 right-[80px]">
+            {/* Dark theme toggle button */}
+            <DarkThemeToggle {...darkThemeToggleProps} />
+          </div>
+          <button
+            onClick={apiCall}
+            className="fixed top-1.5 left-1/2 z-[100] text-white bg-gray-950 rounded-md py-3 px-5"
+          >
+            Make API call
+          </button>
+        </Flowbite>
+      </BrowserRouter>
     </>
   );
 }

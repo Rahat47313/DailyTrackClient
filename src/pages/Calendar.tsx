@@ -8,22 +8,22 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/20/solid";
 import { Menu } from "@headlessui/react";
-import Day from "./Day";
-import Week from "./Week";
-import Month from "./Month";
-import Year from "./Year";
+import Day from "../components/Calendar/Day";
+import Week from "../components/Calendar/Week";
+import Month from "../components/Calendar/Month";
+import Year from "../components/Calendar/Year";
 import {
   setCalendarView,
   setNavigationDate,
   setIsAuthenticated,
-} from "../../redux/calendar/calendarSlice";
+} from "../redux/calendar/calendarSlice";
 import {
   initializeGoogleAPI,
   fetchEvents,
   createEvent,
   updateEvent,
   deleteEvent,
-} from "../../redux/calendar/calendarThunks";
+} from "../redux/calendar/calendarThunks";
 import {
   selectCalendarView,
   selectCurrentDate,
@@ -34,7 +34,7 @@ import {
   selectIsLoading,
   selectError,
   selectIsAuthenticated,
-} from "../../redux/calendar/calendarSelectors";
+} from "../redux/calendar/calendarSelectors";
 
 const VIEW_OPTIONS = {
   DAY: "day",
@@ -214,7 +214,8 @@ export default function Calendar() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
+    <div className="text-gray-900 dark:text-white p-4 md:ml-64 mt-[60px]">
       <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
         Calendar
       </div>
@@ -377,5 +378,6 @@ export default function Calendar() {
         )}
       </div>
     </div>
+    </>
   );
 }

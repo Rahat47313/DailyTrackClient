@@ -2,14 +2,14 @@ import { useDispatch } from "react-redux";
 import { Checkbox } from "flowbite-react";
 import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
-import SidebarRight from "./SidebarRight";
+import SidebarRight from "../components/SidebarRight";
 import { setVisibility } from "../redux/sidebarRight/sidebarRightSlice";
 
 export default function Upcoming() {
   const dispatch = useDispatch();
   return (
     <>
-      <div>
+      <div className="text-gray-900 dark:text-white p-4 md:ml-64 mt-[60px]">
         <SidebarRight />
         <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
           Upcoming Tasks

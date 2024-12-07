@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { setPage } from "../redux/pages/pagesSlice";
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -22,7 +23,8 @@ export default function Sidebar() {
             <div>TASKS</div>
             <ul>
               <li>
-                <button
+                <NavLink
+                  to="/upcoming"
                   onClick={() => dispatch(setPage("upcoming"))}
                   className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
@@ -37,11 +39,11 @@ export default function Sidebar() {
                     </svg>
                   </div>
                   <span className="ms-3 whitespace-nowrap">Upcoming</span>
-                </button>
+                </NavLink>
               </li>
               <li>
-                <button
-                  onClick={() => dispatch(setPage("attendance"))}
+                <NavLink
+                  to="/attendance"
                   className="w-full flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="flex">
@@ -60,11 +62,11 @@ export default function Sidebar() {
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
                     Pro
                   </span>
-                </button>
+                </NavLink>
               </li>
               <li>
-                <button
-                  onClick={() => dispatch(setPage("calendar"))}
+                <NavLink
+                  to="/calendar"
                   className="w-full flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="flex">
@@ -79,11 +81,11 @@ export default function Sidebar() {
                   <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
                     3
                   </span>
-                </button>
+                </NavLink>
               </li>
               <li>
-                <button
-                  onClick={() => dispatch(setPage("sticky wall"))}
+                <NavLink
+                  to="stickyWall"
                   className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
@@ -106,7 +108,7 @@ export default function Sidebar() {
                     </svg>
                   </div>
                   <span className="ms-3 whitespace-nowrap">Sticky Wall</span>
-                </button>
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -114,8 +116,8 @@ export default function Sidebar() {
             <div>LISTS</div>
             <ul>
               <li>
-                <button
-                  href="#"
+                <NavLink
+                  to="#"
                   className="w-full flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="flex">
@@ -127,11 +129,11 @@ export default function Sidebar() {
                   <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
                     3
                   </span>
-                </button>
+                </NavLink>
               </li>
               <li>
-                <button
-                  href="#"
+                <NavLink
+                  to="#"
                   className="w-full flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="flex">
@@ -141,23 +143,23 @@ export default function Sidebar() {
                   <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
                     4
                   </span>
-                </button>
+                </NavLink>
               </li>
               <li>
-                <button
-                  href="#"
+                <NavLink
+                  to="#"
                   className="w-full flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <span className="">+ Add New List</span>
-                </button>
+                </NavLink>
               </li>
             </ul>
           </div>
           <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
             <ul>
               <li>
-                <button
-                  href="#"
+                <NavLink
+                  tp="#"
                   className="w-full flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
@@ -170,11 +172,12 @@ export default function Sidebar() {
                     </svg>
                   </div>
                   <span className="ms-3">Settings</span>
-                </button>
+                </NavLink>
               </li>
               <li>
-                <button
-                  href="#"
+                <NavLink
+                  to="/"
+                  onClick={() => dispatch(setPage("sticky wall"))}
                   className="w-full flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
@@ -195,7 +198,7 @@ export default function Sidebar() {
                     </svg>
                   </div>
                   <span className="ms-3">Sign Out</span>
-                </button>
+                </NavLink>
               </li>
             </ul>
           </div>

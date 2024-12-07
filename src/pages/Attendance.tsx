@@ -2,9 +2,9 @@ import { Button, Tabs } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { selectCurrentDate } from "../../redux/calendar/calendarSelectors";
-import PersonalAttendance from "./PersonalAttendance";
-import OfficeOverview from "./OfficeOverview";
+import { selectCurrentDate } from "../redux/calendar/calendarSelectors";
+import PersonalAttendance from "../components/Attendance/PersonalAttendance";
+import OfficeOverview from "../components/Attendance/OfficeOverview";
 
 export default function Attendance() {
   const tabsRef = useRef(null);
@@ -53,7 +53,8 @@ export default function Attendance() {
   }, []);
 
   return (
-    <div>
+    <>
+    <div className="text-gray-900 dark:text-white p-4 md:ml-64 mt-[60px]">
       <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
         Attendance
       </div>
@@ -120,5 +121,6 @@ export default function Attendance() {
         </Button.Group> */}
       </div>
     </div>
+    </>
   );
 }

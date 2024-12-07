@@ -1,5 +1,7 @@
-import DailyTrack from "../assets/logo/DailyTrack.svg";
-export default function Login() {
+import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
+import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
+export default function Login({funcNav}) {
+  funcNav(false)
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -8,7 +10,8 @@ export default function Login() {
             href=""
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
           >
-            <img className="h-8 mr-2" src={DailyTrack} alt="logo" />
+            <img className="h-8 mr-2" src={DailyTrack_dark} alt="logo" />
+            <img className="h-8 mr-2" src={DailyTrack_light} alt="logo" />
           </a>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
