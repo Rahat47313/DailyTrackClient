@@ -8,6 +8,7 @@ import StickyWall from "./pages/StickyWall";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import { selectNavAndSideVisibility } from "./redux/navAndSide/navAndSideSelectors";
+import Dashboard from "./pages/Dashboard";
 
 
 export default function AppRoutes() {
@@ -21,6 +22,7 @@ export default function AppRoutes() {
         </>
       )}
       <Routes>
+        <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />}></Route>
         {/* <Route path="/" element={<Dashboard />} /> */}
         <Route path="/upcoming" element={<Upcoming />} />

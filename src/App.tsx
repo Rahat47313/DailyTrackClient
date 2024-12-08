@@ -1,10 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { DarkThemeToggle, Flowbite } from "flowbite-react";
-import axios from "axios";
 import AppRoutes from "./AppRoutes"
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
 // import Login from "./login/Login";
 
 // Define the interface for DarkThemeToggle props
@@ -13,12 +10,6 @@ interface DarkThemeToggleInterface {
   onChange: () => void;
   className: string;
 }
-
-const apiCall = () => {
-  axios.get("http://localhost:3000").then((data) => {
-    console.log(data);
-  });
-};
 
 function App() {
   const [darkMode, setDarkMode] = useState(() =>
@@ -50,12 +41,6 @@ function App() {
             {/* Dark theme toggle button */}
             <DarkThemeToggle {...darkThemeToggleProps} />
           </div>
-          <button
-            onClick={apiCall}
-            className="fixed top-1.5 left-1/2 z-[100] text-white bg-gray-950 rounded-md py-3 px-5"
-          >
-            Make API call
-          </button>
         </Flowbite>
       </BrowserRouter>
     </>

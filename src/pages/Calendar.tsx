@@ -35,6 +35,7 @@ import {
   selectError,
   selectIsAuthenticated,
 } from "../redux/calendar/calendarSelectors";
+import { useNavigate } from "react-router-dom";
 
 const VIEW_OPTIONS = {
   DAY: "day",
@@ -76,6 +77,7 @@ export default function Calendar() {
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const navigate = useNavigate();
 
   const classNames = useCallback((...classes) => {
     return classes.filter(Boolean).join(" ");
@@ -87,20 +89,76 @@ export default function Calendar() {
     },
   };
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const checkAuth = async () => {
+      try {
+        if (!gapi.client) {
+          await dispatch(initializeGoogleAPI()).unwrap();
+        }
+
+        const auth2 = gapi.auth2?.getAuthInstance();
+        if (!auth2) {
+          navigate('/login');
+          return;
+        }
+
+        if (!isAuthenticated) {
+          navigate('/login');
+          return;
+        }
+
+        if (isMounted) {
+          await dispatch(fetchEvents()).unwrap();
+        }
+      } catch (error) {
+        console.error('Calendar auth error:', error);
+        if (isMounted) {
+          navigate('/login');
+        }
+      }
+    };
+
+    checkAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [dispatch, isAuthenticated, navigate]);
+
+  // Show loading state while checking auth
+  // if (!gapi.auth2?.getAuthInstance()) {
+  //   return <div>Initializing...</div>;
+  // }
+
+  // Only redirect if explicitly not authenticated
+  // if (isAuthenticated === false) {
+  //   return null;
+  // }
+
+  // if (isLoading) {
+  //   return <div>Loading calendar...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
+
   const navigateDate = useCallback(
-    (amount, unit) => {
+    (amount, view) => {
       const newDate = new Date(navigationDate);
-      switch (unit) {
-        case "day":
+      switch (view) {
+        case VIEW_OPTIONS.DAY:
           newDate.setDate(navigationDate.getDate() + amount);
           break;
-        case "week":
+        case VIEW_OPTIONS.WEEK:
           newDate.setDate(navigationDate.getDate() + amount * 7);
           break;
-        case "month":
+        case VIEW_OPTIONS.MONTH:
           newDate.setMonth(navigationDate.getMonth() + amount);
           break;
-        case "year":
+        case VIEW_OPTIONS.YEAR:
           newDate.setFullYear(navigationDate.getFullYear() + amount);
           break;
       }
@@ -156,9 +214,6 @@ export default function Calendar() {
     }
   }, [calendarView]);
 
-  useEffect(() => {
-    gapi.load("client:auth2", () => dispatch(initializeGoogleAPI()));
-  }, [dispatch]);
 
   // const handleAuthChange = useCallback(
   //   async (isSignedIn) => {
@@ -242,11 +297,11 @@ export default function Calendar() {
       </div> */}
 
       {/* Error Display */}
-      {error && (
+      {/* {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
           {error}
         </div>
-      )}
+      )} */}
 
       {/* Calendar Header */}
       <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">

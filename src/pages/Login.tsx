@@ -1,39 +1,59 @@
 import { useCallback, useEffect } from "react";
 import { gapi } from "gapi-script";
-import { useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsAuthenticated } from "../redux/calendar/calendarSlice";
+import { selectIsAuthenticated } from "../redux/calendar/calendarSelectors";
 import { initializeGoogleAPI, fetchEvents } from "../redux/calendar/calendarThunks";
-import { NavLink } from "react-router-dom";
 import { setNavAndSideVisibility } from "../redux/navAndSide/navAndSideSlice";
 import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
 import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
 
 export default function Login() {
   const dispatch = useDispatch()
-  dispatch(setNavAndSideVisibility(false))
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   useEffect(() => {
-    gapi.load("client:auth2", () => dispatch(initializeGoogleAPI()));
-  }, [dispatch]);
+    let isMounted = true;
 
-  const handleAuthChange = useCallback(
-    async (isSignedIn) => {
-      dispatch(setIsAuthenticated(isSignedIn));
-      if (isSignedIn) {
-        dispatch(fetchEvents());
+    const initAuth = async () => {
+      try {
+        dispatch(setNavAndSideVisibility(false));
+        
+        if (!gapi.client) {
+          await dispatch(initializeGoogleAPI()).unwrap();
+        }
+
+        if (isMounted && isAuthenticated) {
+          navigate('/upcoming');
+          dispatch(setNavAndSideVisibility(true));
+        }
+      } catch (error) {
+        console.error('Failed to initialize Google API:', error);
       }
-    },
-    [dispatch]
-  );
+    };
 
-  const handleSignIn = useCallback(async () => {
+    initAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [dispatch, isAuthenticated, navigate]);
+
+  const handleSignIn = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      await gapi.auth2.getAuthInstance().signIn();
-      handleAuthChange(true);
+      const auth2 = gapi.auth2.getAuthInstance();
+      await auth2.signIn();
+      dispatch(setIsAuthenticated(true));
+      dispatch(fetchEvents());
+      navigate('/upcoming');
+      dispatch(setNavAndSideVisibility(true));
     } catch (error) {
       console.error("Sign in error:", error);
     }
-  }, [handleAuthChange]);
+  }, [dispatch, navigate]);
 
   return (
     <>
@@ -116,7 +136,7 @@ export default function Login() {
                   onClick={handleSignIn}
                   className="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                 >
-                  <NavLink to="/upcoming" onClick={() => dispatch(setShowNavAndSide(true))}>Sign in</NavLink>
+                  Sign in
                 </button>
                 {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{" "}
