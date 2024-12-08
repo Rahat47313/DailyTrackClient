@@ -83,12 +83,6 @@ export default function Calendar() {
     return classes.filter(Boolean).join(" ");
   }, []);
 
-  const datepickerTheme = {
-    root: {
-      input: "bg-pink-800"
-    },
-  };
-
   useEffect(() => {
     let isMounted = true;
 
@@ -364,7 +358,7 @@ export default function Calendar() {
         <div className="flex items-center gap-4">
           {(calendarView === "day" || calendarView === "week") && (
             <div>
-              <Datepicker id="datepick" theme={datepickerTheme} className="[&_input]:bg-pink-800" />
+              <Datepicker id="datepick" className="[&_input]:bg-white dark:[&_input]:bg-gray-800 hover:[&_input]:bg-gray-50 hover:dark:[&_input]:bg-gray-700" />
             </div>
           )}
 
