@@ -63,6 +63,7 @@ export default function Week() {
       .map((event) => {
         const start = new Date(event.start.dateTime || event.start.date);
         const end = new Date(event.end.dateTime || event.end.date);
+        const isAllDay = !event.start.dateTime;
 
         return {
           id: event.id,
@@ -70,14 +71,14 @@ export default function Week() {
           start,
           end,
           column: start.getDay() + 1,
-          startRow:
-            start.getHours() * 12 + Math.floor(start.getMinutes() / 5) + 1,
-          endRow: end.getHours() * 12 + Math.floor(end.getMinutes() / 5) + 1,
+          startRow: isAllDay
+            ? 1
+            : start.getHours() * 12 + Math.floor(start.getMinutes() / 5) + 1,
+          endRow: isAllDay
+            ? 288
+            : end.getHours() * 12 + Math.floor(end.getMinutes() / 5) + 1,
           url: event.htmlLink,
-          color: event.colorId
-            ? `bg-${event.colorId}-50 hover:bg-${event.colorId}-100`
-            : "bg-blue-50 hover:bg-blue-100",
-          isAllDay: !event.start.dateTime,
+          isAllDay,
         };
       });
   };
@@ -231,74 +232,39 @@ export default function Week() {
                   >
                     <a
                       href={event.url}
+                      target="_blank"
                       className={classNames(
-                        "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg p-2 text-xs leading-5 bg-gray-100 hover:bg-gray-200"
+                        "group absolute inset-1 rounded-lg p-2 text-xs leading-5",
+                        event.isAllDay
+                          ? "border-2"
+                          : "bg-gray-100 hover:bg-gray-200"
                       )}
                     >
-                      <p className="order-1 font-semibold text-gray-700">
-                        {event.title}
-                      </p>
-                      <p className="text-gray-500 group-hover:text-gray-700">
-                        <time dateTime={event.start.toISOString()}>
-                          {event.isAllDay
-                            ? "All day"
-                            : event.start.toLocaleTimeString([], {
-                                hour: "numeric",
-                                minute: "2-digit",
-                              })}
-                        </time>
-                      </p>
+                      <div
+                        className={classNames(
+                          "flex flex-col overflow-y-auto",
+                          event.isAllDay
+                            ? "bg-gray-100 hover:bg-gray-200 rounded-lg px-2"
+                            : ""
+                        )}
+                      >
+                        <p className="order-1 font-semibold text-gray-700">
+                          {event.title}
+                        </p>
+                        <p className="text-gray-500 group-hover:text-gray-700">
+                          <time dateTime={event.start.toISOString()}>
+                            {event.isAllDay
+                              ? "All day"
+                              : event.start.toLocaleTimeString([], {
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                })}
+                          </time>
+                        </p>
+                      </div>
                     </a>
                   </li>
                 ))}
-                {/* <li
-                  className="relative mt-px flex sm:col-start-3"
-                  style={{ gridRow: "74 / span 12" }}
-                >
-                  <a
-                    href="#"
-                    className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100"
-                  >
-                    <p className="order-1 font-semibold text-blue-700">
-                      Breakfast
-                    </p>
-                    <p className="text-blue-500 group-hover:text-blue-700">
-                      <time dateTime="2022-01-12T06:00">6:00 AM</time>
-                    </p>
-                  </a>
-                </li>
-                <li
-                  className="relative mt-px flex sm:col-start-3"
-                  style={{ gridRow: "92 / span 30" }}
-                >
-                  <a
-                    href="#"
-                    className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
-                  >
-                    <p className="order-1 font-semibold text-pink-700">
-                      Flight to Paris
-                    </p>
-                    <p className="text-pink-500 group-hover:text-pink-700">
-                      <time dateTime="2022-01-12T07:30">7:30 AM</time>
-                    </p>
-                  </a>
-                </li>
-                <li
-                  className="relative mt-px hidden sm:col-start-6 sm:flex"
-                  style={{ gridRow: "122 / span 24" }}
-                >
-                  <a
-                    href="#"
-                    className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg p-2 text-xs leading-5 bg-gray-100 hover:bg-gray-200"
-                  >
-                    <p className="order-1 font-semibold text-gray-700">
-                      Meeting with design team at Disney
-                    </p>
-                    <p className="text-gray-500 group-hover:text-gray-700">
-                      <time dateTime="2022-01-15T10:00">10:00 AM</time>
-                    </p>
-                  </a>
-                </li> */}
               </ol>
             </div>
           </div>
