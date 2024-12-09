@@ -8,7 +8,6 @@ import {
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
 import { setMonths } from "../../redux/calendar/calendarSlice";
-// import { gapi } from "gapi-script";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -113,8 +112,7 @@ export default function Year() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      console.warn("User is not authenticated");
-      return;
+      console.warn("User is not authenticated, Events will not be fetched");
     }
 
     const monthsData = Array.from({ length: 12 }, (_, monthIndex) => {
@@ -141,41 +139,6 @@ export default function Year() {
 
     dispatch(setMonths(monthsData));
   }, [navigationYear, events, dispatch, isAuthenticated]);
-
-  // useEffect(() => {
-  //   const fetchYearData = async () => {
-
-
-  //       const events = response.result.items;
-
-  //       const monthsData = Array.from({ length: 12 }, (_, monthIndex) => {
-  //         const days = generateDaysInMonth(monthIndex, navigationYear);
-
-  //         events?.forEach((event) => {
-  //           const eventDate =
-  //             event.start.date || event.start.dateTime.split("T")[0];
-  //           const day = days.find((day) => day.date === eventDate);
-  //           if (day) {
-  //             day.events.push(event);
-  //           }
-  //         });
-
-  //         return {
-  //           name: new Date(navigationYear, monthIndex).toLocaleString("default", {
-  //             month: "long",
-  //           }),
-  //           days,
-  //         };
-  //       });
-
-  //       dispatch(setMonths(monthsData));
-  //     } catch (error) {
-  //       console.error("Error fetching events", error);
-  //     }
-  //   };
-
-  //   fetchYearData();
-  // }, [navigationYear, dispatch, isAuthenticated]);
 
   return (
     <div>

@@ -84,7 +84,9 @@ export default function Week() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated){
+      console.warn("User is not authenticated, Events will not be fetched");
+    }
 
     const days = getWeekDays(new Date(navigationDate));
     setWeekDays(days);

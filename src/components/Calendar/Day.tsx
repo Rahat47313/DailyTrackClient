@@ -1,69 +1,70 @@
-import { useEffect, useRef } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-
-const days = [
-  { date: "2021-12-27" },
-  { date: "2021-12-28" },
-  { date: "2021-12-29" },
-  { date: "2021-12-30" },
-  { date: "2021-12-31" },
-  { date: "2022-01-01", isCurrentMonth: true },
-  { date: "2022-01-02", isCurrentMonth: true },
-  { date: "2022-01-03", isCurrentMonth: true },
-  { date: "2022-01-04", isCurrentMonth: true },
-  { date: "2022-01-05", isCurrentMonth: true },
-  { date: "2022-01-06", isCurrentMonth: true },
-  { date: "2022-01-07", isCurrentMonth: true },
-  { date: "2022-01-08", isCurrentMonth: true },
-  { date: "2022-01-09", isCurrentMonth: true },
-  { date: "2022-01-10", isCurrentMonth: true },
-  { date: "2022-01-11", isCurrentMonth: true },
-  { date: "2022-01-12", isCurrentMonth: true },
-  { date: "2022-01-13", isCurrentMonth: true },
-  { date: "2022-01-14", isCurrentMonth: true },
-  { date: "2022-01-15", isCurrentMonth: true },
-  { date: "2022-01-16", isCurrentMonth: true },
-  { date: "2022-01-17", isCurrentMonth: true },
-  { date: "2022-01-18", isCurrentMonth: true },
-  { date: "2022-01-19", isCurrentMonth: true },
-  { date: "2022-01-20", isCurrentMonth: true, isToday: true },
-  { date: "2022-01-21", isCurrentMonth: true },
-  { date: "2022-01-22", isCurrentMonth: true, isSelected: true },
-  { date: "2022-01-23", isCurrentMonth: true },
-  { date: "2022-01-24", isCurrentMonth: true },
-  { date: "2022-01-25", isCurrentMonth: true },
-  { date: "2022-01-26", isCurrentMonth: true },
-  { date: "2022-01-27", isCurrentMonth: true },
-  { date: "2022-01-28", isCurrentMonth: true },
-  { date: "2022-01-29", isCurrentMonth: true },
-  { date: "2022-01-30", isCurrentMonth: true },
-  { date: "2022-01-31", isCurrentMonth: true },
-  { date: "2022-02-01" },
-  { date: "2022-02-02" },
-  { date: "2022-02-03" },
-  { date: "2022-02-04" },
-  { date: "2022-02-05" },
-  { date: "2022-02-06" },
-];
+import { Fragment, useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectDays,
+  selectNavigationDate,
+  selectEvents,
+  selectIsAuthenticated,
+} from "../../redux/calendar/calendarSelectors";
+import { fetchEvents } from "../../redux/calendar/calendarThunks";
+import { setDays } from "../../redux/calendar/calendarSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Day() {
+  const dispatch = useDispatch();
+  const days = useSelector(selectDays);
+  const navigationDate = useSelector(selectNavigationDate);
+  const events = useSelector(selectEvents);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const container = useRef(null);
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
 
+  const generateWeekDays = useCallback((date) => {
+    const currentDate = new Date(date);
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+
+    return Array.from({ length: 7 }, (_, i) => {
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
+      return {
+        date: day.toISOString(),
+        dayName: day.toLocaleDateString("default", { weekday: "short" }),
+        dayNumber: day.getDate(),
+        isToday: day.toDateString() === new Date().toDateString(),
+        dateString: day.toISOString().split("T")[0],
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    dispatch(fetchEvents()).catch((error) => {
+      console.error("Failed to fetch events", error);
+    });
+  }, [dispatch, isAuthenticated]);
+
+  useEffect(() => {
+    const weekDays = generateWeekDays(navigationDate);
+    dispatch(setDays(weekDays));
+  }, [dispatch, generateWeekDays]);
+
   useEffect(() => {
     // Set the container scroll position based on the current time.
-    const currentMinute = new Date().getHours() * 60;
-    container.current.scrollTop =
-      ((container.current.scrollHeight -
-        containerNav.current.offsetHeight -
-        containerOffset.current.offsetHeight) *
-        currentMinute) /
-      1440;
+    if (container.current && containerNav.current && containerOffset.current) {
+      const currentMinute = new Date().getHours() * 60;
+      container.current.scrollTop =
+        ((container.current.scrollHeight -
+          containerNav.current.offsetHeight -
+          containerOffset.current.offsetHeight) *
+          currentMinute) /
+        1440;
+    }
   }, []);
 
   return (
@@ -74,70 +75,25 @@ export default function Day() {
             ref={containerNav}
             className="sticky top-0 z-10 grid flex-none grid-cols-7 text-xs text-gray-500 dark:text-gray-400 shadow ring-1 ring-black dark:ring-white ring-opacity-5 md:hidden"
           >
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>W</span>
-              {/* Default: "text-gray-900", Selected: "bg-gray-900 text-white", Today (Not Selected): "text-indigo-600", Today (Selected): "bg-indigo-600 text-white" */}
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900 dark:text-gray-50">
-                19
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>T</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-indigo-600">
-                20
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>F</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900 dark:text-gray-50">
-                21
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>S</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 dark:bg-gray-50 text-base font-semibold text-white dark:text-black">
-                22
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>S</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900 dark:text-gray-50">
-                23
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>M</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900 dark:text-gray-50">
-                24
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>T</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900 dark:text-gray-50">
-                25
-              </span>
-            </button>
+            {days.map((day) => (
+              <button
+                key={day.dateString}
+                type="button"
+                className="flex flex-col items-center pb-1.5 pt-3"
+              >
+                <span>{day.dayName}</span>
+                <span
+                  className={classNames(
+                    "mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold",
+                    day.isToday
+                      ? "bg-indigo-600 text-white"
+                      : "text-gray-900 dark:text-gray-50"
+                  )}
+                >
+                  {day.dayNumber}
+                </span>
+              </button>
+            ))}
           </div>
           <div className="flex w-full flex-auto">
             <div className="w-14 flex-none ring-1 ring-gray-200 dark:ring-gray-700" />
@@ -148,150 +104,20 @@ export default function Day() {
                 style={{ gridTemplateRows: "repeat(48, minmax(3.5rem, 1fr))" }}
               >
                 <div ref={containerOffset} className="row-end-1 h-7"></div>
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    12AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    1AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    2AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    3AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    4AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    5AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    6AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    7AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    8AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    9AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    10AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    11AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    12PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    1PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    2PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    3PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    4PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    5PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    6PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    7PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    8PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    9PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    10PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    11PM
-                  </div>
-                </div>
-                <div />
+                {Array.from({ length: 24 }, (_, hour) => (
+                  <Fragment key={hour}>
+                    <div>
+                      <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-500 dark:text-gray-400">
+                        {hour === 0
+                          ? "12AM"
+                          : hour > 12
+                          ? `${hour - 12}PM`
+                          : `${hour}AM`}
+                      </div>
+                    </div>
+                    <div />
+                  </Fragment>
+                ))}
               </div>
 
               {/* Events */}
@@ -301,7 +127,61 @@ export default function Day() {
                   gridTemplateRows: "1.75rem repeat(288, minmax(0, 1fr)) auto",
                 }}
               >
-                <li
+                {events.map((event) => {
+                  const start = new Date(
+                    event.start.dateTime || event.start.date
+                  );
+                  const end = new Date(event.end.dateTime || event.end.date);
+                  const isAllDay = !event.start.dateTime;
+
+                  return (
+                    <li
+                      key={event.id}
+                      style={{
+                        gridRow: `${
+                          isAllDay
+                            ? 1
+                            : start.getHours() * 12 +
+                              Math.floor(start.getMinutes() / 5) +
+                              1
+                        } / span ${
+                          isAllDay
+                            ? 288
+                            : end.getHours() * 12 +
+                              Math.floor(end.getMinutes() / 5) +
+                              1 -
+                              (start.getHours() * 12 +
+                                Math.floor(start.getMinutes() / 5) +
+                                1)
+                        }`,
+                      }}
+                      className="relative mt-px flex"
+                    >
+                      <a
+                        href={event.htmlLink}
+                        target="_blank"
+                        className="group absolute inset-1 rounded-lg text-xs leading-5 bg-gray-100 hover:bg-gray-200 p-2"
+                      >
+                        <div className="flex flex-col overflow-y-auto">
+                          <p className="order-1 font-semibold text-gray-700">
+                            {event.summary}
+                          </p>
+                          <p className="text-gray-500 group-hover:text-gray-700">
+                            <time dateTime={start.toISOString()}>
+                              {isAllDay
+                                ? "All day"
+                                : start.toLocaleTimeString([], {
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                  })}
+                            </time>
+                          </p>
+                        </div>
+                      </a>
+                    </li>
+                  );
+                })}
+                {/* <li
                   className="relative mt-px flex"
                   style={{ gridRow: "74 / span 12" }}
                 >
@@ -354,75 +234,9 @@ export default function Day() {
                       <time dateTime="2022-01-22T11:00">11:00 AM</time>
                     </p>
                   </a>
-                </li>
+                </li> */}
               </ol>
             </div>
-          </div>
-        </div>
-        <div className="hidden w-1/2 max-w-md flex-none border-l border-gray-200 dark:border-gray-700 px-8 py-10 md:block">
-          <div className="flex items-center text-center">
-            <button
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-            >
-              <span className="sr-only">Previous month</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <div className="flex-auto text-sm font-semibold">January 2022</div>
-            <button
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-            >
-              <span className="sr-only">Next month</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-          <div className="mt-6 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
-            <div>M</div>
-            <div>T</div>
-            <div>W</div>
-            <div>T</div>
-            <div>F</div>
-            <div>S</div>
-            <div>S</div>
-          </div>
-          <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
-            {days.map((day, dayIdx) => (
-              <button
-                key={day.date}
-                type="button"
-                className={classNames(
-                  "py-1.5 hover:bg-gray-100 focus:z-10",
-                  day.isCurrentMonth ? "bg-white" : "bg-gray-50",
-                  (day.isSelected || day.isToday) && "font-semibold",
-                  day.isSelected && "text-white",
-                  !day.isSelected &&
-                    day.isCurrentMonth &&
-                    !day.isToday &&
-                    "text-gray-900",
-                  !day.isSelected &&
-                    !day.isCurrentMonth &&
-                    !day.isToday &&
-                    "text-gray-400",
-                  day.isToday && !day.isSelected && "text-indigo-600",
-                  dayIdx === 0 && "rounded-tl-lg",
-                  dayIdx === 6 && "rounded-tr-lg",
-                  dayIdx === days.length - 7 && "rounded-bl-lg",
-                  dayIdx === days.length - 1 && "rounded-br-lg"
-                )}
-              >
-                <time
-                  dateTime={day.date}
-                  className={classNames(
-                    "mx-auto flex h-7 w-7 items-center justify-center rounded-full",
-                    day.isSelected && day.isToday && "bg-indigo-600",
-                    day.isSelected && !day.isToday && "bg-gray-900"
-                  )}
-                >
-                  {day.date.split("-").pop().replace(/^0/, "")}
-                </time>
-              </button>
-            ))}
           </div>
         </div>
       </div>

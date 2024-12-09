@@ -112,8 +112,7 @@ export default function Month() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      console.warn("User is not authenticated");
-      return;
+      console.warn("User is not authenticated, Events will not be fetched");
     }
 
     // Filter events for the current month and year
