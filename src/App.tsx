@@ -16,14 +16,14 @@ function App() {
     localStorage.getItem("flowbite-theme-mode") === "dark" ? true : false
   );
 
-  useEffect(() => {
-    // Toggle the 'dark' class on the root HTML element
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
+  // useEffect(() => {
+  //   // Toggle the 'dark' class on the root HTML element
+  //   if (darkMode) {
+  //     document.documentElement.classList.add("dark");
+  //   } else {
+  //     document.documentElement.classList.remove("dark");
+  //   }
+  // }, [darkMode]);
 
   // Ensure props for DarkThemeToggle are typed correctly
   const darkThemeToggleProps: DarkThemeToggleInterface = {

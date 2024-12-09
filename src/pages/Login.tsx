@@ -1,18 +1,24 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { gapi } from "gapi-script";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useThemeMode } from "flowbite-react";
 import { setIsAuthenticated } from "../redux/calendar/calendarSlice";
 import { selectIsAuthenticated } from "../redux/calendar/calendarSelectors";
-import { initializeGoogleAPI, fetchEvents } from "../redux/calendar/calendarThunks";
+import {
+  initializeGoogleAPI,
+  fetchEvents,
+} from "../redux/calendar/calendarThunks";
 import { setNavAndSideVisibility } from "../redux/navAndSide/navAndSideSlice";
 import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
 import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
 
 export default function Login() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { mode } = useThemeMode();
+  const isDarkmode = mode === "dark";
 
   useEffect(() => {
     let isMounted = true;
@@ -20,17 +26,17 @@ export default function Login() {
     const initAuth = async () => {
       try {
         dispatch(setNavAndSideVisibility(false));
-        
+
         if (!gapi.client) {
           await dispatch(initializeGoogleAPI()).unwrap();
         }
 
         if (isMounted && isAuthenticated) {
-          navigate('/upcoming');
+          navigate("/upcoming");
           dispatch(setNavAndSideVisibility(true));
         }
       } catch (error) {
-        console.error('Failed to initialize Google API:', error);
+        console.error("Failed to initialize Google API:", error);
       }
     };
 
@@ -41,19 +47,22 @@ export default function Login() {
     };
   }, [dispatch, isAuthenticated, navigate]);
 
-  const handleSignIn = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const auth2 = gapi.auth2.getAuthInstance();
-      await auth2.signIn();
-      dispatch(setIsAuthenticated(true));
-      dispatch(fetchEvents());
-      navigate('/upcoming');
-      dispatch(setNavAndSideVisibility(true));
-    } catch (error) {
-      console.error("Sign in error:", error);
-    }
-  }, [dispatch, navigate]);
+  const handleSignIn = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+        const auth2 = gapi.auth2.getAuthInstance();
+        await auth2.signIn();
+        dispatch(setIsAuthenticated(true));
+        dispatch(fetchEvents());
+        navigate("/upcoming");
+        dispatch(setNavAndSideVisibility(true));
+      } catch (error) {
+        console.error("Sign in error:", error);
+      }
+    },
+    [dispatch, navigate]
+  );
 
   return (
     <>
@@ -63,8 +72,11 @@ export default function Login() {
             href=""
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
           >
-            <img className="h-8 mr-2" src={DailyTrack_dark} alt="logo" />
-            <img className="h-8 mr-2" src={DailyTrack_light} alt="logo" />
+            <img
+              className="h-8 mr-2"
+              src={isDarkmode ? DailyTrack_dark : DailyTrack_light}
+              alt="logo"
+            />
           </a>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -111,7 +123,7 @@ export default function Login() {
                         id="remember"
                         aria-describedby="remember"
                         type="checkbox"
-                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 checked:bg-red-600 focus:ring-red-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-red-600 dark:ring-offset-gray-800"
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 checked:bg-red-600 dark:checked:bg-red-600 focus:ring-red-600 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-red-600 dark:ring-offset-gray-800"
                         required=""
                       />
                     </div>
