@@ -1,10 +1,13 @@
-import { useMemo } from "react";
-import PersonalAttendanceData from "./PersonalAttendanceData.json";
+import { useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { fetchAttendanceData } from "../../../redux/attendance/attendanceThunks";
+// import PersonalAttendanceData from "./PersonalAttendanceData.json";
 
 // Types to improve type safety
 type AttendanceStatus = 'Present' | 'Absent' | '-';
 type MonthAttendance = { [day: string]: AttendanceStatus | string };
-type YearAttendance = { [year: string]: { [month: string]: MonthAttendance } };
+// type YearAttendance = { [year: string]: { [month: string]: MonthAttendance } };
 //type AttendanceData = { [year: string]: { [month: string]: { [day: string]: string} } };
 
 export default function PersonalAttendanceGrid({ 
@@ -12,8 +15,18 @@ export default function PersonalAttendanceGrid({
 }: { 
   navigationDate: Date, 
 }) {
+  const dispatch = useDispatch();
+  const attendanceData = useSelector((state: RootState) => state.attendance.attendanceData);
+
+  // Fetch attendance data when year changes
+  useEffect(() => {
+    const year = navigationDate.getFullYear().toString();
+    dispatch(fetchAttendanceData(year));
+  }, [navigationDate.getFullYear(), dispatch]);
+
+
   // Explicitly type the imported PersonalAttendanceData
-  const typedAttendanceData: YearAttendance = PersonalAttendanceData;
+  // const typedAttendanceData: YearAttendance = PersonalAttendanceData;
 
   // Generate an array of months in a fixed order
   const months = [
@@ -35,7 +48,6 @@ export default function PersonalAttendanceGrid({
   // Memoized attendance data for the current year
   const currentYearAttendance = useMemo(() => {
     const year = navigationDate.getFullYear().toString();
-    // Create a complete year's attendance structure
     const yearAttendance: { [month: string]: MonthAttendance } = {};
     
     months.forEach(month => {
@@ -43,18 +55,19 @@ export default function PersonalAttendanceGrid({
       const daysInMonth = getDaysInMonth(navigationDate.getFullYear(), month);
       
       // Check if we have existing data for this month
-      const existingMonthData = typedAttendanceData[year]?.[month] || {};
+      const monthData = attendanceData[year]?.[month]?.days || {};
       
       // Populate attendance for each day
       for (let day = 1; day <= daysInMonth; day++) {
         const dayStr = day.toString();
-        const dayStatus = existingMonthData[dayStr];
-        yearAttendance[month][dayStr] = isValidStatus(dayStatus) ? dayStatus : '-';
+        const dayData = monthData[dayStr];
+        const status = dayData?.status || '-';
+        yearAttendance[month][dayStr] = isValidStatus(status) ? status : '-';
       }
     });
     
     return yearAttendance;
-  }, [navigationDate]);
+  }, [navigationDate, attendanceData]);
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">

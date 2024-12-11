@@ -1,20 +1,31 @@
 import { Button, Tabs } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import axiosInstance from '../api/axiosConfig';
 import { selectCurrentDate } from "../redux/calendar/calendarSelectors";
+import {
+  selectClockingInTime,
+  selectClockingOutTime,
+  selectIsLoading,
+  selectError,
+} from "../redux/attendance/attendanceSelectors";
+import { clockIn, clockOut } from "../redux/attendance/attendanceThunks";
 import PersonalAttendance from "../components/Attendance/PersonalAttendance/PersonalAttendance";
 import OfficeOverview from "../components/Attendance/OfficeOverview/OfficeOverview";
 
 export default function Attendance() {
+  const dispatch = useDispatch();
   const tabsRef = useRef(null);
   const [activeTab, setActiveTab] = useState(0);
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
   );
   const currentDate = useSelector(selectCurrentDate);
-  const [clockingInTime, setClockingInTime] = useState("");
-  const [clockingOutTime, setClockingOutTime] = useState("");
+  const clockingInTime = useSelector(selectClockingInTime);
+  const clockingOutTime = useSelector(selectClockingOutTime);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
   const tabTheme = {
     base: "flex flex-col gap-2",
     tablist: {
@@ -52,6 +63,22 @@ export default function Attendance() {
     }, 1000);
   }, []);
 
+  const handleClockIn = async () => {
+    try {
+      await dispatch(clockIn()).unwrap();
+    } catch (error) {
+      console.error("Failed to clock in:", error);
+    }
+  };
+
+  const handleClockOut = async () => {
+    try {
+      await dispatch(clockOut()).unwrap();
+    } catch (error) {
+      console.error("Failed to clock out:", error);
+    }
+  };
+
   return (
     <>
     <div className="text-gray-900 dark:text-white p-4 md:ml-64 mt-[60px]">
@@ -76,15 +103,13 @@ export default function Attendance() {
         <div className="flex flex-col items-center">
           <div className="flex justify-center items-center gap-10 mb-3">
             <button
-              onClick={() => setClockingInTime(new Date().toLocaleTimeString())}
+              onClick={handleClockIn}
               className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
             >
               Clock In
             </button>
             <button
-              onClick={() =>
-                setClockingOutTime(new Date().toLocaleTimeString())
-              }
+              onClick={handleClockOut}
               className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
             >
               Clock Out
