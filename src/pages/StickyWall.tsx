@@ -14,19 +14,20 @@ import {
   deleteNote,
 } from "../redux/stickyWall/stickyWallThunks";
 
+function debounce(func: (...args: any[]) => void, wait: number) {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
 export default function StickyWall() {
   const dispatch = useDispatch();
   const notes = useSelector(selectNotes);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
 
-  // const createNewNote = () => {
-  //   const newNote = {
-  //     id: notes.length + 1,
-  //     content: "",
-  //   };
-  //   dispatch(setNotes([...notes, newNote]));
-  // };
   useEffect(() => {
     dispatch(fetchNotes());
   }, [dispatch]);
@@ -40,19 +41,38 @@ export default function StickyWall() {
     }
   };
 
-  const handleUpdateNote = async (id: string, content: string) => {
+  // function debounce(func: (...args: any[]) => void, wait: number) {
+  //   let timeout: NodeJS.Timeout;
+  //   return (...args: any[]) => {
+  //     clearTimeout(timeout);
+  //     timeout = setTimeout(() => func(...args), wait);
+  //   };
+  // }
+
+  const debouncedUpdateNote = debounce(async (id: string, content: string) => {
     try {
-      const updatedNote = await updateNote(id, content);
-      const updatedNotes = notes.map((note) =>
-        note._id === id ? { ...note, content: updatedNote.content } : note
-      );
-      dispatch(setNotes(updatedNotes));
+      await updateNote(id, content);
     } catch (error) {
       console.error("Failed to update note:", error);
+    }
+  }, 5000);
+
+  const handleUpdateNote = (id: string, content: string) => {
+    const currentNote = notes.find((note) => note._id === id);
+    if (currentNote && currentNote.content !== content) {
+      const updatedNotes = notes.map((note) =>
+        note._id === id ? { ...note, content } : note
+      );
+      dispatch(setNotes(updatedNotes));
+      debouncedUpdateNote(id, content);
     }
   };
 
   const handleDeleteNote = async (id: string) => {
+    if (!id) {
+      console.error("Note ID is undefined");
+      return;
+    }
     try {
       await deleteNote(id);
       const remainingNotes = notes.filter((note) => note._id !== id);
@@ -73,12 +93,24 @@ export default function StickyWall() {
           <div>Loading...</div>
         ) : (
           <div className="flex flex-wrap justify-center text-gray-900">
+            {notes.length === 0 && (
+              <div className="w-full text-center text-gray-900 dark:text-white mb-4">
+                There are no notes :( Create one by using the + button
+              </div>
+            )}
             {notes?.map((note) => (
               <div key={note._id} className="relative group">
                 <textarea
                   value={note.content}
                   onChange={(e) => handleUpdateNote(note._id, e.target.value)}
-                  // onBlur={()=>{createNoteOnDB(note.content)}}
+                  onBlur={(e) => {
+                    const currentNote = notes.find(
+                      (note) => note._id === note._id
+                    );
+                    if (currentNote && currentNote.content !== e.target.value) {
+                      debouncedUpdateNote(note._id, e.target.value);
+                    }
+                  }}
                   className="text-[20px] font-gloria leading-[1.5] border-0 rounded-[3px] bg-[linear-gradient(#f9efaf,#f7e98d)] shadow-[0_4px_6px_rgba(0,0,0,0.1)] overflow-hidden hover:overflow-auto transition-all duration-500 ease-in-out subpixel-antialiased max-w-[520px] max-h-[250px] hover:shadow-[0_5px_8px_rgba(0,0,0,0.25)] dark:hover:shadow-[0_5px_8px_rgba(255,255,255,0.25)] focus:shadow-[0_5px_12px_rgba(0,0,0,0.2)] outline-none w-[250px] h-[250px] m-[0px_20px_20px_0px] p-[25px_25px_40px]"
                 />
                 {/* (e) => updateNoteContent(note.id, e.target.value) */}

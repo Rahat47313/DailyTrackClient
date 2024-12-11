@@ -3,24 +3,19 @@ import { setNotes, setIsLoading, setError } from "./stickyWallSlice";
 import axiosInstance from "../../api/axiosConfig";
 
 export const fetchNotes = createAsyncThunk(
-    "stickyWall/fetchNotes",
-    async (_, { dispatch }) => {
-      dispatch(setIsLoading(true));
-      try {
-        const { data } = await axiosInstance.get('/notes');
-        if (data.length === 0) {
-          const defaultNote = await createNote("This is a sticky note you can type and edit.");
-          dispatch(setNotes([defaultNote]));
-        } else {
-          dispatch(setNotes(data));
-        }
-      } catch (error) {
-        dispatch(setError(error));
-      } finally {
-        dispatch(setIsLoading(false));
-      }
+  "stickyWall/fetchNotes",
+  async (_, { dispatch }) => {
+    dispatch(setIsLoading(true));
+    try {
+      const { data } = await axiosInstance.get('/notes');
+      dispatch(setNotes(data));
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setIsLoading(false));
     }
-  );
+  }
+);
   
   export const createNote = createAsyncThunk(
     "stickyWall/createNote",
