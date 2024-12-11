@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { selectCurrentDate } from "../redux/calendar/calendarSelectors";
-import PersonalAttendance from "../components/Attendance/PersonalAttendance";
-import OfficeOverview from "../components/Attendance/OfficeOverview";
+import PersonalAttendance from "../components/Attendance/PersonalAttendance/PersonalAttendance";
+import OfficeOverview from "../components/Attendance/OfficeOverview/OfficeOverview";
 
 export default function Attendance() {
   const tabsRef = useRef(null);
