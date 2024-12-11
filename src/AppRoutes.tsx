@@ -23,8 +23,7 @@ export default function AppRoutes() {
       )}
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />}></Route>
-        {/* <Route path="/" element={<Dashboard />} /> */}
+        <Route path="/login" element={<Login />} />
         <Route path="/upcoming" element={<Upcoming />} />
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/calendar" element={<Calendar />} />

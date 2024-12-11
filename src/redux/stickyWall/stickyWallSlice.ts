@@ -1,12 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  notes: JSON.parse(localStorage.getItem("notes")) || [
-    {
-      id: 1,
-      content: "This is a sticky note you can type and edit.",
-    },
-  ],
+  notes: [],
+  isLoading: false,
+  error: null,
 };
 
 const stickyWallSlice = createSlice({
@@ -15,11 +12,16 @@ const stickyWallSlice = createSlice({
   reducers: {
     setNotes: (state, action) => {
       state.notes = action.payload;
-      localStorage.setItem("notes", JSON.stringify(state.notes));
+    },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
     },
   },
 });
 
-export const { setNotes } = stickyWallSlice.actions;
+export const { setNotes, setIsLoading, setError } = stickyWallSlice.actions;
 
 export default stickyWallSlice.reducer;
