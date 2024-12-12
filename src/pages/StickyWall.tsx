@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import {
@@ -28,6 +28,9 @@ export default function StickyWall() {
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
 
+  // Create a ref to store pending updates
+  const pendingUpdates = useRef<{[key: string]: string}>({});
+
   useEffect(() => {
     dispatch(fetchNotes());
   }, [dispatch]);
@@ -49,22 +52,39 @@ export default function StickyWall() {
   //   };
   // }
 
-  const debouncedUpdateNote = debounce(async (id: string, content: string) => {
-    try {
-      await updateNote(id, content);
-    } catch (error) {
-      console.error("Failed to update note:", error);
-    }
-  }, 5000);
+  const debouncedUpdateNote = useCallback(
+    debounce(async () => {
+      try {
+        // Get all pending updates
+        const updates = pendingUpdates.current;
+        
+        // Clear pending updates
+        pendingUpdates.current = {};
+
+        // Process all pending updates
+        for (const [id, content] of Object.entries(updates)) {
+          await updateNote(id, content);
+        }
+        console.log("Database updated with all pending changes");
+      } catch (error) {
+        console.error("Failed to update notes:", error);
+      }
+    }, 5000),
+    []
+  );
 
   const handleUpdateNote = (id: string, content: string) => {
     const currentNote = notes.find((note) => note._id === id);
     if (currentNote && currentNote.content !== content) {
+      // Update local state immediately
       const updatedNotes = notes.map((note) =>
         note._id === id ? { ...note, content } : note
       );
       dispatch(setNotes(updatedNotes));
-      debouncedUpdateNote(id, content);
+
+      // Queue update for database
+      pendingUpdates.current[id] = content;
+      debouncedUpdateNote();
     }
   };
 
@@ -103,6 +123,7 @@ export default function StickyWall() {
                 <textarea
                   value={note.content}
                   onChange={(e) => handleUpdateNote(note._id, e.target.value)}
+                  // onChange={(e) => handleUpdateNote(note._id, e.target.value)}
                   onBlur={(e) => {
                     const currentNote = notes.find(
                       (note) => note._id === note._id
