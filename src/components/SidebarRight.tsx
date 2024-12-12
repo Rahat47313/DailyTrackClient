@@ -2,7 +2,7 @@ import { Drawer, Datepicker, Checkbox } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { TiPlus } from "react-icons/ti";
 import { selectSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSelectors";
-import { setVisibility } from "../redux/sidebarRight/sidebarRightSlice";
+import { setSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSlice";
 
 export default function SidebarRight() {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ export default function SidebarRight() {
     <>
       <Drawer
         open={visibility}
-        onClose={() => dispatch(setVisibility(false))}
+        onClose={() => dispatch(setSidebarRightVisibility(false))}
         position="right"
         theme={drawerTheme}
         className="p-8 w-[400px]"

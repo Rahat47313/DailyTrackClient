@@ -3,7 +3,7 @@ import { Checkbox } from "flowbite-react";
 import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
 import SidebarRight from "../components/SidebarRight";
-import { setVisibility } from "../redux/sidebarRight/sidebarRightSlice";
+import { setSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSlice";
 
 export default function Upcoming() {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ export default function Upcoming() {
         <div className="p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
           <div className="font-bold text-2xl mb-4">Today</div>
           <button
-            onClick={() => dispatch(setVisibility(true))}
+            onClick={() => dispatch(setSidebarRightVisibility(true))}
             className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
           >
             <TiPlus />
@@ -30,7 +30,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              onClick={() => dispatch(setVisibility(true))}
+              onClick={() => dispatch(setSidebarRightVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -45,7 +45,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              onClick={() => dispatch(setVisibility(true))}
+              onClick={() => dispatch(setSidebarRightVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -83,7 +83,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              onClick={() => dispatch(setVisibility(true))}
+              onClick={() => dispatch(setSidebarRightVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -98,7 +98,7 @@ export default function Upcoming() {
             </div>
             <button
               type="button"
-              onClick={() => dispatch(setVisibility(true))}
+              onClick={() => dispatch(setSidebarRightVisibility(true))}
               className="grow flex justify-end"
             >
               <div className="xxs:hidden sm:block">
@@ -111,7 +111,7 @@ export default function Upcoming() {
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
             <div className="font-bold text-2xl mb-4">Tomorrow</div>
             <button
-              onClick={() => dispatch(setVisibility(true))}
+              onClick={() => dispatch(setSidebarRightVisibility(true))}
               className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
             >
               <TiPlus />
@@ -124,7 +124,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                onClick={() => dispatch(setVisibility(true))}
+                onClick={() => dispatch(setSidebarRightVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -139,7 +139,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                onClick={() => dispatch(setVisibility(true))}
+                onClick={() => dispatch(setSidebarRightVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -151,7 +151,7 @@ export default function Upcoming() {
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
             <div className="font-bold text-2xl mb-4">This Week</div>
             <button
-              onClick={() => dispatch(setVisibility(true))}
+              onClick={() => dispatch(setSidebarRightVisibility(true))}
               className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full"
             >
               <TiPlus />
@@ -164,7 +164,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                onClick={() => dispatch(setVisibility(true))}
+                onClick={() => dispatch(setSidebarRightVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -179,7 +179,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                onClick={() => dispatch(setVisibility(true))}
+                onClick={() => dispatch(setSidebarRightVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">
@@ -194,7 +194,7 @@ export default function Upcoming() {
               </div>
               <button
                 type="button"
-                onClick={() => dispatch(setVisibility(true))}
+                onClick={() => dispatch(setSidebarRightVisibility(true))}
                 className="grow flex justify-end"
               >
                 <div className="xxs:hidden md:block">

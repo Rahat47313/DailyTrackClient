@@ -1,1 +1,1 @@
-export const selectSidebarRightVisibility = (state) => state.sidebarRight.visibility;
+export const selectSidebarRightVisibility = (state) => state.sidebarRight.sidebarRightVisibility;

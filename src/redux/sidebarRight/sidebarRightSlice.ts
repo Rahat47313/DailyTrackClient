@@ -1,21 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  visibility: false,
+  sidebarRightVisibility: false,
 };
 
 const sidebarRightSlice = createSlice({
   name: "sidebarRight",
   initialState,
   reducers: {
-    setVisibility: (state, action) => {
-      state.visibility = action.payload;
+    setSidebarRightVisibility: (state, action) => {
+      state.sidebarRightVisibility = action.payload;
     },
   },
 });
 
 export const {
-  setVisibility,
+  setSidebarRightVisibility,
 } = sidebarRightSlice.actions;
 
 export default sidebarRightSlice.reducer;
