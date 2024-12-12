@@ -81,7 +81,7 @@ export default function Attendance() {
 
   return (
     <>
-    <div className="text-gray-900 dark:text-white p-4 md:ml-64 mt-[60px]">
+    <div className="p-4 md:ml-64 mt-[60px]">
       <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
         Attendance
       </div>
