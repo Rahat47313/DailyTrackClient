@@ -59,7 +59,7 @@ export default function Upcoming() {
                 <Checkbox />
                 <div>Renew driver&apos;s license</div>
               </div>
-              <div className="flex xxs:hidden md:flex pl-4 text-xs">
+              <div className="hidden sm:flex pl-4 text-xs">
                 <div className="flex items-center gap-2 border-r px-4">
                   <div className="w-4 h-4 fill-gray-500 transition duration-75 dark:text-gray-400">
                     <svg viewBox="0 0 500 500">
