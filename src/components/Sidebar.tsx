@@ -166,7 +166,7 @@ export default function Sidebar() {
             <ul>
               <li>
                 <NavLink
-                  tp="#"
+                  to="#"
                   className="w-full flex items-center p-2 text-gray-900 transition duration-75 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
