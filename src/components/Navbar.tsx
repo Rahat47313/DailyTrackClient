@@ -2,8 +2,11 @@ import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
 import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
 import ProfilePic from "../assets/profile/profile.svg";
 import { useThemeMode } from "flowbite-react";
+import { setSidebarLeftSmallVisibility } from "../redux/sidebarLeft/sidebarLeftSlice";
+import { useDispatch } from "react-redux";
 
 export default function Navbar() {
+  const dispatch = useDispatch();
   const { computedMode } = useThemeMode(); // Detect the current theme mode
   return (
     <>
@@ -13,10 +16,8 @@ export default function Navbar() {
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-start rtl:justify-end">
                 <button
-                  data-drawer-target="logo-sidebar"
-                  data-drawer-toggle="logo-sidebar"
-                  aria-controls="logo-sidebar"
                   type="button"
+                  onClick={()=> dispatch(setSidebarLeftSmallVisibility(true))}
                   className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                 >
                   <span className="sr-only">Open sidebar</span>

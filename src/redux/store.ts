@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import calendarReducer from "./calendar/calendarSlice";
-import pagesReducer from "./pages/pagesSlice"
-import sidebarRightReducer from "./sidebarRight/sidebarRightSlice"
-import stickyWallReducer from "./stickyWall/stickyWallSlice"
-import navAndSideReducer from "./navAndSide/navAndSideSlice"
-import attendanceReducer from './attendance/attendanceSlice';
+import pagesReducer from "./pages/pagesSlice";
+import sidebarLeftReducer from "./sidebarLeft/sidebarLeftSlice";
+import sidebarRightReducer from "./sidebarRight/sidebarRightSlice";
+import stickyWallReducer from "./stickyWall/stickyWallSlice";
+import navAndSideReducer from "./navAndSide/navAndSideSlice";
+import attendanceReducer from "./attendance/attendanceSlice";
 
 const store = configureStore({
   reducer: {
     calendar: calendarReducer,
     pages: pagesReducer,
+    sidebarLeft: sidebarLeftReducer,
     sidebarRight: sidebarRightReducer,
     stickyWall: stickyWallReducer,
     navAndSide: navAndSideReducer,

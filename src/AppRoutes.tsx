@@ -6,19 +6,20 @@ import Attendance from "./pages/Attendance";
 import Calendar from "./pages/Calendar";
 import StickyWall from "./pages/StickyWall";
 import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
+import SidebarLeft from "./components/SidebarLeft";
 import { selectNavAndSideVisibility } from "./redux/navAndSide/navAndSideSelectors";
 import Dashboard from "./pages/Dashboard";
-
+import SidebarLeftSmall from "./components/SidebarLeftSmall";
 
 export default function AppRoutes() {
-    const showNavAndSide = useSelector(selectNavAndSideVisibility)
+  const showNavAndSide = useSelector(selectNavAndSideVisibility);
   return (
     <>
       {showNavAndSide && (
         <>
           <Navbar />
-          <Sidebar />
+          <SidebarLeft />
+          <SidebarLeftSmall />
         </>
       )}
       <Routes>

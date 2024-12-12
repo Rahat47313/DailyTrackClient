@@ -107,7 +107,7 @@ export default function Upcoming() {
             </button>
           </div>
         </div>
-        <div className="flex justify-between gap-4 mt-5">
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mt-5">
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
             <div className="font-bold text-2xl mb-4">Tomorrow</div>
             <button

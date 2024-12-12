@@ -1,16 +1,16 @@
 import { gapi } from "gapi-script";
 import { useCallback } from "react";
 import { NavLink } from "react-router-dom";
+import { Drawer } from "flowbite-react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSidebarLeftSmallVisibility } from "../redux/sidebarLeft/sidebarLeftSelectors";
+import { setSidebarLeftSmallVisibility } from "../redux/sidebarLeft/sidebarLeftSlice";
 
-export default function Sidebar() {
-
-  // function generateRandomColor() {
-  //   var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-  //   return randomColor;
-  //   //random color will be freshly served
-  // }
-
-
+export default function SidebarLeftSmall() {
+  const dispatch = useDispatch();
+  const sidebarLeftSmallVisibility = useSelector(
+    selectSidebarLeftSmallVisibility
+  );
   const handleSignOut = useCallback(async () => {
     try {
       await gapi.auth2.getAuthInstance().signOut();
@@ -18,15 +18,14 @@ export default function Sidebar() {
       console.error("Sign out error:", error);
     }
   }, []);
-
   return (
-    <>
-      <aside
-        id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 md:z-10 w-64 h-screen pt-5 md:pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        aria-label="Sidebar"
+    <div>
+      <Drawer
+        open={sidebarLeftSmallVisibility}
+        onClose={() => dispatch(setSidebarLeftSmallVisibility(false))}
       >
-        <div className="h-full text-sm px-3 pb-4 overflow-y-auto rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-800">
+        <Drawer.Header titleIcon={() => <></>} />
+        <Drawer.Items>
           <div className="space-y-2 font-medium">
             <div>TASKS</div>
             <ul>
@@ -209,8 +208,8 @@ export default function Sidebar() {
               </li>
             </ul>
           </div>
-        </div>
-      </aside>
-    </>
+        </Drawer.Items>
+      </Drawer>
+    </div>
   );
 }

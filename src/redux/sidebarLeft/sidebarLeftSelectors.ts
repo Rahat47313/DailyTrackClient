@@ -1,0 +1,1 @@
+export const selectSidebarLeftSmallVisibility = (state) => state.sidebarLeft.sidebarLeftSmallVisibility;
