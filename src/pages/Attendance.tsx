@@ -115,8 +115,8 @@ export default function Attendance() {
               Clock Out
             </button>
           </div>
-          {clockingInTime && <p>Clocked in at {clockingInTime}</p>}
-          {clockingOutTime && <p>Clocked out at {clockingOutTime}</p>}
+          {/* {clockingInTime && <p>Clocked in at {clockingInTime}</p>} */}
+          {/* {clockingOutTime && <p>Clocked out at {clockingOutTime}</p>} */}
         </div>
       </div>
       <div className="flex flex-col gap-3">
