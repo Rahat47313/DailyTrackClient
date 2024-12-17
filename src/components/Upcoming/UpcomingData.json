@@ -1,0 +1,128 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Research content ideas",
+      "dueDate": "2024-12-17",
+      "subtasks": [
+        {
+          "id": "1-1",
+          "title": "Analyze competitor content",
+          "completed": false
+        },
+        {
+          "id": "1-2",
+          "title": "Analyze own content",
+          "completed": false
+        }
+      ],
+      "category": {
+        "name": "Personal",
+        "color": "bg-red-500"
+      },
+      "completed": false
+    },
+    {
+      "id": 2,
+      "title": "Create a database of guest authors",
+      "dueDate": "2024-12-17",
+      "subtasks": [
+        {
+          "id": "2-1",
+          "title": "Research potential authors",
+          "completed": false
+        }
+      ],
+      "category": {
+        "name": "Personal",
+        "color": "bg-red-500"
+      },
+      "completed": false
+    },
+    {
+      "id": 3,
+      "title": "Renew driver's license",
+      "dueDate": "2024-12-17",
+      "subtasks": [
+        {
+          "id": "3-1",
+          "title": "Gather required documents",
+          "completed": false
+        }
+      ],
+      "category": {
+        "name": "Personal",
+        "color": "bg-red-500"
+      },
+      "completed": false
+    },
+    {
+      "id": 4,
+      "title": "Consult accountant",
+      "dueDate": "2024-12-17",
+      "subtasks": [
+        {
+          "id": "4-1",
+          "title": "Prepare financial documents",
+          "completed": false
+        }
+      ],
+      "category": {
+        "name": "Personal",
+        "color": "bg-red-500"
+      },
+      "completed": false
+    },
+    {
+      "id": 5,
+      "title": "Create job posting for SEO specialist",
+      "dueDate": "2024-12-18",
+      "subtasks": [
+        {
+          "id": "5-1",
+          "title": "Define job requirements",
+          "completed": false
+        }
+      ],
+      "category": {
+        "name": "Personal",
+        "color": "bg-red-500"
+      },
+      "completed": false
+    },
+    {
+      "id": 6,
+      "title": "Request design assets for landing page",
+      "dueDate": "2024-12-18",
+      "subtasks": [
+        {
+          "id": "6-1",
+          "title": "Create design brief",
+          "completed": false
+        }
+      ],
+      "category": {
+        "name": "Personal",
+        "color": "bg-red-500"
+      },
+      "completed": false
+    },
+    {
+        "id": 7,
+        "title": "Request design assets for landing page",
+        "dueDate": "2024-12-19",
+        "subtasks": [
+          {
+            "id": "7-1",
+            "title": "Create design brief",
+            "completed": false
+          }
+        ],
+        "category": {
+          "name": "Personal",
+          "color": "bg-red-500"
+        },
+        "completed": false
+      }
+  ]
+}
