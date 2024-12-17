@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { TiPlus } from "react-icons/ti";
 import { selectSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSelectors";
 import { setSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSlice";
+import { selectSelectedTask } from "../redux/selectedTask/selectedTaskSelectors";
+import { clearSelectedTask } from "../redux/selectedTask/selectedTaskSlice";
 
 export default function SidebarRight() {
   const dispatch = useDispatch();
   const sidebarRightVisibility = useSelector(selectSidebarRightVisibility);
+  const selectedTask = useSelector(selectSelectedTask);
 
   const drawerTheme = {
     header: {
@@ -20,21 +23,29 @@ export default function SidebarRight() {
     },
   };
 
+  const handleClose = () => {
+    dispatch(setSidebarRightVisibility(false));
+    dispatch(clearSelectedTask());
+  };
+
   return (
     <>
       <Drawer
         open={sidebarRightVisibility}
-        onClose={() => dispatch(setSidebarRightVisibility(false))}
+        onClose={handleClose}
         position="right"
         theme={drawerTheme}
         className="p-8 w-[400px]"
       >
-        <Drawer.Header titleIcon={() => <></>} title="Task:" />
+        <Drawer.Header titleIcon={() => <></>} title={selectedTask ? "Edit Task" : "New Task"} />
         <Drawer.Items>
           <form className="space-y-5 max-w-sm mx-auto">
-            <div className="">
+            <div>
               <input
                 type="text"
+                value={selectedTask?.title || ""}
+                placeholder="Task title"
+                onChange={(e) => {selectedTask.title = e.target.value}}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -107,14 +118,27 @@ export default function SidebarRight() {
             <div className="font-bold text-xl text-gray-500 uppercase dark:text-gray-400">
               Subtasks:
             </div>
-            <button className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full">
+            {selectedTask?.subtasks ? (
+              selectedTask.subtasks.map((subtask) => (
+                <div key={subtask.id} className="flex items-center gap-4 pl-1">
+                  <Checkbox checked={subtask.completed} />
+                  <div>{subtask.title}</div>
+                </div>
+              ))
+            ) : (
+              <button className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full">
+                <TiPlus />
+                <div>Add New Subtask</div>
+              </button>
+            )}
+            {/* <button className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full">
               <TiPlus />
               <div>Add New Subtask</div>
-            </button>
-            <div className="flex items-center gap-4 pl-1">
+            </button> */}
+            {/* <div className="flex items-center gap-4 pl-1">
               <Checkbox />
               <div>Research content ideas</div>
-            </div>
+            </div> */}
           </form>
         </Drawer.Items>
       </Drawer>

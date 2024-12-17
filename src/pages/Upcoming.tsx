@@ -31,11 +31,7 @@ export default function Upcoming() {
       {tasks.map((task) => (
         <UpcomingTasks
           key={task.id}
-          title={task.title}
-          dueDate={task.dueDate}
-          subtaskNum={task.subtasks.length}
-          category={task.category.name}
-          categoryColor={task.category.color}
+          task={task}
         />
       ))}
     </div>
@@ -60,7 +56,7 @@ export default function Upcoming() {
         <div className="flex flex-col gap-5">
           {renderTaskSection("Today", groupedTasks.today)}
           {renderTaskSection("Tomorrow", groupedTasks.tomorrow)}
-          {renderTaskSection("This Week", groupedTasks.thisWeek)}
+          {renderTaskSection("Next 7 days", groupedTasks.thisWeek)}
         </div>
       </div>
     </>

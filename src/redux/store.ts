@@ -6,6 +6,7 @@ import sidebarRightReducer from "./sidebarRight/sidebarRightSlice";
 import stickyWallReducer from "./stickyWall/stickyWallSlice";
 import navAndSideReducer from "./navAndSide/navAndSideSlice";
 import attendanceReducer from "./attendance/attendanceSlice";
+import selectedTaskReducer from "./selectedTask/selectedTaskSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     stickyWall: stickyWallReducer,
     navAndSide: navAndSideReducer,
     attendance: attendanceReducer,
+    selectedTask: selectedTaskReducer,
   },
 });
 

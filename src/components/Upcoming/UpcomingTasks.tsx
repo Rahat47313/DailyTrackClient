@@ -1,31 +1,34 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Checkbox } from "flowbite-react";
 import { IoIosArrowForward } from "react-icons/io";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
+import { setSelectedTask } from "../../redux/selectedTask/selectedTaskSlice";
+import { selectSelectedTask } from "../../redux/selectedTask/selectedTaskSelectors";
 
 interface UpcomingTasksInterface {
-  title: string;
-  dueDate: string;
-  subtaskNum: number;
-  category: string;
-  categoryColor: string;
+  task: {
+    id: number;
+    title: string;
+    dueDate: string;
+    subtasks: { id: string; title: string; completed: boolean }[];
+    category: { name: string; color: string };
+  };
 }
 
-export default function UpcomingTasks({
-  title,
-  dueDate,
-  subtaskNum,
-  category,
-  categoryColor
-}: UpcomingTasksInterface) {
+export default function UpcomingTasks({ task }: UpcomingTasksInterface) {
   const dispatch = useDispatch();
+
+  const handleTaskClick = () => {
+    dispatch(setSelectedTask(task));
+    dispatch(setSidebarRightVisibility(true));
+  };
   return (
     <>
       <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
         <div>
           <div className="flex items-center gap-4">
             <Checkbox />
-            <div>{title}</div>
+            <div>{task.title}</div>
           </div>
           <div className="hidden sm:flex pl-4 text-xs">
             <div className="flex items-center gap-2 border-r px-4">
@@ -35,23 +38,23 @@ export default function UpcomingTasks({
                   <path d="M327.23 244.24c-8.14-8.13-21.33-8.13-29.46 0L250 292.01l-47.77-47.77c-8.14-8.14-21.33-8.14-29.46 0-8.14 8.14-8.14 21.33 0 29.46l47.77 47.77-47.77 47.77c-8.14 8.14-8.14 21.33 0 29.46s21.33 8.14 29.46 0L250 350.94l47.77 47.77c8.14 8.14 21.33 8.14 29.46 0 8.14-8.14 8.14-21.33 0-29.46l-47.77-47.77 47.77-47.77c8.14-8.14 8.14-21.33 0-29.47 0 .01 0 0 0 0z" />
                 </svg>
               </div>
-              <div>{dueDate}</div>
+              <div>{task.dueDate}</div>
             </div>
             <div className="flex items-center gap-2 border-r px-4">
               <div className="flex items-center justify-center w-3 h-3 p-[10px] text-xs font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                {subtaskNum}
+                {task.subtasks.length}
               </div>
               <div>Subtasks</div>
             </div>
             <div className="flex items-center gap-2 px-4">
-              <div className={`w-5 h-5 rounded-md ${categoryColor}`} />
-              <div>{category}</div>
+              <div className={`w-5 h-5 rounded-md ${task.category.color}`} />
+              <div>{task.category.name}</div>
             </div>
           </div>
         </div>
         <button
           type="button"
-          onClick={() => dispatch(setSidebarRightVisibility(true))}
+          onClick={handleTaskClick}
           className="grow flex justify-end py-[14px]"
         >
           <div className="xxs:hidden sm:block">

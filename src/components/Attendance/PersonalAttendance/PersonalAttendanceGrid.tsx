@@ -2,7 +2,6 @@ import { useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { fetchAttendanceData } from "../../../redux/attendance/attendanceThunks";
-// import PersonalAttendanceData from "./PersonalAttendanceData.json";
 
 // Types to improve type safety
 type AttendanceStatus = 'Present' | 'Absent' | '-';

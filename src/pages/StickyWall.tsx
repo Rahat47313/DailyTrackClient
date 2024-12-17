@@ -44,14 +44,6 @@ export default function StickyWall() {
     }
   };
 
-  // function debounce(func: (...args: any[]) => void, wait: number) {
-  //   let timeout: NodeJS.Timeout;
-  //   return (...args: any[]) => {
-  //     clearTimeout(timeout);
-  //     timeout = setTimeout(() => func(...args), wait);
-  //   };
-  // }
-
   const debouncedUpdateNote = useCallback(
     debounce(async () => {
       try {
