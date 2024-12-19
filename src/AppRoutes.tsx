@@ -1,15 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Navbar from "./components/Navbar";
+import SidebarLeft from "./components/SidebarLeft";
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Upcoming from "./pages/Upcoming";
 import Attendance from "./pages/Attendance";
 import Calendar from "./pages/Calendar";
 import StickyWall from "./pages/StickyWall";
-import Navbar from "./components/Navbar";
-import SidebarLeft from "./components/SidebarLeft";
+import Lists from "./pages/Lists";
 import { selectNavAndSideVisibility } from "./redux/navAndSide/navAndSideSelectors";
-import Dashboard from "./pages/Dashboard";
 import SidebarLeftSmall from "./components/SidebarLeftSmall";
+import ListPage from "./components/Lists/ListPage";
 
 export default function AppRoutes() {
   const showNavAndSide = useSelector(selectNavAndSideVisibility);
@@ -29,6 +31,8 @@ export default function AppRoutes() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/stickyWall" element={<StickyWall />} />
+        <Route path="/lists" element={<Lists />} />
+        <Route path="/lists/:category" element={<ListPage />} />
       </Routes>
     </>
   );

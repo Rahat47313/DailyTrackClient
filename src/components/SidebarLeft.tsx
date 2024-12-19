@@ -1,6 +1,7 @@
 import { gapi } from "gapi-script";
 import { useCallback } from "react";
 import { NavLink } from "react-router-dom";
+import TaskData from "../components/TaskData.json";
 
 export default function SidebarLeft() {
   // function generateRandomColor() {
@@ -8,6 +9,10 @@ export default function SidebarLeft() {
   //   return randomColor;
   //   //random color will be freshly served
   // }
+  const categoryCounts = TaskData.categories.reduce((acc, category) => {
+    acc[category.name] = category.tasks.length;
+    return acc;
+  }, {});
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -129,38 +134,26 @@ export default function SidebarLeft() {
           </ul>
         </div>
         <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-          <div>LISTS</div>
+          <NavLink to={"/lists"}>LISTS</NavLink>
           <ul>
-            <li>
-              <NavLink
-                to="#"
-                className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <div className="flex">
-                  <div className="w-5 h-5 rounded-md bg-red-500"></div>
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Personal
+            {TaskData.categories.map((category) => (
+              <li key={category.name}>
+                <NavLink
+                  to={`/lists/${category.name}`}
+                  className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  <div className="flex">
+                    <div className={`w-5 h-5 rounded-md ${category.color}`}></div>
+                    <span className="flex-1 ms-3 whitespace-nowrap">
+                      {category.name}
+                    </span>
+                  </div>
+                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
+                  {categoryCounts[category.name]}
                   </span>
-                </div>
-                <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                  3
-                </span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="#"
-                className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <div className="flex">
-                  <div className="w-5 h-5 rounded-md bg-yellow-500"></div>
-                  <span className="ms-3 whitespace-nowrap">Work</span>
-                </div>
-                <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                  4
-                </span>
-              </NavLink>
-            </li>
+                </NavLink>
+              </li>
+            ))}
             <li>
               <NavLink
                 to="#"
