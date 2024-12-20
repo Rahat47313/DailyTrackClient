@@ -72,9 +72,9 @@ export default function SidebarLeft() {
                   </div>
                   <span className="ms-3 whitespace-nowrap">Attendance</span>
                 </div>
-                <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                {/* <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
                   Pro
-                </span>
+                </span> */}
               </NavLink>
             </li>
             <li>
@@ -95,9 +95,6 @@ export default function SidebarLeft() {
                   </div>
                   <span className="ms-3 whitespace-nowrap">Calendar</span>
                 </div>
-                <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                  3
-                </span>
               </NavLink>
             </li>
             <li>
@@ -166,7 +163,7 @@ export default function SidebarLeft() {
         </div>
         <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
           <ul>
-            <li>
+            {/* <li>
               <NavLink
                 to="#"
                 className="w-full flex items-center p-2 transition duration-75 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -182,7 +179,7 @@ export default function SidebarLeft() {
                 </div>
                 <span className="ms-3">Settings</span>
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink
                 to="/login"
