@@ -7,6 +7,7 @@ import stickyWallReducer from "./stickyWall/stickyWallSlice";
 import navAndSideReducer from "./navAndSide/navAndSideSlice";
 import attendanceReducer from "./attendance/attendanceSlice";
 import selectedTaskReducer from "./selectedTask/selectedTaskSlice";
+import categoryReducer from "./tasks/categoriesSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     navAndSide: navAndSideReducer,
     attendance: attendanceReducer,
     selectedTask: selectedTaskReducer,
+    categories: categoryReducer,
   },
 });
 

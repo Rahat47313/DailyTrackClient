@@ -1,18 +1,64 @@
+import { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { gapi } from "gapi-script";
-import { useCallback } from "react";
 import { NavLink } from "react-router-dom";
-import TaskData from "../components/TaskData.json";
+import { selectCategories, selectCategoriesError, selectCategoriesLoading } from "../redux/tasks/categoriesSelectors";
+import { fetchCategories, createCategory } from "../redux/tasks/categoriesThunks";
 
 export default function SidebarLeft() {
+  const dispatch = useDispatch();
+  const categories = useSelector(selectCategories) || [];
+  const isLoading = useSelector(selectCategoriesLoading);
+  const error = useSelector(selectCategoriesError);
+  const [newCategoryName, setNewCategoryName] = useState("");
   // function generateRandomColor() {
   //   var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
   //   return randomColor;
   //   //random color will be freshly served
   // }
-  const categoryCounts = TaskData.categories.reduce((acc, category) => {
-    acc[category.name] = category.tasks.length;
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    try {
+      await dispatch(createCategory(newCategoryName)).unwrap();
+      setNewCategoryName("");
+    } catch (error) {
+      console.error("Failed to create category:", error);
+    }
+  };
+
+  const categoryCounts = categories.reduce((acc, category) => {
+    acc[category.name] = category.tasks?.length || 0;
     return acc;
   }, {});
+
+  // Update the categories list JSX to handle loading and error states
+  const renderCategories = () => {
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+    if (!categories.length) return <div>No categories found</div>;
+
+    return categories.map((category) => (
+      <li key={category._id}>
+        <NavLink
+          to={`/lists/${category.name}`}
+          className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+        >
+          <div className="flex">
+            <div className={`w-5 h-5 rounded-md ${category.color}`}></div>
+            <span className="flex-1 ms-3 whitespace-nowrap">{category.name}</span>
+          </div>
+          <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
+            {categoryCounts[category.name]}
+          </span>
+        </NavLink>
+      </li>
+    ));
+  };
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -133,33 +179,41 @@ export default function SidebarLeft() {
         <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
           <NavLink to={"/lists"}>LISTS</NavLink>
           <ul>
-            {TaskData.categories.map((category) => (
-              <li key={category.name}>
+            {categories.map((category) => (
+              <li key={category._id}>
                 <NavLink
                   to={`/lists/${category.name}`}
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <div className="flex">
-                    <div className={`w-5 h-5 rounded-md ${category.color}`}></div>
+                    <div
+                      className={`w-5 h-5 rounded-md ${category.color}`}
+                    ></div>
                     <span className="flex-1 ms-3 whitespace-nowrap">
                       {category.name}
                     </span>
                   </div>
                   <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                  {categoryCounts[category.name]}
+                    {categoryCounts[category.name]}
                   </span>
                 </NavLink>
               </li>
             ))}
-            <li>
-              <NavLink
-                to="#"
-                className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <span className="">+ Add New List</span>
-              </NavLink>
-            </li>
           </ul>
+          <div className="flex items-center justify-between gap-2">
+            <input
+              type="text"
+              value={newCategoryName}
+              onChange={(e) => setNewCategoryName(e.target.value)}
+              placeholder="Add a new list"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
+            />
+            <button
+            onClick={handleCreateCategory}
+             className="flex items-center justify-center px-4 py-2.5 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 group">
+              <span>+</span>
+            </button>
+          </div>
         </div>
         <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
           <ul>
