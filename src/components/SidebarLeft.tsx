@@ -1,9 +1,22 @@
 import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { gapi } from "gapi-script";
 import { NavLink } from "react-router-dom";
-import { selectCategories, selectCategoriesError, selectCategoriesLoading } from "../redux/tasks/categoriesSelectors";
-import { fetchCategories, createCategory } from "../redux/tasks/categoriesThunks";
+import { gapi } from "gapi-script";
+import { Dropdown } from "flowbite-react";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import {
+  selectCategories,
+  selectCategoriesError,
+  selectCategoriesLoading,
+} from "../redux/tasks/categoriesSelectors";
+import {
+  fetchCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "../redux/tasks/categoriesThunks";
 
 export default function SidebarLeft() {
   const dispatch = useDispatch();
@@ -11,6 +24,43 @@ export default function SidebarLeft() {
   const isLoading = useSelector(selectCategoriesLoading);
   const error = useSelector(selectCategoriesError);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [renameCategoryId, setRenameCategoryId] = useState(null);
+  const [renameCategoryName, setRenameCategoryName] = useState("");
+
+  const dropdownTheme = {
+    arrowIcon: "ml-0 h-0 w-0",
+    content: "py-1 focus:outline-none",
+    floating: {
+      animation: "transition-opacity",
+      arrow: {
+        base: "absolute z-10 h-2 w-2 rotate-45",
+        style: {
+          dark: "bg-gray-900 dark:bg-gray-700",
+          light: "bg-white",
+          auto: "bg-white dark:bg-gray-700",
+        },
+        placement: "-4px",
+      },
+      base: "z-10 w-fit divide-y divide-gray-100 rounded shadow focus:outline-none",
+      content: "py-1 text-sm text-gray-700 dark:text-gray-200",
+      divider: "my-1 h-px bg-gray-100 dark:bg-gray-600",
+      header: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-200",
+      hidden: "invisible opacity-0",
+      item: {
+        container: "",
+        base: "flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white",
+        icon: "mr-2 h-4 w-4",
+      },
+      style: {
+        dark: "bg-gray-900 text-white dark:bg-gray-700",
+        light: "border border-gray-200 bg-white text-gray-900",
+        auto: "border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white",
+      },
+      target: "w-fit",
+    },
+    inlineWrapper: "flex items-center",
+  };
+
   // function generateRandomColor() {
   //   var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
   //   return randomColor;
@@ -28,6 +78,25 @@ export default function SidebarLeft() {
       setNewCategoryName("");
     } catch (error) {
       console.error("Failed to create category:", error);
+    }
+  };
+
+  const handleRenameCategory = async (id) => {
+    if (!renameCategoryName.trim()) return;
+    try {
+      await dispatch(updateCategory({ id, name: renameCategoryName })).unwrap();
+      setRenameCategoryId(null);
+      setRenameCategoryName("");
+    } catch (error) {
+      console.error("Failed to rename category:", error);
+    }
+  };
+
+  const handleDeleteCategory = async (id) => {
+    try {
+      await dispatch(deleteCategory(id)).unwrap();
+    } catch (error) {
+      console.error("Failed to delete category:", error);
     }
   };
 
@@ -50,7 +119,9 @@ export default function SidebarLeft() {
         >
           <div className="flex">
             <div className={`w-5 h-5 rounded-md ${category.color}`}></div>
-            <span className="flex-1 ms-3 whitespace-nowrap">{category.name}</span>
+            <span className="flex-1 ms-3 whitespace-nowrap">
+              {category.name}
+            </span>
           </div>
           <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
             {categoryCounts[category.name]}
@@ -180,23 +251,59 @@ export default function SidebarLeft() {
           <NavLink to={"/lists"}>LISTS</NavLink>
           <ul>
             {categories.map((category) => (
-              <li key={category._id}>
-                <NavLink
-                  to={`/lists/${category.name}`}
-                  className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              <li
+                key={category._id}
+                className="flex items-center justify-between gap-2"
+              >
+                {renameCategoryId === category._id ? (
+          <input
+            type="text"
+            value={renameCategoryName}
+            onChange={(e) => setRenameCategoryName(e.target.value)}
+            onBlur={() => handleRenameCategory(category._id)}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 w-40"
+          />
+        ) : (
+          <NavLink
+            to={`/lists/${category.name}`}
+            className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+          >
+            <div className="flex">
+              <div className={`w-5 h-5 rounded-md ${category.color}`}></div>
+              <span className="flex-1 ms-3 whitespace-nowrap">{category.name}</span>
+            </div>
+            <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
+              {categoryCounts[category.name]}
+            </span>
+          </NavLink>
+        )}
+                <Dropdown
+                  theme={dropdownTheme}
+                  renderTrigger={() => (
+                    <button>
+                      <p className="text-xl hover:text-red-500">
+                        <BsThreeDotsVertical />
+                      </p>
+                    </button>
+                  )}
                 >
-                  <div className="flex">
-                    <div
-                      className={`w-5 h-5 rounded-md ${category.color}`}
-                    ></div>
-                    <span className="flex-1 ms-3 whitespace-nowrap">
-                      {category.name}
-                    </span>
-                  </div>
-                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                    {categoryCounts[category.name]}
-                  </span>
-                </NavLink>
+                  <Dropdown.Item
+                    icon={FaEdit}
+                    onClick={() => {
+                      setRenameCategoryId(category._id);
+                      setRenameCategoryName(category.name);
+                    }}
+                  >
+                    Rename
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    icon={MdDelete}
+                    onClick={() => handleDeleteCategory(category._id)}
+                  >
+                    Delete
+                  </Dropdown.Item>
+                </Dropdown>
               </li>
             ))}
           </ul>
@@ -209,8 +316,9 @@ export default function SidebarLeft() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
             />
             <button
-            onClick={handleCreateCategory}
-             className="flex items-center justify-center px-4 py-2.5 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 group">
+              onClick={handleCreateCategory}
+              className="flex items-center justify-center px-4 py-2.5 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 group"
+            >
               <span>+</span>
             </button>
           </div>

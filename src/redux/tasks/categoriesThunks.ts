@@ -37,3 +37,36 @@ export const createCategory = createAsyncThunk(
     }
   }
 );
+
+export const updateCategory = createAsyncThunk(
+  "categories/updateCategory",
+  async ({ id, name }: { id: string; name: string }, { dispatch }) => {
+    dispatch(setIsLoading(true));
+    try {
+      const { data } = await axiosInstance.patch(`/tasks/categories/${id}`, { name });
+      dispatch(fetchCategories());
+      return data;
+    } catch (error) {
+      dispatch(setError(error));
+      throw error;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  }
+);
+
+export const deleteCategory = createAsyncThunk(
+  "categories/deleteCategory",
+  async (id: string, { dispatch }) => {
+    dispatch(setIsLoading(true));
+    try {
+      await axiosInstance.delete(`/tasks/categories/${id}`);
+      dispatch(fetchCategories());
+    } catch (error) {
+      dispatch(setError(error));
+      throw error;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  }
+);
