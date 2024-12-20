@@ -5,10 +5,7 @@ import { Dropdown } from "flowbite-react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import {
-  selectCategories,
-  selectCategoriesLoading,
-} from "../redux/tasks/categoriesSelectors";
+import { selectCategories } from "../redux/tasks/categoriesSelectors";
 import {
   fetchCategories,
   createCategory,
@@ -19,7 +16,6 @@ import {
 export default function Lists() {
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
-  const isLoading = useSelector(selectCategoriesLoading);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [renameCategoryId, setRenameCategoryId] = useState(null);
   const [renameCategoryName, setRenameCategoryName] = useState("");
@@ -91,10 +87,6 @@ export default function Lists() {
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
       <div className="p-4 md:ml-64 mt-[60px]">
@@ -125,6 +117,7 @@ export default function Lists() {
                 </NavLink>
               )}
               <Dropdown
+                label=""
                 theme={dropdownTheme}
                 renderTrigger={() => (
                   <button>

@@ -6,11 +6,7 @@ import { Dropdown } from "flowbite-react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import {
-  selectCategories,
-  selectCategoriesError,
-  selectCategoriesLoading,
-} from "../redux/tasks/categoriesSelectors";
+import { selectCategories } from "../redux/tasks/categoriesSelectors";
 import {
   fetchCategories,
   createCategory,
@@ -21,8 +17,6 @@ import {
 export default function SidebarLeft() {
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories) || [];
-  const isLoading = useSelector(selectCategoriesLoading);
-  const error = useSelector(selectCategoriesError);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [renameCategoryId, setRenameCategoryId] = useState(null);
   const [renameCategoryName, setRenameCategoryName] = useState("");
@@ -104,32 +98,6 @@ export default function SidebarLeft() {
     acc[category.name] = category.tasks?.length || 0;
     return acc;
   }, {});
-
-  // Update the categories list JSX to handle loading and error states
-  const renderCategories = () => {
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!categories.length) return <div>No categories found</div>;
-
-    return categories.map((category) => (
-      <li key={category._id}>
-        <NavLink
-          to={`/lists/${category.name}`}
-          className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
-        >
-          <div className="flex">
-            <div className={`w-5 h-5 rounded-md ${category.color}`}></div>
-            <span className="flex-1 ms-3 whitespace-nowrap">
-              {category.name}
-            </span>
-          </div>
-          <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-            {categoryCounts[category.name]}
-          </span>
-        </NavLink>
-      </li>
-    ));
-  };
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -256,28 +224,33 @@ export default function SidebarLeft() {
                 className="flex items-center justify-between gap-2"
               >
                 {renameCategoryId === category._id ? (
-          <input
-            type="text"
-            value={renameCategoryName}
-            onChange={(e) => setRenameCategoryName(e.target.value)}
-            onBlur={() => handleRenameCategory(category._id)}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 w-40"
-          />
-        ) : (
-          <NavLink
-            to={`/lists/${category.name}`}
-            className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
-          >
-            <div className="flex">
-              <div className={`w-5 h-5 rounded-md ${category.color}`}></div>
-              <span className="flex-1 ms-3 whitespace-nowrap">{category.name}</span>
-            </div>
-            <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-              {categoryCounts[category.name]}
-            </span>
-          </NavLink>
-        )}
+                  <input
+                    type="text"
+                    value={renameCategoryName}
+                    onChange={(e) => setRenameCategoryName(e.target.value)}
+                    onBlur={() => handleRenameCategory(category._id)}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 w-40"
+                  />
+                ) : (
+                  <NavLink
+                    to={`/lists/${category.name}`}
+                    className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <div className="flex">
+                      <div
+                        className={`w-5 h-5 rounded-md ${category.color}`}
+                      ></div>
+                      <span className="flex-1 ms-3 whitespace-nowrap">
+                        {category.name}
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
+                      {categoryCounts[category.name]}
+                    </span>
+                  </NavLink>
+                )}
                 <Dropdown
+                  label=""
                   theme={dropdownTheme}
                   renderTrigger={() => (
                     <button>
