@@ -6,7 +6,7 @@ import sidebarRightReducer from "./sidebarRight/sidebarRightSlice";
 import stickyWallReducer from "./stickyWall/stickyWallSlice";
 import navAndSideReducer from "./navAndSide/navAndSideSlice";
 import attendanceReducer from "./attendance/attendanceSlice";
-import selectedTaskReducer from "./selectedTask/selectedTaskSlice";
+import selectedTaskReducer from "./sidebarRight/selectedTaskSlice";
 import categoryReducer from "./tasks/categoriesSlice";
 import tasksReducer from './tasks/tasksSlice';
 

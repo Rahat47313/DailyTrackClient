@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { Checkbox } from "flowbite-react";
 import { IoIosArrowForward } from "react-icons/io";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
-import { setSelectedTask } from "../../redux/selectedTask/selectedTaskSlice";
+import { setSelectedTask } from "../../redux/sidebarRight/selectedTaskSlice";
 
 interface UpcomingTasksInterface {
   task: {

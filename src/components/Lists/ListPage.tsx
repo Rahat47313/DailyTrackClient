@@ -6,7 +6,7 @@ import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
 import SidebarRight from "../../components/SidebarRight";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
-import { setSelectedTask } from "../../redux/selectedTask/selectedTaskSlice";
+import { setSelectedTask } from "../../redux/sidebarRight/selectedTaskSlice";
 import { selectCategories } from "../../redux/tasks/categoriesSelectors";
 import { selectTasks, selectTasksLoading } from "../../redux/tasks/tasksSelectors";
 import { fetchTasksByCategory } from "../../redux/tasks/tasksThunks";

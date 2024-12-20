@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { TiPlus } from "react-icons/ti";
 import { selectSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSelectors";
 import { setSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSlice";
-import { selectSelectedTask } from "../redux/selectedTask/selectedTaskSelectors";
-import { clearSelectedTask } from "../redux/selectedTask/selectedTaskSlice";
+import { selectSelectedTask } from "../redux/sidebarRight/selectedTaskSelectors";
+import { clearSelectedTask } from "../redux/sidebarRight/selectedTaskSlice";
 
 export default function SidebarRight() {
   const dispatch = useDispatch();
