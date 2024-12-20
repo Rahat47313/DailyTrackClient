@@ -1,19 +1,31 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Checkbox } from "flowbite-react";
 import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
 import SidebarRight from "../../components/SidebarRight";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
 import { setSelectedTask } from "../../redux/selectedTask/selectedTaskSlice";
-import TaskData from "../../components/TaskData.json";
+import { selectCategories } from "../../redux/tasks/categoriesSelectors";
+import { selectTasks, selectTasksLoading } from "../../redux/tasks/tasksSelectors";
+import { fetchTasksByCategory } from "../../redux/tasks/tasksThunks";
 import { Fragment } from "react/jsx-runtime";
 
 export default function ListPage() {
   const dispatch = useDispatch();
   const { category } = useParams();
+  const categories = useSelector(selectCategories);
+  const tasks = useSelector(selectTasks);
+  const isLoading = useSelector(selectTasksLoading);
 
-  const categoryData = TaskData.categories.find((cat) => cat.name === category);
+  const categoryData = categories.find((cat) => cat.name === category);
+
+  useEffect(() => {
+    if (categoryData?._id) {
+      dispatch(fetchTasksByCategory(categoryData._id));
+    }
+  }, [dispatch, categoryData?._id]);
 
   const handleTaskClick = (task) => {
     dispatch(
@@ -28,8 +40,12 @@ export default function ListPage() {
     dispatch(setSidebarRightVisibility(true));
   };
 
+  if (isLoading) {
+    return <div className="p-4 md:ml-64 mt-[60px]">Loading...</div>;
+  }
+
   return (
-    <div>
+    <>
       <div className="p-4 md:ml-64 mt-[60px]">
         <SidebarRight />
         <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
@@ -42,15 +58,15 @@ export default function ListPage() {
           <TiPlus />
           <div>Add New Task</div>
         </button>
-        {categoryData?.tasks?.length > 0 && (
+        {tasks?.length > 0 && (
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
-            {categoryData?.tasks.map((task) => (
-              <Fragment key={task.id}>
+            {tasks.map((task) => (
+              <Fragment key={task._id}>
                 <div className="flex flex-col border-b border-gray-200 dark:border-gray-700 py-3 px-5 w-full">
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="flex items-center gap-4">
-                        <Checkbox />
+                      <Checkbox checked={task.completed} />
                         <div>{task.title}</div>
                       </div>
                       <div className="hidden sm:flex pl-4 text-xs">
@@ -61,11 +77,11 @@ export default function ListPage() {
                               <path d="M327.23 244.24c-8.14-8.13-21.33-8.13-29.46 0L250 292.01l-47.77-47.77c-8.14-8.14-21.33-8.14-29.46 0-8.14 8.14-8.14 21.33 0 29.46l47.77 47.77-47.77 47.77c-8.14 8.14-8.14 21.33 0 29.46s21.33 8.14 29.46 0L250 350.94l47.77 47.77c8.14 8.14 21.33 8.14 29.46 0 8.14-8.14 8.14-21.33 0-29.46l-47.77-47.77 47.77-47.77c8.14-8.14 8.14-21.33 0-29.47 0 .01 0 0 0 0z" />
                             </svg>
                           </div>
-                          <div>{task.dueDate}</div>
+                          <div>{new Date(task.dueDate).toLocaleDateString()}</div>
                         </div>
                         <div className="flex items-center gap-2 border-r px-4">
                           <div className="flex items-center justify-center w-3 h-3 p-[10px] text-xs font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                            {task.subtasks.length}
+                          {task.subtasks?.length || 0}
                           </div>
                           <div>Subtasks</div>
                         </div>
@@ -94,6 +110,6 @@ export default function ListPage() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

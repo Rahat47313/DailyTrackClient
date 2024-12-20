@@ -8,6 +8,7 @@ import navAndSideReducer from "./navAndSide/navAndSideSlice";
 import attendanceReducer from "./attendance/attendanceSlice";
 import selectedTaskReducer from "./selectedTask/selectedTaskSlice";
 import categoryReducer from "./tasks/categoriesSlice";
+import tasksReducer from './tasks/tasksSlice';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     attendance: attendanceReducer,
     selectedTask: selectedTaskReducer,
     categories: categoryReducer,
+    tasks: tasksReducer,
   },
 });
 
