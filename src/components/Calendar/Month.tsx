@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   selectNavigationDate,
   selectEvents,
-  selectCurrentDate,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
+import { selectEventsAndTasks } from '../../redux/calendar/calendarSelectors';
 import { ClockIcon } from "@heroicons/react/20/solid";
 
 function classNames(...classes) {
@@ -30,9 +30,8 @@ const isCurrentMonth = (date) => {
 };
 
 export default function Month() {
-  const dispatch = useDispatch();
   const navigationDate = useSelector(selectNavigationDate);
-  const events = useSelector(selectEvents);
+  const events = useSelector(selectEventsAndTasks);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigationMonth = navigationDate.getMonth();
   const [days, setDays] = useState([]);

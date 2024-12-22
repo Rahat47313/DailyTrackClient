@@ -9,6 +9,7 @@ import attendanceReducer from "./attendance/attendanceSlice";
 import selectedTaskReducer from "./sidebarRight/selectedTaskSlice";
 import categoryReducer from "./tasks/categoriesSlice";
 import tasksReducer from './tasks/tasksSlice';
+import tasksCountReducer from './tasks/tasksCountSlice';
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     selectedTask: selectedTaskReducer,
     categories: categoryReducer,
     tasks: tasksReducer,
+    tasksCount: tasksCountReducer,
   },
 });
 

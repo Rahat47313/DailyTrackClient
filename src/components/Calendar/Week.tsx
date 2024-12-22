@@ -5,6 +5,7 @@ import {
   selectEvents,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
+import { selectEventsAndTasks } from '../../redux/calendar/calendarSelectors';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -22,7 +23,7 @@ const TIME_SLOTS = Array.from({ length: 24 }, (_, hour) => ({
 export default function Week() {
   const dispatch = useDispatch();
   const navigationDate = useSelector(selectNavigationDate);
-  const events = useSelector(selectEvents);
+  const events = useSelector(selectEventsAndTasks);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [weekDays, setWeekDays] = useState([]);
   const [weekEvents, setWeekEvents] = useState([]);

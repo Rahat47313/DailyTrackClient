@@ -13,11 +13,14 @@ import {
   updateCategory,
   deleteCategory,
 } from "../redux/tasks/categoriesThunks";
-import { selectTasks } from "../redux/tasks/tasksSelectors";
+import { selectTasks } from '../redux/tasks/tasksSelectors';
+import { selectTasksCount } from '../redux/tasks/tasksCountSelectors';
+import { fetchAllTasksCounts } from '../redux/tasks/tasksCountThunks';
 
 export default function SidebarLeft() {
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
+  const tasksCounts = useSelector(selectTasksCount);
   const categories = useSelector(selectCategories) || [];
   const [newCategoryName, setNewCategoryName] = useState("");
   const [renameCategoryId, setRenameCategoryId] = useState(null);
@@ -65,6 +68,7 @@ export default function SidebarLeft() {
 
   useEffect(() => {
     dispatch(fetchCategories());
+    dispatch(fetchAllTasksCounts());
   }, [dispatch]);
 
   const handleCreateCategory = async () => {
@@ -95,16 +99,6 @@ export default function SidebarLeft() {
       console.error("Failed to delete category:", error);
     }
   };
-
-  const categoryCounts = useMemo(() => {
-    return categories.reduce((acc, category) => {
-      // Count tasks for each category
-      acc[category.name] = tasks.filter(
-        task => task.category._id === category._id
-      ).length;
-      return acc;
-    }, {});
-  }, [categories, tasks]);
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -252,7 +246,7 @@ export default function SidebarLeft() {
                       </span>
                     </div>
                     <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                      {categoryCounts[category.name]}
+                    {tasksCounts[category._id] || 0}
                     </span>
                   </NavLink>
                 )}

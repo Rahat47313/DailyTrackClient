@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  calendarView: "year",
+  calendarView: "month",
   currentDate: new Date().toISOString(),
   currentMonth: new Date().getMonth(),
   currentYear: new Date().getFullYear(),

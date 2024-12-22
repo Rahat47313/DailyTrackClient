@@ -1,4 +1,6 @@
 import { createSelector } from "reselect";
+import { selectTasks } from '../tasks/tasksSelectors';
+import { convertTaskToEvent } from '../../utils/calendarUtils';
 
 const selectCalendarState = (state) => state.calendar;
 
@@ -26,6 +28,15 @@ export const selectEvents = createSelector(
   [selectCalendarState],
   (calendar) => calendar.events
 );
+
+export const selectEventsAndTasks = createSelector(
+  [selectEvents, selectTasks],
+  (events, tasks) => {
+    const taskEvents = tasks.map(convertTaskToEvent);
+    return [...events, ...taskEvents];
+  }
+);
+
 export const selectIsLoading = createSelector(
   [selectCalendarState],
   (calendar) => calendar.isLoading

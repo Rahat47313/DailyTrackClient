@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosConfig';
 import { setTasks, setIsLoading, setError } from './tasksSlice';
+import { fetchAllTasksCounts } from './tasksCountThunks';
 
 export const fetchTasksByCategory = createAsyncThunk(
   'tasks/fetchTasksByCategory',
@@ -24,7 +25,8 @@ export const createTask = createAsyncThunk(
     dispatch(setIsLoading(true));
     try {
       const { data } = await axiosInstance.post('/tasks', taskData);
-      dispatch(fetchTasksByCategory(taskData.categoryId));
+      await dispatch(fetchTasksByCategory(taskData.categoryId));
+      await dispatch(fetchAllTasksCounts()); 
       return data;
     } catch (error) {
       dispatch(setError(error));
@@ -41,7 +43,8 @@ export const updateTask = createAsyncThunk(
     dispatch(setIsLoading(true));
     try {
       const { data } = await axiosInstance.patch(`/tasks/${id}`, updates);
-      dispatch(fetchTasksByCategory(categoryId));
+      await dispatch(fetchTasksByCategory(categoryId));
+      await dispatch(fetchAllTasksCounts());
       return data;
     } catch (error) {
       dispatch(setError(error));
@@ -58,7 +61,8 @@ export const deleteTask = createAsyncThunk(
     dispatch(setIsLoading(true));
     try {
       await axiosInstance.delete(`/tasks/${id}`);
-      dispatch(fetchTasksByCategory(categoryId));
+      await dispatch(fetchTasksByCategory(categoryId));
+      await dispatch(fetchAllTasksCounts());
     } catch (error) {
       dispatch(setError(error));
       throw error;

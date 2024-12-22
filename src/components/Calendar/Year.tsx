@@ -4,9 +4,9 @@ import {
   selectDays,
   selectMonths,
   selectNavigationDate,
-  selectEvents,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
+import { selectEventsAndTasks } from '../../redux/calendar/calendarSelectors';
 import { setMonths } from "../../redux/calendar/calendarSlice";
 
 function classNames(...classes) {
@@ -32,10 +32,9 @@ const isCurrentMonth = (date) => {
 
 export default function Year() {
   const dispatch = useDispatch();
-  const days = useSelector(selectDays)
-  const months = useSelector(selectMonths);
+  const months = useSelector(selectMonths) || [];
   const navigationDate = useSelector(selectNavigationDate);
-  const events = useSelector(selectEvents);
+  const events = useSelector(selectEventsAndTasks) || [];
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigationYear = navigationDate.getFullYear();
 
