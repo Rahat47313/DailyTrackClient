@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { gapi } from "gapi-script";
@@ -13,9 +13,11 @@ import {
   updateCategory,
   deleteCategory,
 } from "../redux/tasks/categoriesThunks";
+import { selectTasks } from "../redux/tasks/tasksSelectors";
 
 export default function SidebarLeft() {
   const dispatch = useDispatch();
+  const tasks = useSelector(selectTasks);
   const categories = useSelector(selectCategories) || [];
   const [newCategoryName, setNewCategoryName] = useState("");
   const [renameCategoryId, setRenameCategoryId] = useState(null);
@@ -94,10 +96,15 @@ export default function SidebarLeft() {
     }
   };
 
-  const categoryCounts = categories.reduce((acc, category) => {
-    acc[category.name] = category.tasks?.length || 0;
-    return acc;
-  }, {});
+  const categoryCounts = useMemo(() => {
+    return categories.reduce((acc, category) => {
+      // Count tasks for each category
+      acc[category.name] = tasks.filter(
+        task => task.category._id === category._id
+      ).length;
+      return acc;
+    }, {});
+  }, [categories, tasks]);
 
   const handleSignOut = useCallback(async () => {
     try {

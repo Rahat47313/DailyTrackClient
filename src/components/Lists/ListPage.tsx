@@ -6,11 +6,12 @@ import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
 import SidebarRight from "../../components/SidebarRight";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
-import { setSelectedTask } from "../../redux/sidebarRight/selectedTaskSlice";
+import { clearSelectedTask, setSelectedTask } from "../../redux/sidebarRight/selectedTaskSlice";
 import { selectCategories } from "../../redux/tasks/categoriesSelectors";
 import { selectTasks, selectTasksLoading } from "../../redux/tasks/tasksSelectors";
 import { fetchTasksByCategory } from "../../redux/tasks/tasksThunks";
 import { Fragment } from "react/jsx-runtime";
+import { setCurrentCategory } from "../../redux/tasks/categoriesSlice";
 
 export default function ListPage() {
   const dispatch = useDispatch();
@@ -24,17 +25,16 @@ export default function ListPage() {
   useEffect(() => {
     if (categoryData?._id) {
       dispatch(fetchTasksByCategory(categoryData._id));
+      dispatch(setCurrentCategory(categoryData));
     }
-  }, [dispatch, categoryData?._id]);
+  }, [dispatch, categoryData]);
 
   const handleTaskClick = (task) => {
+    console.log('Task being selected:', task);
     dispatch(
       setSelectedTask({
         ...task,
-        category: {
-          name: categoryData.name,
-          color: categoryData.color,
-        },
+        category: categoryData
       })
     );
     dispatch(setSidebarRightVisibility(true));
@@ -52,7 +52,10 @@ export default function ListPage() {
           {category}
         </div>
         <button
-          onClick={() => dispatch(setSidebarRightVisibility(true))}
+          onClick={() => {
+            dispatch(clearSelectedTask());
+            dispatch(setSidebarRightVisibility(true))
+          }}
           className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 my-5 w-full"
         >
           <TiPlus />

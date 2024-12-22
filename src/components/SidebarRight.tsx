@@ -1,17 +1,20 @@
 import { useState, useEffect, Fragment } from "react";
 import { Drawer, Datepicker, Checkbox, Dropdown } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
-import { TiPlus } from "react-icons/ti";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { FaSave } from "react-icons/fa";
 import { selectSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSelectors";
 import { setSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSlice";
 import { selectSelectedTask } from "../redux/sidebarRight/selectedTaskSelectors";
 import { clearSelectedTask } from "../redux/sidebarRight/selectedTaskSlice";
-import { createTask, updateTask } from "../redux/tasks/tasksThunks";
-import { 
+import { createTask, updateTask, deleteTask } from "../redux/tasks/tasksThunks";
+import {
   selectCategories,
   selectCurrentCategory,
   selectCategoriesLoading,
-  selectCategoriesError 
+  selectCategoriesError,
 } from "../redux/tasks/categoriesSelectors";
 
 export default function SidebarRight() {
@@ -22,6 +25,44 @@ export default function SidebarRight() {
   const currentCategory = useSelector(selectCurrentCategory);
   const isLoading = useSelector(selectCategoriesLoading);
   const error = useSelector(selectCategoriesError);
+  const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
+  const [renameSubtaskIndex, setRenameSubtaskIndex] = useState(null);
+  const [renameSubtaskTitle, setRenameSubtaskTitle] = useState("");
+
+  const dropdownTheme = {
+    arrowIcon: "ml-0 h-0 w-0",
+    content: "py-1 focus:outline-none",
+    floating: {
+      animation: "transition-opacity",
+      arrow: {
+        base: "absolute z-10 h-2 w-2 rotate-45",
+        style: {
+          dark: "bg-gray-900 dark:bg-gray-700",
+          light: "bg-white",
+          auto: "bg-white dark:bg-gray-700",
+        },
+        placement: "-4px",
+      },
+      base: "z-10 w-fit divide-y divide-gray-100 rounded shadow focus:outline-none",
+      content: "py-1 text-sm text-gray-700 dark:text-gray-200",
+      divider: "my-1 h-px bg-gray-100 dark:bg-gray-600",
+      header: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-200",
+      hidden: "invisible opacity-0",
+      item: {
+        container: "",
+        base: "flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white",
+        icon: "mr-2 h-4 w-4",
+      },
+      style: {
+        dark: "bg-gray-900 text-white dark:bg-gray-700",
+        light: "border border-gray-200 bg-white text-gray-900",
+        auto: "border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white",
+      },
+      target: "w-fit",
+    },
+    inlineWrapper: "flex items-center",
+  };
+
   const [formErrors, setFormErrors] = useState({
     title: "",
     categoryId: "",
@@ -72,6 +113,8 @@ export default function SidebarRight() {
 
   // Initialize form data
   useEffect(() => {
+    console.log("Selected Task:", selectedTask);
+    console.log("Current Category:", currentCategory);
     if (selectedTask) {
       setFormData({
         title: selectedTask.title,
@@ -80,11 +123,19 @@ export default function SidebarRight() {
         categoryId: selectedTask.category._id,
         subtasks: selectedTask.subtasks,
       });
+      console.log(
+        "Setting form data for existing task:",
+        selectedTask.category._id
+      );
     } else {
       setFormData({
-        ...formData,
+        title: "",
+        description: "",
+        dueDate: new Date(),
         categoryId: currentCategory?._id || "",
+        subtasks: [],
       });
+      console.log("Setting form data for new task:", currentCategory?._id);
     }
   }, [selectedTask, currentCategory]);
 
@@ -97,15 +148,37 @@ export default function SidebarRight() {
   };
 
   const handleAddSubtask = () => {
+    if (!newSubtaskTitle.trim()) return;
     setFormData((prev) => ({
       ...prev,
-      subtasks: [...prev.subtasks, { title: "", completed: false }],
+      subtasks: [
+        ...prev.subtasks,
+        { title: newSubtaskTitle, completed: false },
+      ],
     }));
+    setNewSubtaskTitle("");
   };
 
-  const handleSubtaskChange = (index, value) => {
-    const newSubtasks = [...formData.subtasks];
-    newSubtasks[index].title = value;
+  const handleRenameSubtask = (index) => {
+    if (!renameSubtaskTitle.trim()) {
+      setRenameSubtaskIndex(null);
+      setRenameSubtaskTitle("");
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      subtasks: prev.subtasks.map((subtask, i) =>
+        i === index ? { ...subtask, title: renameSubtaskTitle } : subtask
+      ),
+    }));
+
+    setRenameSubtaskIndex(null);
+    setRenameSubtaskTitle("");
+  };
+
+  const handleDeleteSubtask = (index) => {
+    const newSubtasks = formData.subtasks.filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,
       subtasks: newSubtasks,
@@ -139,6 +212,22 @@ export default function SidebarRight() {
       handleClose();
     } catch (err) {
       console.error("Failed to save task:", err);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (selectedTask) {
+        await dispatch(
+          deleteTask({
+            id: selectedTask._id,
+            categoryId: formData.categoryId,
+          })
+        );
+        handleClose();
+      }
+    } catch (err) {
+      console.error("Failed to delete task:", err);
     }
   };
 
@@ -185,7 +274,6 @@ export default function SidebarRight() {
               id="message"
               rows={4}
               placeholder="Description"
-              defaultValue={""}
               value={formData.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -194,15 +282,23 @@ export default function SidebarRight() {
             <div className="flex items-center gap-4">
               <p className="block mb-2 text-sm font-medium">Lists</p>
               <Dropdown
-                // label="Choose"
-                // color="gray"
                 renderTrigger={() => (
                   <button
                     className="text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 font-medium rounded-lg text-sm w-full p-2.5 text-center flex justify-center items-center dark:bg-gray-700 dark:hover:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     type="button"
                   >
-                    {categories.find((c) => c._id === formData.categoryId)
-                      ?.name || "Choose"}
+                    {(() => {
+                      const selectedCategory = categories.find(
+                        (c) => c._id === formData.categoryId
+                      );
+                      return selectedCategory
+                        ? selectedCategory.name
+                        : "Choose";
+                    })()}
+                    {/* {formData.categoryId
+                      ? categories.find((c) => c._id === formData.categoryId)
+                          ?.name
+                      : "Choose"} */}
                     <svg
                       className="w-2.5 h-2.5 ms-3"
                       aria-hidden="true"
@@ -248,40 +344,110 @@ export default function SidebarRight() {
               Subtasks:
             </div>
             {formData.subtasks.map((subtask, index) => (
-              <div key={index} className="flex items-center gap-4 pl-1">
-                <Checkbox
-                  checked={subtask.completed}
-                  onChange={() => handleToggleSubtask(index)}
-                />
-                <input
-                  type="text"
-                  value={subtask.title}
-                  onChange={(e) => handleSubtaskChange(index, e.target.value)}
-                  className="flex-1"
-                />
-                <div>{subtask.title}</div>
+              <div key={index} className="flex items-center gap-2">
+                {renameSubtaskIndex === index ? (
+                  <input
+                    type="text"
+                    value={renameSubtaskTitle}
+                    onChange={(e) => setRenameSubtaskTitle(e.target.value)}
+                    onBlur={() => handleRenameSubtask(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleRenameSubtask(index);
+                      } else if (e.key === "Escape") {
+                        setRenameSubtaskIndex(null);
+                        setRenameSubtaskTitle("");
+                      }
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
+                  />
+                ) : (
+                  <div className="w-full flex items-center justify-between p-2">
+                    <div className="flex items-center gap-4">
+                      <Checkbox
+                        checked={subtask.completed}
+                        onChange={() => handleToggleSubtask(index)}
+                      />
+                      <span className="flex-1 whitespace-nowrap">
+                        {subtask.title}
+                      </span>
+                    </div>
+                    <Dropdown
+                      label=""
+                      theme={dropdownTheme}
+                      renderTrigger={() => (
+                        <button>
+                          <p className="text-xl hover:text-red-500">
+                            <BsThreeDotsVertical />
+                          </p>
+                        </button>
+                      )}
+                    >
+                      <Dropdown.Item
+                        icon={FaEdit}
+                        onClick={() => {
+                          setRenameSubtaskIndex(index);
+                          setRenameSubtaskTitle(subtask.title);
+                        }}
+                      >
+                        Edit
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        icon={MdDelete}
+                        onClick={() => {
+                          handleDeleteSubtask(index);
+                        }}
+                      >
+                        Delete
+                      </Dropdown.Item>
+                    </Dropdown>
+                  </div>
+                )}
               </div>
             ))}
-            <button onClick={handleAddSubtask} className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5 w-full">
-              <TiPlus />
-              <div>Add New Subtask</div>
-            </button>
-            <div className="flex justify-center pt-10">
+            <div className="flex items-center justify-between gap-2">
+              <input
+                type="text"
+                value={newSubtaskTitle}
+                onChange={(e) => setNewSubtaskTitle(e.target.value)}
+                placeholder="Add a new subtask"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
+              />
+              <button
+                onClick={handleAddSubtask}
+                className="flex items-center justify-center px-4 py-2.5 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 group"
+              >
+                <span>+</span>
+              </button>
+            </div>
+            <div className="flex justify-center items-center gap-10 pt-10">
               <button
                 type="button"
                 onClick={handleSave}
                 disabled={isLoading}
-                className="flex items-center border rounded-md border-gray-200 dark:border-gray-700 gap-4 py-3 px-5"
+                className="flex items-center text-green-500 border rounded-md border-green-200 dark:border-green-700 gap-4 py-3 px-5"
               >
                 {isLoading ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900" />
                 ) : (
                   <>
-                    <TiPlus />
+                    <FaSave />
                     <span>SAVE</span>
                   </>
                 )}
               </button>
+              {selectedTask && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={isLoading}
+                  className="flex items-center text-red-500 border rounded-md border-red-200 dark:border-red-700 gap-4 py-3 px-5"
+                >
+                  <MdDelete />
+                  <span>DELETE</span>
+                </button>
+              )}
             </div>
           </form>
         </Drawer.Items>
