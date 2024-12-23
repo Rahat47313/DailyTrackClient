@@ -6,7 +6,7 @@ import {
     setError,
     setAttendanceData 
   } from "./attendanceSlice";
-import axiosInstance from "../../api/axiosConfig";
+import axiosInstance from "../../utils/axiosConfig";
 
 export const fetchAttendanceData = createAsyncThunk(
     "attendance/fetchData",

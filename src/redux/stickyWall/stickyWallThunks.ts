@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setNotes, setIsLoading, setError } from "./stickyWallSlice";
-import axiosInstance from "../../api/axiosConfig";
+import axiosInstance from "../../utils/axiosConfig";
 
 export const fetchNotes = createAsyncThunk(
   "stickyWall/fetchNotes",

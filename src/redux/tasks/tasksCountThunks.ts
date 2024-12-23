@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setTasksCount } from './tasksCountSlice';
-import axiosInstance from '../../api/axiosConfig';
+import axiosInstance from '../../utils/axiosConfig';
 
 export const fetchAllTasksCounts = createAsyncThunk(
   'tasks/fetchAllTasksCounts',

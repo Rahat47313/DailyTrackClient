@@ -2,7 +2,7 @@ import { Button, Tabs } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import axiosInstance from '../api/axiosConfig';
+import axiosInstance from '../utils/axiosConfig';
 import { selectCurrentDate } from "../redux/calendar/calendarSelectors";
 import {
   selectClockingInTime,

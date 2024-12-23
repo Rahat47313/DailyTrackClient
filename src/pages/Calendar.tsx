@@ -27,8 +27,6 @@ import {
 import {
   selectCalendarView,
   selectCurrentDate,
-  // selectCurrentMonth,
-  // selectCurrentYear,
   selectNavigationDate,
   selectEvents,
   selectIsLoading,
@@ -70,8 +68,6 @@ export default function Calendar() {
   const dispatch = useDispatch();
   const calendarView = useSelector(selectCalendarView);
   const currentDate = useSelector(selectCurrentDate);
-  // const currentMonth = useSelector(selectCurrentMonth);
-  // const currentYear = useSelector(selectCurrentYear);
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEvents);
   const isLoading = useSelector(selectIsLoading);
@@ -120,24 +116,6 @@ export default function Calendar() {
       isMounted = false;
     };
   }, [dispatch, isAuthenticated, navigate]);
-
-  // Show loading state while checking auth
-  // if (!gapi.auth2?.getAuthInstance()) {
-  //   return <div>Initializing...</div>;
-  // }
-
-  // Only redirect if explicitly not authenticated
-  // if (isAuthenticated === false) {
-  //   return null;
-  // }
-
-  // if (isLoading) {
-  //   return <div>Loading calendar...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
 
   const navigateDate = useCallback(
     (amount, view) => {
@@ -208,34 +186,6 @@ export default function Calendar() {
     }
   }, [calendarView]);
 
-  // const handleAuthChange = useCallback(
-  //   async (isSignedIn) => {
-  //     dispatch(setIsAuthenticated(isSignedIn));
-  //     if (isSignedIn) {
-  //       dispatch(fetchEvents());
-  //     }
-  //   },
-  //   [dispatch]
-  // );
-
-  // const handleSignIn = useCallback(async () => {
-  //   try {
-  //     await gapi.auth2.getAuthInstance().signIn();
-  //     handleAuthChange(true);
-  //   } catch (error) {
-  //     console.error("Sign in error:", error);
-  //   }
-  // }, [handleAuthChange]);
-
-  // const handleSignOut = useCallback(async () => {
-  //   try {
-  //     await gapi.auth2.getAuthInstance().signOut();
-  //     handleAuthChange(false);
-  //   } catch (error) {
-  //     console.error("Sign out error:", error);
-  //   }
-  // }, [handleAuthChange]);
-
   const renderCalendarView = () => {
     const viewProps = {
       navigationDate,
@@ -267,34 +217,6 @@ export default function Calendar() {
         <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
           Calendar
         </div>
-
-        {/* Authentication and Action Buttons */}
-        {/* <div className="flex gap-4 mb-4">
-        {!isAuthenticated ? (
-          <button
-            // onClick={handleSignIn}
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            disabled={isLoading}
-          >
-            Sign In
-          </button>
-        ) : (
-          <button
-            // onClick={handleSignOut}
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            disabled={isLoading}
-          >
-            Sign Out
-          </button>
-        )}
-      </div> */}
-
-        {/* Error Display */}
-        {/* {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-          {error}
-        </div>
-      )} */}
 
         {/* Calendar Header */}
         <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
