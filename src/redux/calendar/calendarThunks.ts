@@ -6,6 +6,8 @@ import {
   setError,
   setIsAuthenticated,
 } from "./calendarSlice";
+import axiosInstance from "../../utils/axiosConfig";
+import { setTasks } from "../tasks/tasksSlice";
 
 const CALENDAR_ID = "primary";
 // const currentYear = new Date().getFullYear();
@@ -145,3 +147,20 @@ export const deleteEvent = (eventId) => async (dispatch) => {
     dispatch(setIsLoading(false));
   }
 };
+
+export const fetchAllTasks = createAsyncThunk(
+  'tasks/fetchAllTasks',
+  async (_, { dispatch }) => {
+    dispatch(setIsLoading(true));
+    try {
+      const { data } = await axiosInstance.get('/tasks');
+      dispatch(setTasks(data));
+      return data;
+    } catch (error) {
+      dispatch(setError(error.message));
+      throw error;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  }
+);

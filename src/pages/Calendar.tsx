@@ -23,6 +23,7 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
+  fetchAllTasks,
 } from "../redux/calendar/calendarThunks";
 import {
   selectCalendarView,
@@ -71,13 +72,24 @@ export default function Calendar() {
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEvents);
   const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
+  const isTasksRefreshing = useSelector((state) => state.tasks.isRefreshing);
 
   const classNames = useCallback((...classes) => {
     return classes.filter(Boolean).join(" ");
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchAllTasks());
+
+    // Refresh tasks periodically
+    const intervalId = setInterval(() => {
+      dispatch(fetchAllTasks());
+    }, 30000); // Every 30 seconds
+
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
 
   useEffect(() => {
     let isMounted = true;
@@ -344,12 +356,19 @@ export default function Calendar() {
 
         {/* Calendar Content */}
         <div className="flex-1 overflow-auto">
-          {isLoading ? (
+          {isLoading && !isTasksRefreshing ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
             </div>
           ) : (
-            renderCalendarView()
+            <>
+              {renderCalendarView()}
+              {isTasksRefreshing && (
+                <div className="fixed bottom-4 right-4">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600" />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
