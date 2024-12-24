@@ -4,13 +4,41 @@ import { IoIosArrowForward } from "react-icons/io";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
 import { setSelectedTask } from "../../redux/sidebarRight/selectedTaskSlice";
 
+// interface UpcomingTasksInterface {
+//   task: {
+//     _id: string;
+//     title: string;
+//     description: string;
+//     dueDate: string;
+//     completed: boolean;
+//     subtasks: { _id: string; title: string; completed: boolean }[];
+//     category: { 
+//       _id: string;
+//       name: string; 
+//       color: string; 
+//     };
+//   };
+// }
+
 interface UpcomingTasksInterface {
   task: {
-    id: number;
-    title: string;
-    dueDate: string;
-    subtasks: { id: string; title: string; completed: boolean }[];
-    category: { name: string; color: string };
+    _id: string;
+    title: string; 
+    description: string;
+    dueDate: Date;
+    completed: boolean;
+    subtasks: {
+      _id: string;
+      title: string;
+      completed: boolean;
+    }[];
+    category: {
+      _id: string;       
+      name: string;
+      color: string;
+    };
+    createdAt?: Date;
+    updatedAt?: Date;
   };
 }
 
@@ -37,7 +65,7 @@ export default function UpcomingTasks({ task }: UpcomingTasksInterface) {
                   <path d="M327.23 244.24c-8.14-8.13-21.33-8.13-29.46 0L250 292.01l-47.77-47.77c-8.14-8.14-21.33-8.14-29.46 0-8.14 8.14-8.14 21.33 0 29.46l47.77 47.77-47.77 47.77c-8.14 8.14-8.14 21.33 0 29.46s21.33 8.14 29.46 0L250 350.94l47.77 47.77c8.14 8.14 21.33 8.14 29.46 0 8.14-8.14 8.14-21.33 0-29.46l-47.77-47.77 47.77-47.77c8.14-8.14 8.14-21.33 0-29.47 0 .01 0 0 0 0z" />
                 </svg>
               </div>
-              <div>{task.dueDate}</div>
+              <div>{new Date(task.dueDate).toLocaleDateString()}</div>
             </div>
             <div className="flex items-center gap-2 border-r px-4">
               <div className="flex items-center justify-center w-3 h-3 p-[10px] text-xs font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">

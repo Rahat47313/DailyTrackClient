@@ -3,6 +3,23 @@ import axiosInstance from '../../utils/axiosConfig';
 import { setTasks, setIsLoading, setError } from './tasksSlice';
 import { fetchAllTasksCounts } from './tasksCountThunks';
 
+export const fetchAllUpcomingTasks = createAsyncThunk(
+  'tasks/fetchAllUpcomingTasks',
+  async (_, { dispatch }) => {
+    dispatch(setIsLoading(true));
+    try {
+      const { data } = await axiosInstance.get('/tasks');
+      dispatch(setTasks(data));
+      return data;
+    } catch (error) {
+      dispatch(setError(error));
+      throw error;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  }
+);
+
 export const fetchTasksByCategory = createAsyncThunk(
   'tasks/fetchTasksByCategory',
   async (categoryId: string, { dispatch }) => {
