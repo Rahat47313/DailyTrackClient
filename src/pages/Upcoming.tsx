@@ -3,7 +3,6 @@ import { TiPlus } from "react-icons/ti";
 import SidebarRight from "../components/SidebarRight";
 import { setSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSlice";
 import UpcomingTasks from "../components/Upcoming/UpcomingTasks";
-import UpcomingData from "../components/TaskData.json";
 import { selectTasks, selectTasksLoading } from "../redux/tasks/tasksSelectors";
 import { useEffect } from "react";
 import { fetchAllUpcomingTasks } from "../redux/tasks/tasksThunks";
