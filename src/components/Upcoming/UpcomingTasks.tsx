@@ -4,26 +4,10 @@ import { IoIosArrowForward } from "react-icons/io";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
 import { setSelectedTask } from "../../redux/sidebarRight/selectedTaskSlice";
 
-// interface UpcomingTasksInterface {
-//   task: {
-//     _id: string;
-//     title: string;
-//     description: string;
-//     dueDate: string;
-//     completed: boolean;
-//     subtasks: { _id: string; title: string; completed: boolean }[];
-//     category: { 
-//       _id: string;
-//       name: string; 
-//       color: string; 
-//     };
-//   };
-// }
-
 interface UpcomingTasksInterface {
   task: {
     _id: string;
-    title: string; 
+    title: string;
     description: string;
     dueDate: Date;
     completed: boolean;
@@ -33,7 +17,7 @@ interface UpcomingTasksInterface {
       completed: boolean;
     }[];
     category: {
-      _id: string;       
+      _id: string;
       name: string;
       color: string;
     };

@@ -18,10 +18,10 @@ function groupTasksByDate(tasks) {
     .split("T")[0];
 
   return {
-    today: tasks.filter(task => task.dueDate?.split('T')[0] === today),
-    tomorrow: tasks.filter(task => task.dueDate?.split('T')[0] === tomorrow),
-    thisWeek: tasks.filter(task => {
-      const taskDate = task.dueDate?.split('T')[0];
+    today: tasks.filter((task) => task.dueDate?.split("T")[0] === today),
+    tomorrow: tasks.filter((task) => task.dueDate?.split("T")[0] === tomorrow),
+    thisWeek: tasks.filter((task) => {
+      const taskDate = task.dueDate?.split("T")[0];
       return taskDate > tomorrow && taskDate <= weekFromNow;
     }),
   };
