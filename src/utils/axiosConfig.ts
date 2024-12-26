@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
   },
 });
 
-// Add request interceptor for auth
+// Request interceptor for auth
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Add response interceptor for error handling
+// Response interceptor for error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

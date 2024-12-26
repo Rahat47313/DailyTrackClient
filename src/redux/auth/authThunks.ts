@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../utils/axiosConfig';
-import { setUser, setToken, setIsLoading, setError } from './authSlice';
+import { setUser, setToken, logout, setIsLoading, setError } from './authSlice';
+import { setNavAndSideVisibility } from '../navAndSide/navAndSideSlice';
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -16,6 +17,20 @@ export const login = createAsyncThunk(
       throw error;
     } finally {
       dispatch(setIsLoading(false));
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  'auth/logout',
+  async (_, { dispatch }) => {
+    try {
+      // Clear auth state
+      dispatch(logout());
+      // Hide nav and sidebar
+      dispatch(setNavAndSideVisibility(false));
+    } catch (error) {
+      console.error('Logout error:', error);
     }
   }
 );

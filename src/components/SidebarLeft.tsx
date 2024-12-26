@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { gapi } from "gapi-script";
 import { Dropdown } from "flowbite-react";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -17,9 +17,11 @@ import {
 import { selectTasks } from "../redux/tasks/tasksSelectors";
 import { selectTasksCount } from "../redux/tasks/tasksCountSelectors";
 import { fetchAllTasksCounts } from "../redux/tasks/tasksCountThunks";
+import { logoutUser } from '../redux/auth/authThunks';
 
 export default function SidebarLeft() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const tasks = useSelector(selectTasks);
   const tasksCounts = useSelector(selectTasksCount);
   const categories = useSelector(selectCategories) || [];
@@ -101,13 +103,22 @@ export default function SidebarLeft() {
     }
   };
 
-  const handleSignOut = useCallback(async () => {
+  const handleGoogleSignOut = useCallback(async () => {
     try {
       await gapi.auth2.getAuthInstance().signOut();
     } catch (error) {
       console.error("Sign out error:", error);
     }
   }, []);
+
+  const handleSignOut = useCallback(async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate('/login');
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  }, [dispatch, navigate]);
 
   return (
     <>
@@ -333,6 +344,7 @@ export default function SidebarLeft() {
             <li>
               <NavLink
                 to="/login"
+                // onClick={handleGoogleSignOut}
                 onClick={handleSignOut}
                 className="w-full flex items-center p-2 transition duration-75 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
