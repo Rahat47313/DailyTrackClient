@@ -12,6 +12,7 @@ import Lists from "./pages/Lists";
 import { selectNavAndSideVisibility } from "./redux/navAndSide/navAndSideSelectors";
 import SidebarLeftSmall from "./components/SidebarLeftSmall";
 import ListPage from "./components/Lists/ListPage";
+import Users from "./pages/Users";
 
 export default function AppRoutes() {
   const showNavAndSide = useSelector(selectNavAndSideVisibility);
@@ -32,6 +33,7 @@ export default function AppRoutes() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/stickyWall" element={<StickyWall />} />
         <Route path="/lists" element={<Lists />} />
+        <Route path="/users" element={<Users />} />
         <Route path="/lists/:category" element={<ListPage />} />
       </Routes>
     </>

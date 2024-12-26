@@ -24,7 +24,6 @@ export default function SidebarRight() {
   const categories = useSelector(selectCategories);
   const currentCategory = useSelector(selectCurrentCategory);
   const isLoading = useSelector(selectCategoriesLoading);
-  const error = useSelector(selectCategoriesError);
   const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
   const [renameSubtaskIndex, setRenameSubtaskIndex] = useState(null);
   const [renameSubtaskTitle, setRenameSubtaskTitle] = useState("");

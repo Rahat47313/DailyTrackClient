@@ -6,6 +6,7 @@ import { Dropdown } from "flowbite-react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { FaUserGear } from "react-icons/fa6";
 import { selectCategories } from "../redux/tasks/categoriesSelectors";
 import {
   fetchCategories,
@@ -13,9 +14,9 @@ import {
   updateCategory,
   deleteCategory,
 } from "../redux/tasks/categoriesThunks";
-import { selectTasks } from '../redux/tasks/tasksSelectors';
-import { selectTasksCount } from '../redux/tasks/tasksCountSelectors';
-import { fetchAllTasksCounts } from '../redux/tasks/tasksCountThunks';
+import { selectTasks } from "../redux/tasks/tasksSelectors";
+import { selectTasksCount } from "../redux/tasks/tasksCountSelectors";
+import { fetchAllTasksCounts } from "../redux/tasks/tasksCountThunks";
 
 export default function SidebarLeft() {
   const dispatch = useDispatch();
@@ -246,7 +247,7 @@ export default function SidebarLeft() {
                       </span>
                     </div>
                     <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-red-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-white">
-                    {tasksCounts[category._id] || 0}
+                      {tasksCounts[category._id] || 0}
                     </span>
                   </NavLink>
                 )}
@@ -299,6 +300,19 @@ export default function SidebarLeft() {
         </div>
         <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
           <ul>
+            <li>
+              <NavLink
+                to="/users"
+                className="w-full flex items-center p-2 transition duration-75 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <div className="w-5 h-5 fill-gray-500 transition duration-75 group-hover:fill-red-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
+                  <svg viewBox="0 0 500 500">
+                    <path d="M112.5 175c34.5 0 62.5-28 62.5-62.5S147.1 50 112.5 50 50 77.9 50 112.5 78 175 112.5 175zm287.6 0c34.5 0 62.5-28 62.5-62.5S434.6 50 400.1 50s-62.5 28-62.5 62.5 27.9 62.5 62.5 62.5zM0 283.4c0 9.1 7.5 16.6 16.6 16.6h167.2C163 281.6 150 254.8 150 225c0-5.9.5-11.7 1.5-17.4-10.6-4.9-22.4-7.6-34.8-7.6H83.4C37.3 200 0 237.3 0 283.4zM250 300c18.8 0 35.9-6.9 49-18.2 2-2.9 4.1-5.7 6.3-8.4 2.1-2.6 4.5-4.8 7-6.5 8-12 12.7-26.4 12.7-42 0-41.4-33.6-75-75-75s-75 33.6-75 75 33.6 75.1 75 75.1zm51.1 47c-8-4.6-14.1-12.7-16.3-22h-80.7C146.7 325 100 371.7 100 429.2c0 11.5 9.3 20.9 20.9 20.9h234.8c-1.6-4.1-2.5-8.5-2.5-12.8V435c-1-.5-2.1-1.2-3.1-1.8l-2 1.2c-13.1 7.6-31.6 6.3-42.7-7.6-3.5-4.4-6.7-9-9.7-13.8l-.1-.2-.1-.2-1.9-3.2-.1-.2-.1-.2c-2.7-4.8-5-9.8-7-15.1-6.4-16.6 1.7-33.3 14.8-40.9l2.1-1.2v-3.6l-2.1-1.2h-.1zm115.6-147h-33.3c-12.4 0-24.2 2.7-34.8 7.6 1 5.6 1.5 11.5 1.5 17.4 0 13.6-2.7 26.5-7.6 38.3 2 .7 3.8 1.6 5.5 2.6l2 1.2c1-.6 2-1.3 3.1-1.8V263c0-15.2 10.4-30.6 28-33.3 6.2-.9 12.5-1.5 18.9-1.5s12.7.5 18.9 1.5c17.6 2.7 28 18.1 28 33.3v2.3c1 .5 2.1 1.2 3.1 1.8l2-1.2c13.1-7.6 31.6-6.3 42.7 7.6 1.8 2.2 3.5 4.5 5.2 6.8-1.5-44.7-38.2-80.3-83.2-80.3zM488 328.1c4.9-2.8 7.4-8.7 5.3-14.1-1.6-4.3-3.6-8.4-5.8-12.4l-1.8-3.1c-2.4-4-5.1-7.7-8-11.3-3.6-4.5-9.9-5.2-14.8-2.3l-14.1 8.2c-7-5.9-14.9-10.6-23.8-13.8v-16.4c0-5.7-3.8-10.8-9.5-11.6-5.1-.8-10.2-1.2-15.5-1.2-5.3 0-10.5.4-15.5 1.2-5.6.9-9.5 5.9-9.5 11.6v16.4c-8.8 3.1-16.8 7.8-23.8 13.8l-14.2-8.2c-4.9-2.8-11.3-2-14.8 2.3-2.9 3.6-5.5 7.4-8 11.4l-1.8 3c-2.2 4-4.1 8.1-5.8 12.4-2 5.3.4 11.2 5.3 14l14.2 8.2c-.8 4.5-1.3 9.1-1.3 13.8s.5 9.3 1.3 13.7l-14.2 8.2c-4.9 2.8-7.4 8.7-5.3 14 1.6 4.3 3.6 8.4 5.8 12.3l1.9 3.2c2.3 4 5 7.7 7.9 11.3 3.6 4.5 9.9 5.2 14.8 2.3l14.2-8c7 5.9 15 10.6 23.8 13.8v16.4c0 5.7 3.8 10.8 9.5 11.6 5.1.8 10.2 1.2 15.5 1.2s10.5-.4 15.5-1.2c5.6-.9 9.5-5.9 9.5-11.6v-16.4c8.8-3.1 16.8-7.8 23.8-13.8l14.2 8.2c4.9 2.8 11.3 2 14.8-2.3 2.9-3.6 5.5-7.3 7.9-11.3l1.9-3.3c2.2-4 4.1-8 5.8-12.3 2-5.3-.4-11.2-5.3-14l-14.2-8.2c.8-4.5 1.3-9.1 1.3-13.7s-.5-9.3-1.3-13.8l14.1-8.2zM431.3 350c0 17.3-14 31.3-31.3 31.3s-31.3-14-31.3-31.3 14-31.3 31.3-31.3c17.3.1 31.3 14 31.3 31.3z" />
+                  </svg>
+                </div>
+                <span className="ms-3">Manage Users</span>
+              </NavLink>
+            </li>
             {/* <li>
               <NavLink
                 to="#"

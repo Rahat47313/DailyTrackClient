@@ -10,6 +10,8 @@ import selectedTaskReducer from "./sidebarRight/selectedTaskSlice";
 import categoryReducer from "./tasks/categoriesSlice";
 import tasksReducer from './tasks/tasksSlice';
 import tasksCountReducer from './tasks/tasksCountSlice';
+import usersReducer from './users/usersSlice';
+import authReducer from './auth/authSlice';
 
 const store = configureStore({
   reducer: {
@@ -24,6 +26,8 @@ const store = configureStore({
     categories: categoryReducer,
     tasks: tasksReducer,
     tasksCount: tasksCountReducer,
+    users: usersReducer,
+    auth: authReducer,
   },
 });
 
