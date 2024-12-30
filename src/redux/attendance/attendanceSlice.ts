@@ -7,14 +7,22 @@ interface AttendanceState {
   error: string | null;
   attendanceData: {
     [year: string]: {
-      [month: string]: {
-        [day: string]: {
-          status: string;
-          clockInTime: string | null;
-          clockOutTime: string | null;
-        };
-      };
-    };
+      users: {
+        [userId: string]: {
+          userType: string;
+          name: string;
+          [month: string]: {
+            days: {
+              [day: string]: {
+                status: string;
+                clockInTime: string | null;
+                clockOutTime: string | null;
+              }
+            }
+          }
+        }
+      }
+    }
   };
 }
 
