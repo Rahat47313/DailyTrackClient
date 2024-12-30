@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, Label, TextInput } from "flowbite-react";
 import { fetchUsers, createUser, deleteUser } from "../redux/users/usersThunks";
 import { selectUsers, selectUsersLoading } from "../redux/users/usersSelectors";
-import { MdDelete } from "react-icons/md";
+import { selectCurrentUser } from "../redux/auth/authSelectors";
+import UserList from "../components/Users/UserList";
 
 export default function Users() {
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
+  const currentUser = useSelector(selectCurrentUser);
   const isLoading = useSelector(selectUsersLoading);
 
   const [formData, setFormData] = useState({
@@ -52,8 +54,27 @@ export default function Users() {
   };
 
   useEffect(() => {
+    console.log("Current user:", currentUser);
+    console.log("All users:", users);
     dispatch(fetchUsers());
   }, [dispatch]);
+
+  const filteredUsers = useMemo(() => {
+    if (currentUser.userType === "superAdmin") {
+      return {
+        superAdmins: users.filter((user) => user.userType === "superAdmin"),
+        admins: users.filter((user) => user.userType === "admin"),
+        employees: users.filter((user) => user.userType === "employee"),
+      };
+    }
+    if (currentUser.userType === "admin") {
+      return {
+        admins: users.filter((user) => user.userType === "admin"),
+        employees: users.filter((user) => user.userType === "employee"),
+      };
+    }
+    return {};
+  }, [users, currentUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,12 +86,19 @@ export default function Users() {
     }
   };
 
-  const handleDelete = (userId: string) => {
-    dispatch(deleteUser(userId));
+  const handleDelete = async (userId: string, userType: string) => {
+    try {
+      if (currentUser.userType === "superAdmin") {
+        // Permanently delete
+        await dispatch(deleteUser(userId)).unwrap();
+      } else if (currentUser.userType === "admin") {
+        // Soft delete - just deactivate
+        await dispatch(deactivateUser(userId)).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to remove user:", error);
+    }
   };
-
-  const adminUsers = users.filter((user) => user.userType === "admin");
-  const employeeUsers = users.filter((user) => user.userType === "employee");
 
   return (
     <div className="p-4 md:ml-64 mt-[60px]">
@@ -100,10 +128,10 @@ export default function Users() {
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="email0" value="Your email" />
+                <Label htmlFor="email" value="Your email" />
               </div>
               <TextInput
-                id="email0"
+                id="email"
                 type="email"
                 placeholder="name@contessa.com"
                 value={formData.email}
@@ -115,10 +143,10 @@ export default function Users() {
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="password0" value="Password" />
+                <Label htmlFor="password" value="Password" />
               </div>
               <TextInput
-                id="password0"
+                id="password"
                 type="password"
                 value={formData.password}
                 onChange={(e) =>
@@ -129,10 +157,10 @@ export default function Users() {
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="userType0" value="User Type" />
+                <Label htmlFor="userType" value="User Type" />
               </div>
               <Dropdown
-                id="userType0"
+                id="userType"
                 theme={dropdownTheme}
                 renderTrigger={() => (
                   <button
@@ -171,7 +199,7 @@ export default function Users() {
                     setFormData({ ...formData, userType: "employee" })
                   }
                 >
-                  User
+                  Employee
                 </Dropdown.Item>
               </Dropdown>
             </div>
@@ -180,58 +208,37 @@ export default function Users() {
             </Button>
           </form>
         </div>
-        <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
-          <div className="font-bold text-2xl mb-4">Admins</div>
-          <ul className="flex flex-col gap-4">
-            {adminUsers.map((user) => (
-              <li key={user._id} className="flex justify-between items-center">
-                <div>
-                  <div className="font-bold">{user.name}</div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
-                </div>
-                <button onClick={() => handleDelete(user._id)}>
-                  <p className="text-xl hover:text-red-500">
-                    <MdDelete />
-                  </p>
-                </button>
-              </li>
-            ))}
-            <li className="flex justify-between items-center">
-              <div>
-                <div className="font-bold">John Doe</div>
-              </div>
-              <p className="text-xl hover:text-red-500">
-                <MdDelete />
-              </p>
-            </li>
-          </ul>
-        </div>
-        <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
-          <div className="font-bold text-2xl mb-4">Employees</div>
-          <ul className="flex flex-col gap-4">
-            {employeeUsers.map((user) => (
-              <li key={user._id} className="flex justify-between items-center">
-                <div>
-                  <div className="font-bold">{user.name}</div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
-                </div>
-                <button onClick={() => handleDelete(user._id)}>
-                  <p className="text-xl hover:text-red-500">
-                    <MdDelete />
-                  </p>
-                </button>
-              </li>
-            ))}
-            <li className="flex justify-between items-center">
-              <div>
-                <div className="font-bold">John Doe</div>
-              </div>
-              <p className="text-xl hover:text-red-500">
-                <MdDelete />
-              </p>
-            </li>
-          </ul>
-        </div>
+        {currentUser.userType === "superAdmin" &&
+          filteredUsers.superAdmins?.length > 0 && (
+            <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
+              <div className="font-bold text-2xl mb-4">Super Admins</div>
+              <UserList
+                users={filteredUsers.superAdmins}
+                onDelete={handleDelete}
+                canDelete={false} // Super admins can't be deleted
+              />
+            </div>
+          )}
+        {filteredUsers.admins?.length > 0 && (
+          <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
+            <div className="font-bold text-2xl mb-4">Admins</div>
+            <UserList
+              users={filteredUsers.admins}
+              onDelete={handleDelete}
+              canDelete={currentUser.userType === "superAdmin"}
+            />
+          </div>
+        )}
+        {filteredUsers.employees?.length > 0 && (
+          <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
+            <div className="font-bold text-2xl mb-4">Employees</div>
+            <UserList
+              users={filteredUsers.employees}
+              onDelete={handleDelete}
+              canDelete={true}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

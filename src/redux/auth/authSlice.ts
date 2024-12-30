@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface AuthState {
   user: {
     _id: string;
     name: string;
     email: string;
-    userType: 'superAdmin' | 'admin' | 'employee';
+    userType: "superAdmin" | "admin" | "employee";
   } | null;
   token: string | null;
   isLoading: boolean;
@@ -13,25 +13,27 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
-  token: localStorage.getItem('token'),
+  user: JSON.parse(localStorage.getItem("user") || "null"),
+  token: localStorage.getItem("token"),
   isLoading: false,
-  error: null
+  error: null,
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload));
     },
     setToken: (state, action) => {
       state.token = action.payload;
       if (action.payload) {
-        localStorage.setItem('token', action.payload);
+        localStorage.setItem("token", action.payload);
       } else {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
     },
     setIsLoading: (state, action) => {
@@ -43,10 +45,11 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.token = null;
-      localStorage.removeItem('token');
-    }
-  }
+      localStorage.removeItem("token");
+    },
+  },
 });
 
-export const { setUser, setToken, setIsLoading, setError, logout } = authSlice.actions;
+export const { setUser, setToken, setIsLoading, setError, logout } =
+  authSlice.actions;
 export default authSlice.reducer;

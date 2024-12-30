@@ -9,8 +9,11 @@ export const fetchUsers = createAsyncThunk(
     try {
       const { data } = await axiosInstance.get('/admin/users');
       dispatch(setUsers(data));
-    } catch (error) {
-      dispatch(setError(error.message));
+      return data;
+    } catch (error: any) {
+      const message = error.response?.data?.error || error.message;
+      dispatch(setError(message));
+      throw error;
     } finally {
       dispatch(setIsLoading(false));
     }

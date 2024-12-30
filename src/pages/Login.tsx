@@ -4,7 +4,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useThemeMode } from "flowbite-react";
 import { login } from "../redux/auth/authThunks";
-import { selectIsLoading, selectError } from "../redux/auth/authSelectors";
+import {
+  selectToken,
+  selectIsLoading,
+  selectError,
+} from "../redux/auth/authSelectors";
 import { setIsAuthenticated } from "../redux/calendar/calendarSlice";
 import { selectIsAuthenticated } from "../redux/calendar/calendarSelectors";
 import {
@@ -18,6 +22,7 @@ import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = useSelector(selectToken);
   const isAuthLoading = useSelector(selectIsLoading);
   const authError = useSelector(selectError);
   const isGoogleAuthenticated = useSelector(selectIsAuthenticated);
@@ -30,46 +35,53 @@ export default function Login() {
 
   useEffect(() => {
     dispatch(setNavAndSideVisibility(false));
-    let isMounted = true;
+  }, []);
 
-    const initAuth = async () => {
-      try {
-        // dispatch(setNavAndSideVisibility(false));
+  useEffect(() => {
+    if (token) {
+      navigate("/upcoming");
+    }
+  }, [token, navigate]);
 
-        if (!gapi.client) {
-          await dispatch(initializeGoogleAPI()).unwrap();
-        }
+  // useEffect(() => {
+  //   let isMounted = true;
 
-        if (isMounted && isGoogleAuthenticated) {
-          navigate("/upcoming");
-          // dispatch(setNavAndSideVisibility(true));
-        }
-      } catch (error) {
-        console.error("Failed to initialize Google API:", error);
-      }
-    };
+  //   const initAuth = async () => {
+  //     try {
 
-    initAuth();
+  //       if (!gapi.client) {
+  //         await dispatch(initializeGoogleAPI()).unwrap();
+  //       }
 
-    return () => {
-      isMounted = false;
-    };
-  }, [dispatch, isGoogleAuthenticated, navigate]);
+  //       if (isMounted && isGoogleAuthenticated) {
+  //         navigate("/upcoming");
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to initialize Google API:", error);
+  //     }
+  //   };
 
-  const handleGoogleSignIn = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      try {
-        const auth2 = gapi.auth2.getAuthInstance();
-        await auth2.signIn();
-        dispatch(setIsAuthenticated(true));
-        dispatch(fetchEvents());
-      } catch (error) {
-        console.error("Sign in error:", error);
-      }
-    },
-    [dispatch, navigate]
-  );
+  //   initAuth();
+
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [dispatch, isGoogleAuthenticated, navigate]);
+
+  // const handleGoogleSignIn = useCallback(
+  //   async (e: React.FormEvent) => {
+  //     e.preventDefault();
+  //     try {
+  //       const auth2 = gapi.auth2.getAuthInstance();
+  //       await auth2.signIn();
+  //       dispatch(setIsAuthenticated(true));
+  //       dispatch(fetchEvents());
+  //     } catch (error) {
+  //       console.error("Sign in error:", error);
+  //     }
+  //   },
+  //   [dispatch, navigate]
+  // );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

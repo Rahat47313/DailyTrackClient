@@ -22,7 +22,7 @@ export default function Dashboard() {
       <div className="flex flex-col justify-center items-center gap-10 h-screen">
         <p className="text-3xl">Just a temporary landing page</p>
         <button onClick={apiCall} className="bg-gray-950 rounded-md py-3 px-5">
-          <NavLink to="/login" onClick={()=> dispatch(setNavAndSideVisibility(true))}>Call API & Login</NavLink>
+          <NavLink to="/login" onClick={()=> dispatch(setNavAndSideVisibility(true))}>Go to Login</NavLink>
         </button>
       </div>
     </>

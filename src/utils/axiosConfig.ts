@@ -25,8 +25,11 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Only redirect if not already on login page
+    if (error.response?.status === 401 && window.location.pathname !== '/login') {
       localStorage.removeItem("token");
+      localStorage.removeItem('user');
+      window.location.href = '/login';
     }
     const message = error.response?.data?.error || error.message;
     return Promise.reject(message);
