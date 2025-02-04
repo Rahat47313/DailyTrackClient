@@ -9,6 +9,22 @@ import {
 import axiosInstance from "../../utils/axiosConfig";
 import { RootState } from "../store";
 
+const getBSTDate = () => {
+  return new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Dhaka"
+  });
+};
+
+const getBSTTime = () => {
+  return new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Dhaka",
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
+};
+
 export const fetchAttendanceData = createAsyncThunk(
   "attendance/fetchData",
   async (year: string, { dispatch, getState }) => {
@@ -22,10 +38,8 @@ export const fetchAttendanceData = createAsyncThunk(
     dispatch(setIsLoading(true));
     try {
       const { data } = await axiosInstance.get(`/attendance/${year}`);
-      console.log("Fetched data:", data); // Debug log
 
       if (!data || Object.keys(data).length === 0) {
-        console.log("No data returned"); // Debug log
         return state.attendance.attendanceData; // Keep existing data
       }
 
@@ -33,10 +47,13 @@ export const fetchAttendanceData = createAsyncThunk(
       return data;
     } catch (error: any) {
       const message = error.response?.data?.error || error.message;
-      console.error("In attendanceThunk, Error fetching attendance data:", message);
+      console.error(
+        "In attendanceThunk, Error fetching attendance data:",
+        message
+      );
       dispatch(setError(message));
       // dispatch(setAttendanceData({}));
-      return state.attendance.attendanceData; 
+      return state.attendance.attendanceData;
     } finally {
       dispatch(setIsLoading(false));
     }
@@ -45,7 +62,7 @@ export const fetchAttendanceData = createAsyncThunk(
     condition: (_, { getState }) => {
       const { attendance } = getState() as RootState;
       return !attendance.isLoading;
-    }
+    },
   }
 );
 
@@ -82,13 +99,14 @@ export const clockIn = createAsyncThunk(
   async (_, { dispatch }) => {
     dispatch(setIsLoading(true));
     try {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now
-        .toLocaleString("default", { month: "short" })
-        .toUpperCase();
-      const day = now.getDate();
-      const time = now.toLocaleTimeString();
+      const bstDate = new Date(getBSTDate()); 
+      const year = bstDate.getFullYear();
+      const month = bstDate.toLocaleString("en-US", {
+        timeZone: "Asia/Dhaka",
+        month: "short"
+      }).toUpperCase();
+      const day = bstDate.getDate();
+      const time = getBSTTime();
 
       await axiosInstance.post(`/attendance/${year}/${month}/${day}/clockin`);
       dispatch(setClockingInTime(time));
@@ -108,13 +126,14 @@ export const clockOut = createAsyncThunk(
   async (_, { dispatch }) => {
     dispatch(setIsLoading(true));
     try {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now
-        .toLocaleString("default", { month: "short" })
-        .toUpperCase();
-      const day = now.getDate();
-      const time = now.toLocaleTimeString();
+      const bstDate = new Date(getBSTDate());
+      const year = bstDate.getFullYear();
+      const month = bstDate.toLocaleString("en-US", {
+        timeZone: "Asia/Dhaka", 
+        month: "short"
+      }).toUpperCase();
+      const day = bstDate.getDate();
+      const time = getBSTTime();
 
       await axiosInstance.post(`/attendance/${year}/${month}/${day}/clockout`);
       dispatch(setClockingOutTime(time));

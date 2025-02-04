@@ -92,7 +92,6 @@ export default function Attendance() {
     const shouldFetch = !attendanceData[year];
 
     if (shouldFetch) {
-      // console.log("navigationDate: ", navigationDate);
       dispatch(fetchAttendanceData(year));
     }
   }, [navigationDate, dispatch]);

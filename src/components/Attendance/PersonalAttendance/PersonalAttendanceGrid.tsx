@@ -50,17 +50,11 @@ export default function PersonalAttendanceGrid({
       // Get only current user's attendance
       const userRecord = attendanceData[currentUser._id];
       const monthData = userRecord?.years?.[year]?.months?.[month]?.days || {};
-      // console.log(`Month ${month} data:`, monthData); // Debug log
       
       // Populate attendance for each day
       for (let day = 1; day <= daysInMonth; day++) {
         const dayStr = day.toString().padStart(2, '0');
         const dayData = monthData[day.toString()] || monthData[dayStr]; // just trying out both formats
-
-        // Debug logging
-      if (dayData?.status === 'Present') {
-        console.log(`Found Present for ${month} ${dayStr}:`, dayData);
-      }
       
         yearAttendance[month][dayStr] = dayData?.status || '-';
         // yearAttendance[month][dayStr] = isValidStatus(dayData?.status) ? dayData.status : '-';
@@ -69,7 +63,6 @@ export default function PersonalAttendanceGrid({
       }
     });
     
-    console.log('Year attendance:', yearAttendance);
     return yearAttendance;
   }, [navigationDate, attendanceData, currentUser._id]);
 

@@ -1,5 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DarkThemeToggle, Flowbite } from "flowbite-react";
 import AppRoutes from "./AppRoutes"
 // import Login from "./login/Login";

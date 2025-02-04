@@ -1,8 +1,13 @@
+import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/auth/authSelectors";
 
-export const AdminRoute = ({ children }) => {
+interface AdminRouteInterface {
+  children: ReactNode;
+}
+
+export const AdminRoute = ({ children }: AdminRouteInterface) => {
   const currentUser = useSelector(selectCurrentUser);
 
   if (!currentUser || currentUser.userType === "employee") {

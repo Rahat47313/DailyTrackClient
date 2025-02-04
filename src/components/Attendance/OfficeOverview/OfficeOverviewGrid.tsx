@@ -1,57 +1,56 @@
 import { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/auth/authSelectors";
 import { selectAttendanceData } from "../../../redux/attendance/attendanceSelectors";
-import { selectIsLoading } from "../../../redux/attendance/attendanceSelectors";
 
 // Types to improve type safety
 type AttendanceStatus = "Present" | "Absent" | "-";
-type UserAttendance = { [day: string]: AttendanceStatus };
-type YearAttendance = {
-  [year: string]: {
-    [month: string]: {
-      [username: string]: UserAttendance;
-    };
-  };
-};
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  userType: string;
-}
 
 export default function OfficeOverviewGrid({
   navigationDate,
 }: {
   navigationDate: Date;
 }) {
-  const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
   const attendanceData = useSelector(selectAttendanceData);
-  const isLoading = useSelector(selectIsLoading);
 
   const usersAttendance = useMemo(() => {
     const year = navigationDate.getFullYear().toString();
-    const month = (navigationDate.getMonth() + 1).toString().padStart(2, '0');
+    // const month = (navigationDate.getMonth() + 1).toString().padStart(2, "0");
     const users = [];
-  
+
     // Get all users' attendance for selected month
     Object.entries(attendanceData).forEach(([userId, userRecord]) => {
       // Filter based on permissions
-      if (currentUser.userType === 'admin' && userRecord.userType === 'superAdmin') {
+      if (
+        currentUser.userType === "admin" &&
+        userRecord.user.userType === "superAdmin"
+      ) {
         return;
       }
 
-      const monthData = userRecord.years?.[year]?.months?.[month]?.days || {};
+      const attendance = userRecord.years[year]?.months || {};
+
       users.push({
         _id: userId,
-        name: userRecord.name,
-        attendance: monthData
+        name: userRecord.user.name,
+        userType: userRecord.user.userType,
+        attendance: {
+          ...attendance // Keep existing months structure
+        }
       });
+
+      // users.push({
+      //   _id: userId,
+      //   name: userRecord.user.name,
+      //   userType: userRecord.user.userType,
+      //   attendance: userRecord.years?.[year]?.months?.[month]?.days || {},
+      // });
     });
-  
+
+    // Debug logs
+    console.log('Users Attendance:', users);
+
     return users;
   }, [navigationDate, attendanceData, currentUser.userType]);
 
@@ -126,14 +125,14 @@ export default function OfficeOverviewGrid({
                 ...Array.from({ length: daysInMonth }, (_, i) =>
                   (i + 1).toString()
                 ),
-              ].map((day, index) => (
+              ].map((header, index) => (
                 <div
-                  key={day}
+                  key={header}
                   className={`flex items-center ${
                     index === 0 ? "justify-start pl-3" : "justify-center"
                   } font-bold shadow py-3`}
                 >
-                  {day}
+                  {header}
                 </div>
               ))}
             </div>
@@ -162,15 +161,17 @@ export default function OfficeOverviewGrid({
                       {/* User column */}
                       <div
                         className="flex items-center justify-start sticky text-gray-500 dark:text-gray-400 pl-3 p-2"
-                        title={`${user.name} (${user.name})`}
+                        title={`${user.name} (${user.userType})`}
                       >
                         {user.name}
                       </div>
 
                       {/* Attendance for each day */}
                       {[...Array(daysInMonth)].map((_, dayIndex) => {
+                        // console.log(1)
                         const day = (dayIndex + 1).toString();
-                        const status = attendanceData[navigationDate.getFullYear()]
+                        const month = navigationDate.toLocaleString("default", { month: "short" }).toUpperCase();
+                        const status = user.attendance[month]?.days[day]?.status || '-';
                         const formattedStatus = formatStatus(status);
 
                         return (

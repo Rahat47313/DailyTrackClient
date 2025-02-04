@@ -30,7 +30,6 @@ export default function CategoryPage() {
   }, [dispatch, categoryData]);
 
   const handleTaskClick = (task) => {
-    console.log('Task being selected:', task);
     dispatch(
       setSelectedTask({
         ...task,

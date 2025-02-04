@@ -112,8 +112,6 @@ export default function SidebarRight() {
 
   // Initialize form data
   useEffect(() => {
-    console.log("Selected Task:", selectedTask);
-    console.log("Current Category:", currentCategory);
     if (selectedTask) {
       setFormData({
         title: selectedTask.title,
@@ -122,10 +120,6 @@ export default function SidebarRight() {
         categoryId: selectedTask.category._id,
         subtasks: selectedTask.subtasks,
       });
-      console.log(
-        "Setting form data for existing task:",
-        selectedTask.category._id
-      );
     } else {
       setFormData({
         title: "",
@@ -134,7 +128,6 @@ export default function SidebarRight() {
         categoryId: currentCategory?._id || "",
         subtasks: [],
       });
-      console.log("Setting form data for new task:", currentCategory?._id);
     }
   }, [selectedTask, currentCategory]);
 
