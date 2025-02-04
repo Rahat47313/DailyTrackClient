@@ -7,50 +7,68 @@ import {
   setAttendanceData,
 } from "./attendanceSlice";
 import axiosInstance from "../../utils/axiosConfig";
+import { RootState } from "../store";
 
 export const fetchAttendanceData = createAsyncThunk(
   "attendance/fetchData",
-  async (year: string, { dispatch }) => {
+  async (year: string, { dispatch, getState }) => {
+    const state = getState() as RootState;
+
+    // Only fetch if we don't have data for this year
+    if (state.attendance.attendanceData[year]) {
+      return state.attendance.attendanceData;
+    }
+
     dispatch(setIsLoading(true));
     try {
       const { data } = await axiosInstance.get(`/attendance/${year}`);
-      // Transform the data structure to match what PersonalAttendanceGrid expects
-      const formattedData = data?.attendance?.[year]?.months || {};
-      dispatch(setAttendanceData({ [year]: formattedData }));
-    } catch (error) {
-      console.error("Error fetching attendance data:", error);
-      dispatch(setError(error.message));
-      dispatch(setAttendanceData({}));
+
+      if (!data) {
+        return state.attendance.attendanceData; // Keep existing data
+      }
+
+      dispatch(setAttendanceData(data));
+      return data;
+    } catch (error: any) {
+      const message = error.response?.data?.error || error.message;
+      console.error("In attendanceThunks; Error fetching attendance data:", message);
+      dispatch(setError(message));
+      // dispatch(setAttendanceData({}));
+      return state.attendance.attendanceData; 
     } finally {
       dispatch(setIsLoading(false));
+    }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { attendance } = getState() as RootState;
+      return !attendance.isLoading;
     }
   }
 );
 
-// export const fetchPersonalAttendance = createAsyncThunk(
-//   "attendance/fetchPersonal",
+// export const fetchAttendanceData = createAsyncThunk(
+//   "attendance/fetchData",
 //   async (year: string, { dispatch }) => {
 //     dispatch(setIsLoading(true));
 //     try {
-//       const { data } = await axiosInstance.get(`/attendance/personal/${year}`);
-//       dispatch(setPersonalAttendanceData(data));
-//     } catch (error) {
-//       dispatch(setError(error.message));
-//     } finally {
-//       dispatch(setIsLoading(false));
-//     }
-//   }
-// );
+//       const { data } = await axiosInstance.get(`/attendance/${year}`);
 
-// export const fetchOfficeAttendance = createAsyncThunk(
-//   "attendance/fetchOffice",
-//   async (year: string, { dispatch }) => {
-//     dispatch(setIsLoading(true));
-//     try {
-//       const { data } = await axiosInstance.get(`/attendance/office/${year}`);
-//       dispatch(setOfficeAttendanceData(data));
+//       const formattedData = data.reduce((acc, record: AttendanceRecord) => {
+//         acc[record._id] = {
+//           years: record.years,
+//           user: record.user
+//         };
+//         return acc;
+//       }, {});
+
+//       dispatch(setAttendanceData(formattedData));
+//       return formattedData;
 //     } catch (error) {
+//       console.error("Error fetching attendance data:", error);
 //       dispatch(setError(error.message));
+//       dispatch(setAttendanceData({}));
+//       throw error;
 //     } finally {
 //       dispatch(setIsLoading(false));
 //     }

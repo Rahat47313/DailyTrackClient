@@ -1,17 +1,21 @@
-import { useState, useCallback } from "react";
-import PersonalAttendanceGrid from "./PersonalAttendanceGrid";
+import { useCallback } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import PersonalAttendanceGrid from "./PersonalAttendanceGrid";
+import { useDispatch, useSelector } from "react-redux";
+import { selectNavigationDate } from "../../../redux/attendance/attendanceSelectors";
+import { setNavigationDate } from "../../../redux/attendance/attendanceSlice";
 
 export default function PersonalAttendance() {
-  const [navigationDate, setNavigationDate] = useState(new Date());
+  const dispatch = useDispatch()
+  const navigationDate = useSelector(selectNavigationDate)
 
   const navigateDate = useCallback(
     (amount: number) => {
       const newDate = new Date(navigationDate);
       newDate.setFullYear(navigationDate.getFullYear() + amount);
-      setNavigationDate(newDate);
+      dispatch(setNavigationDate(newDate.toISOString()));
     },
-    [navigationDate]
+    [navigationDate, dispatch]
   );
 
   const handleNext = useCallback(() => {
@@ -23,8 +27,8 @@ export default function PersonalAttendance() {
   }, [navigateDate]);
 
   const handleToday = useCallback(() => {
-    setNavigationDate(new Date());
-  }, []);
+    dispatch(setNavigationDate(new Date().toISOString()));
+  }, [dispatch]);
 
   return (
     <>

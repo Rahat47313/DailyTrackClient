@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAttendanceData } from "../../../redux/attendance/attendanceThunks";
 import { selectCurrentUser } from "../../../redux/auth/authSelectors";
 import { selectAttendanceData } from "../../../redux/attendance/attendanceSelectors";
 import { selectIsLoading } from "../../../redux/attendance/attendanceSelectors";
@@ -33,33 +32,28 @@ export default function OfficeOverviewGrid({
   const attendanceData = useSelector(selectAttendanceData);
   const isLoading = useSelector(selectIsLoading);
 
-  useEffect(() => {
+  const usersAttendance = useMemo(() => {
     const year = navigationDate.getFullYear().toString();
-    const month = (navigationDate.getMonth() + 1).toString().padStart(2, "0");
-    dispatch(fetchAttendanceData({ year, month }));
-  }, [navigationDate, dispatch]);
+    const month = (navigationDate.getMonth() + 1).toString().padStart(2, '0');
+    const users = [];
+  
+    // Get all users' attendance for selected month
+    Object.entries(attendanceData).forEach(([userId, userRecord]) => {
+      // Filter based on permissions
+      if (currentUser.userType === 'admin' && userRecord.userType === 'superAdmin') {
+        return;
+      }
 
-  // Filter users based on permissions
-  const filteredAttendance = useMemo(() => {
-    const year = navigationDate.getFullYear().toString();
-    const month = navigationDate.getMonth().toString().padStart(2, "0");
-    const data = attendanceData[year]?.users || {};
-
-    return Object.entries(data)
-      .filter(([userId, userData]) => {
-        if (currentUser.userType === "superAdmin") return true;
-        if (currentUser.userType === "admin") {
-          return userData.userType !== "superAdmin";
-        }
-        return userId === currentUser._id;
-      })
-      .map(([_id, userData]) => ({
-        _id,
-        name: userData.name,
-        email: userData.email,
-        userType: userData.userType,
-      }));
-  }, [navigationDate, attendanceData, currentUser]);
+      const monthData = userRecord.years?.[year]?.months?.[month]?.days || {};
+      users.push({
+        _id: userId,
+        name: userRecord.name,
+        attendance: monthData
+      });
+    });
+  
+    return users;
+  }, [navigationDate, attendanceData, currentUser.userType]);
 
   // // Explicitly type the imported OfficeOverviewData
   // const typedAttendanceData: YearAttendance =
@@ -81,7 +75,7 @@ export default function OfficeOverviewGrid({
     const month = navigationDate.getMonth().toString().padStart(2, "0");
 
     // Get the users and their attendance for this specific month
-    const monthAttendance = filteredAttendance[year]?.[month] || {};
+    const monthAttendance = usersAttendance[year]?.[month] || {};
 
     return monthAttendance;
   }, [navigationDate]);
@@ -114,12 +108,6 @@ export default function OfficeOverviewGrid({
         return { full: "-", abbr: "-" };
     }
   };
-
-  useEffect(() => {
-    const year = navigationDate.getFullYear().toString();
-    const month = (navigationDate.getMonth() + 1).toString().padStart(2, "0");
-    dispatch(fetchAttendanceData({ year, month }));
-  }, [navigationDate, dispatch]);
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">
@@ -159,10 +147,10 @@ export default function OfficeOverviewGrid({
               <div
                 className="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-200 dark:divide-gray-700"
                 style={{
-                  gridTemplateRows: `repeat(${filteredAttendance.length}, minmax(3rem, 1fr))`,
+                  gridTemplateRows: `repeat(${usersAttendance.length}, minmax(3rem, 1fr))`,
                 }}
               >
-                {filteredAttendance.map((user) => {
+                {usersAttendance.map((user) => {
                   return (
                     <div
                       key={user._id}

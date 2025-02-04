@@ -5,7 +5,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { FaSave } from "react-icons/fa";
-import { selectSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSelectors";
+import { selectSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSelectors.ts";
 import { setSidebarRightVisibility } from "../redux/sidebarRight/sidebarRightSlice";
 import { selectSelectedTask } from "../redux/sidebarRight/selectedTaskSelectors";
 import { clearSelectedTask } from "../redux/sidebarRight/selectedTaskSlice";

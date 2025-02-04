@@ -54,10 +54,14 @@ export default function Users() {
   };
 
   useEffect(() => {
-    console.log("Current user:", currentUser);
-    console.log("All users:", users);
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    if (users.length === 0) {
+      dispatch(fetchUsers()).unwrap().then(fetchedUsers => {
+        console.log("All users:", fetchedUsers);
+      }).catch(error => {
+        console.error("Failed to fetch users:", error);
+      });
+    }
+  }, [dispatch, currentUser, users.length]);
 
   const filteredUsers = useMemo(() => {
     if (currentUser.userType === "superAdmin") {

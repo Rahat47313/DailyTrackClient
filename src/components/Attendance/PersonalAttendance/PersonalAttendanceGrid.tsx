@@ -1,6 +1,5 @@
 import { useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAttendanceData } from "../../../redux/attendance/attendanceThunks";
 import { selectCurrentUser } from "../../../redux/auth/authSelectors";
 import { selectAttendanceData } from "../../../redux/attendance/attendanceSelectors";
 
@@ -39,12 +38,6 @@ export default function PersonalAttendanceGrid({
     return ['Present', 'Absent', '-'].includes(status);
   };
 
-  // Fetch attendance data when year changes
-  useEffect(() => {
-    const year = navigationDate.getFullYear().toString();
-    dispatch(fetchAttendanceData(year));
-  }, [navigationDate.getFullYear(), dispatch]);
-
   // Memoized attendance data filtered for current user
   const currentUserAttendance = useMemo(() => {
     const year = navigationDate.getFullYear().toString();
@@ -55,11 +48,12 @@ export default function PersonalAttendanceGrid({
       const daysInMonth = getDaysInMonth(navigationDate.getFullYear(), month);
       
       // Get only current user's attendance
-      const monthData = attendanceData[year]?.users?.[currentUser._id]?.[month]?.days || {};
+      const userRecord = attendanceData[currentUser._id];
+      const monthData = userRecord?.years?.[year]?.months?.[month]?.days || {};
       
       // Populate attendance for each day
       for (let day = 1; day <= daysInMonth; day++) {
-        const dayStr = day.toString();
+        const dayStr = day.toString().padStart(2, '0');
         const dayData = monthData[dayStr];
         const status = dayData?.status || '-';
         yearAttendance[month][dayStr] = isValidStatus(status) ? status : '-';
@@ -67,7 +61,13 @@ export default function PersonalAttendanceGrid({
     });
     
     return yearAttendance;
-  }, [navigationDate, attendanceData, currentUser]);
+  }, [navigationDate, attendanceData, currentUser._id]);
+
+  useEffect(() => {
+    console.log('Current User:', currentUser);
+    console.log('Attendance Data:', attendanceData);
+    console.log('Current User Attendance:', currentUserAttendance);
+  }, [currentUser, attendanceData, currentUserAttendance]);
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">

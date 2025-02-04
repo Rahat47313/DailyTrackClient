@@ -2,15 +2,21 @@ import { Button, Tabs } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import axiosInstance from '../utils/axiosConfig';
+import axiosInstance from "../utils/axiosConfig";
 import { selectCurrentDate } from "../redux/calendar/calendarSelectors";
 import {
   selectClockingInTime,
   selectClockingOutTime,
   selectIsLoading,
   selectError,
+  selectNavigationDate,
+  selectAttendanceData,
 } from "../redux/attendance/attendanceSelectors";
-import { clockIn, clockOut } from "../redux/attendance/attendanceThunks";
+import {
+  clockIn,
+  clockOut,
+  fetchAttendanceData,
+} from "../redux/attendance/attendanceThunks";
 import PersonalAttendance from "../components/Attendance/PersonalAttendance/PersonalAttendance";
 import OfficeOverview from "../components/Attendance/OfficeOverview/OfficeOverview";
 
@@ -26,6 +32,8 @@ export default function Attendance() {
   const clockingOutTime = useSelector(selectClockingOutTime);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
+  const navigationDate = useSelector(selectNavigationDate);
+  const attendanceData = useSelector(selectAttendanceData);
   const tabTheme = {
     base: "flex flex-col gap-2",
     tablist: {
@@ -79,61 +87,71 @@ export default function Attendance() {
     }
   };
 
+  useEffect(() => {
+    const year = navigationDate.getFullYear().toString();
+    const shouldFetch = !attendanceData[year];
+
+    if (shouldFetch) {
+      console.log("navigationDate: ", navigationDate);
+      dispatch(fetchAttendanceData(year));
+    }
+  }, [navigationDate, dispatch]);
+
   return (
     <>
-    <div className="p-4 md:ml-64 mt-[60px]">
-      <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
-        Attendance
-      </div>
-      <div className="flex items-center">
-        <div>
-          <p>
-            {currentDate.toLocaleDateString("default", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {currentDate.toLocaleString("default", { weekday: "long" })}
-          </p>
-          <p>{currentTime}</p>
+      <div className="p-4 md:ml-64 mt-[60px]">
+        <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
+          Attendance
         </div>
-        <p className="flex text-4xl mx-auto">Welcome, User</p>
-        <div className="flex flex-col items-center">
-          <div className="flex justify-center items-center gap-10 mb-3">
-            <button
-              onClick={handleClockIn}
-              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-            >
-              Clock In
-            </button>
-            <button
-              onClick={handleClockOut}
-              className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-            >
-              Clock Out
-            </button>
+        <div className="flex items-center">
+          <div>
+            <p>
+              {currentDate.toLocaleDateString("default", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {currentDate.toLocaleString("default", { weekday: "long" })}
+            </p>
+            <p>{currentTime}</p>
           </div>
-          {/* {clockingInTime && <p>Clocked in at {clockingInTime}</p>} */}
-          {/* {clockingOutTime && <p>Clocked out at {clockingOutTime}</p>} */}
+          <p className="flex text-4xl mx-auto">Welcome, User</p>
+          <div className="flex flex-col items-center">
+            <div className="flex justify-center items-center gap-10 mb-3">
+              <button
+                onClick={handleClockIn}
+                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              >
+                Clock In
+              </button>
+              <button
+                onClick={handleClockOut}
+                className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+              >
+                Clock Out
+              </button>
+            </div>
+            {clockingInTime && <p>Clocked in at {clockingInTime}</p>}
+            {clockingOutTime && <p>Clocked out at {clockingOutTime}</p>}
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <Tabs
-          variant="underline"
-          ref={tabsRef}
-          theme={tabTheme}
-          onActiveTabChange={(tab) => setActiveTab(tab)}
-        >
-          <Tabs.Item active title="Personal Attendance" icon={BsPersonFill}>
-            <PersonalAttendance />
-          </Tabs.Item>
-          <Tabs.Item title="Office Overview" icon={BsPeopleFill}>
-            <OfficeOverview />
-          </Tabs.Item>
-        </Tabs>
-        {/* <div className="text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex flex-col gap-3">
+          <Tabs
+            variant="underline"
+            ref={tabsRef}
+            theme={tabTheme}
+            onActiveTabChange={(tab) => setActiveTab(tab)}
+          >
+            <Tabs.Item active title="Personal Attendance" icon={BsPersonFill}>
+              <PersonalAttendance />
+            </Tabs.Item>
+            <Tabs.Item title="Office Overview" icon={BsPeopleFill}>
+              <OfficeOverview />
+            </Tabs.Item>
+          </Tabs>
+          {/* <div className="text-sm text-gray-500 dark:text-gray-400">
           Active tab: {activeTab}
         </div>
         <Button.Group>
@@ -144,8 +162,8 @@ export default function Attendance() {
             Dashboard
           </Button>
         </Button.Group> */}
+        </div>
       </div>
-    </div>
     </>
   );
 }
