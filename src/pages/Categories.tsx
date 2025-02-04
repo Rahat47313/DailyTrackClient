@@ -13,7 +13,7 @@ import {
   deleteCategory,
 } from "../redux/tasks/categoriesThunks";
 
-export default function Lists() {
+export default function Categories() {
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
   const [newCategoryName, setNewCategoryName] = useState("");
@@ -91,7 +91,7 @@ export default function Lists() {
     <div>
       <div className="p-4 md:ml-64 mt-[60px]">
         <div className="font-bold text-4xl border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
-          Lists of Tasks
+        Categories of Tasks
         </div>
         <div className="flex gap-5 flex-wrap">
           {categories.map((category) => (
@@ -109,7 +109,7 @@ export default function Lists() {
                 />
               ) : (
                 <NavLink
-                  to={`/lists/${category.name}`}
+                  to={`/categories/${category.name}`}
                   className="flex justify-center items-center gap-3"
                 >
                   <div className={`w-5 h-5 rounded-md ${category.color}`} />
@@ -151,7 +151,7 @@ export default function Lists() {
               type="text"
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
-              placeholder="Add a new list"
+              placeholder="Add a new category"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 w-40"
             />
             <button

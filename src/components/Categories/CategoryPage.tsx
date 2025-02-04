@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Checkbox } from "flowbite-react";
 import { TiPlus } from "react-icons/ti";
 import { IoIosArrowForward } from "react-icons/io";
-import SidebarRight from "../../components/SidebarRight";
+import SidebarRight from "../SidebarRight";
 import { setSidebarRightVisibility } from "../../redux/sidebarRight/sidebarRightSlice";
 import { clearSelectedTask, setSelectedTask } from "../../redux/sidebarRight/selectedTaskSlice";
 import { selectCategories } from "../../redux/tasks/categoriesSelectors";
@@ -13,7 +13,7 @@ import { fetchTasksByCategory } from "../../redux/tasks/tasksThunks";
 import { Fragment } from "react/jsx-runtime";
 import { setCurrentCategory } from "../../redux/tasks/categoriesSlice";
 
-export default function ListPage() {
+export default function CategoryPage() {
   const dispatch = useDispatch();
   const { category } = useParams();
   const categories = useSelector(selectCategories);

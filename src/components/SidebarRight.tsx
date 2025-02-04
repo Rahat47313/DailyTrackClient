@@ -279,7 +279,7 @@ export default function SidebarRight() {
             />
 
             <div className="flex items-center gap-4">
-              <p className="block mb-2 text-sm font-medium">Lists</p>
+              <p className="block mb-2 text-sm font-medium">Categories</p>
               <Dropdown
                 renderTrigger={() => (
                   <button

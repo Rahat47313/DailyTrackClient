@@ -229,7 +229,7 @@ export default function SidebarLeft() {
           </ul>
         </div>
         <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-          <NavLink to={"/lists"}>LISTS</NavLink>
+          <NavLink to={"/categories"}>CATEGORIES</NavLink>
           <ul>
             {categories.map((category) => (
               <li
@@ -246,7 +246,7 @@ export default function SidebarLeft() {
                   />
                 ) : (
                   <NavLink
-                    to={`/lists/${category.name}`}
+                    to={`/categories/${category.name}`}
                     className="w-full flex items-center justify-between p-2 rounded-lg hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <div className="flex">
@@ -298,7 +298,7 @@ export default function SidebarLeft() {
               type="text"
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
-              placeholder="Add a new list"
+              placeholder="Add a new category"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
             />
             <button

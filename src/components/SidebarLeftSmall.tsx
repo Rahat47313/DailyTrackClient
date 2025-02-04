@@ -119,7 +119,7 @@ export default function SidebarLeftSmall() {
             </ul>
           </div>
           <div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-            <div>LISTS</div>
+            <div>CATEGORIES</div>
             <ul>
               <li>
                 <NavLink
@@ -156,7 +156,7 @@ export default function SidebarLeftSmall() {
                   to="#"
                   className="w-full flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:text-red-500 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <span className="">+ Add New List</span>
+                  <span className="">+ Add New Category</span>
                 </NavLink>
               </li>
             </ul>

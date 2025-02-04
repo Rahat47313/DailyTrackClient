@@ -8,10 +8,10 @@ import Upcoming from "./pages/Upcoming";
 import Attendance from "./pages/Attendance";
 import Calendar from "./pages/Calendar";
 import StickyWall from "./pages/StickyWall";
-import Lists from "./pages/Lists";
+import Categories from "./pages/Categories";
 import { selectNavAndSideVisibility } from "./redux/navAndSide/navAndSideSelectors";
 import SidebarLeftSmall from "./components/SidebarLeftSmall";
-import ListPage from "./components/Lists/ListPage";
+import CategoryPage from "./components/Categories/CategoryPage";
 import Users from "./pages/Users";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AdminRoute } from "./components/AdminRoute";
@@ -63,10 +63,10 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/lists"
+          path="/categories"
           element={
             <ProtectedRoute>
-              <Lists />
+              <Categories />
             </ProtectedRoute>
           }
         />
@@ -81,10 +81,10 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/lists/:category"
+          path="/categories/:category"
           element={
             <ProtectedRoute>
-              <ListPage />
+              <CategoryPage />
             </ProtectedRoute>
           }
         />

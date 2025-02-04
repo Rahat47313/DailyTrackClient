@@ -29,8 +29,9 @@ export const createCategory = createAsyncThunk(
       });
       dispatch(fetchCategories());
       return data;
-    } catch (error) {
-      dispatch(setError(error));
+    } catch (error: any) {
+      const message = error.response?.data?.error || error.message;
+      dispatch(setError(message));
       throw error;
     } finally {
       dispatch(setIsLoading(false));
