@@ -15,15 +15,17 @@ export const fetchAttendanceData = createAsyncThunk(
     const state = getState() as RootState;
 
     // Only fetch if we don't have data for this year
-    if (state.attendance.attendanceData[year]) {
-      return state.attendance.attendanceData;
-    }
+    // if (state.attendance.attendanceData[year]) {
+    //   return state.attendance.attendanceData;
+    // }
 
     dispatch(setIsLoading(true));
     try {
       const { data } = await axiosInstance.get(`/attendance/${year}`);
+      console.log("Fetched data:", data); // Debug log
 
-      if (!data) {
+      if (!data || Object.keys(data).length === 0) {
+        console.log("No data returned"); // Debug log
         return state.attendance.attendanceData; // Keep existing data
       }
 
@@ -31,7 +33,7 @@ export const fetchAttendanceData = createAsyncThunk(
       return data;
     } catch (error: any) {
       const message = error.response?.data?.error || error.message;
-      console.error("In attendanceThunks; Error fetching attendance data:", message);
+      console.error("In attendanceThunk, Error fetching attendance data:", message);
       dispatch(setError(message));
       // dispatch(setAttendanceData({}));
       return state.attendance.attendanceData; 

@@ -50,24 +50,28 @@ export default function PersonalAttendanceGrid({
       // Get only current user's attendance
       const userRecord = attendanceData[currentUser._id];
       const monthData = userRecord?.years?.[year]?.months?.[month]?.days || {};
+      // console.log(`Month ${month} data:`, monthData); // Debug log
       
       // Populate attendance for each day
       for (let day = 1; day <= daysInMonth; day++) {
         const dayStr = day.toString().padStart(2, '0');
-        const dayData = monthData[dayStr];
-        const status = dayData?.status || '-';
-        yearAttendance[month][dayStr] = isValidStatus(status) ? status : '-';
+        const dayData = monthData[day.toString()] || monthData[dayStr]; // just trying out both formats
+
+        // Debug logging
+      if (dayData?.status === 'Present') {
+        console.log(`Found Present for ${month} ${dayStr}:`, dayData);
+      }
+      
+        yearAttendance[month][dayStr] = dayData?.status || '-';
+        // yearAttendance[month][dayStr] = isValidStatus(dayData?.status) ? dayData.status : '-';
+        // const status = dayData?.status || '-';
+        // yearAttendance[month][dayStr] = isValidStatus(status) ? status : '-';
       }
     });
     
+    console.log('Year attendance:', yearAttendance);
     return yearAttendance;
   }, [navigationDate, attendanceData, currentUser._id]);
-
-  useEffect(() => {
-    console.log('Current User:', currentUser);
-    console.log('Attendance Data:', attendanceData);
-    console.log('Current User Attendance:', currentUserAttendance);
-  }, [currentUser, attendanceData, currentUserAttendance]);
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">
@@ -114,9 +118,11 @@ export default function PersonalAttendanceGrid({
                       {months.map((month) => {
                         // Only show status if the day exists in that month
                         const daysInMonth = getDaysInMonth(navigationDate.getFullYear(), month);
+                        // Ensure day is padded to match how we stored it
+                        const dayStr = day.toString().padStart(2, '0');
                         const status =
                         parseInt(day) <= daysInMonth
-                            ? currentUserAttendance[month]?.[day] || "-"
+                            ? currentUserAttendance[month]?.[dayStr] || "-"
                             : "-";
                         
                         // Function to format status for display
