@@ -10,17 +10,36 @@ import { clearSelectedTask } from "../redux/sidebarRight/selectedTaskSlice";
 
 function groupTasksByDate(tasks) {
   if (!tasks) return { today: [], tomorrow: [], thisWeek: [] };
-  const today = new Date().toISOString().split("T")[0];
-  const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
-  const weekFromNow = new Date(Date.now() + 7 * 86400000)
-    .toISOString()
-    .split("T")[0];
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0); // Start of today
+
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1); // Start of tomorrow
+
+  const weekFromNow = new Date(now);
+  weekFromNow.setDate(weekFromNow.getDate() + 7); // One week from today
+  // const today = new Date().toISOString().split("T")[0];
+  // const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+  // const weekFromNow = new Date(Date.now() + 7 * 86400000)
+  //   .toISOString()
+  //   .split("T")[0];
 
   return {
-    today: tasks.filter((task) => task.dueDate?.split("T")[0] === today),
-    tomorrow: tasks.filter((task) => task.dueDate?.split("T")[0] === tomorrow),
+    today: tasks.filter((task) => {
+      const taskDate = new Date(task.dueDate);
+      taskDate.setHours(0, 0, 0, 0);
+      return taskDate.getTime() === now.getTime();
+    }), //task.dueDate?.split("T")[0] === today
+
+    tomorrow: tasks.filter((task) => {
+      const taskDate = new Date(task.dueDate);
+      taskDate.setHours(0, 0, 0, 0);
+      return taskDate.getTime() === tomorrow.getTime();
+    }), //task.dueDate?.split("T")[0] === tomorrow
     thisWeek: tasks.filter((task) => {
-      const taskDate = task.dueDate?.split("T")[0];
+      const taskDate = new Date(task.dueDate);
+      taskDate.setHours(0, 0, 0, 0); //task.dueDate?.split("T")[0];
       return taskDate > tomorrow && taskDate <= weekFromNow;
     }),
   };
