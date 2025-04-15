@@ -1,4 +1,5 @@
 import { MdDelete } from "react-icons/md";
+import type { User } from "../../types";
 
 interface UserListProps {
   users: User[];

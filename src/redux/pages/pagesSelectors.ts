@@ -1,1 +1,3 @@
-export const selectPage = (state) => state.pages.page;
+import { RootState } from "../store";
+
+export const selectPage = (state: RootState) => state.pages.page;

@@ -15,26 +15,21 @@ import Year from "../components/Calendar/Year";
 import {
   setCalendarView,
   setNavigationDate,
-  setIsAuthenticated,
 } from "../redux/calendar/calendarSlice";
 import {
   initializeGoogleAPI,
   fetchEvents,
-  createEvent,
-  updateEvent,
-  deleteEvent,
   fetchAllTasks,
 } from "../redux/calendar/calendarThunks";
 import {
   selectCalendarView,
   selectCurrentDate,
   selectNavigationDate,
-  selectEvents,
   selectIsLoading,
-  selectError,
   selectIsAuthenticated,
 } from "../redux/calendar/calendarSelectors";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch, RootState } from "../redux/store";
 
 const VIEW_OPTIONS = {
   DAY: "day",
@@ -66,17 +61,16 @@ const VIEW_OPTIONS = {
 // };
 
 export default function Calendar() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const calendarView = useSelector(selectCalendarView);
   const currentDate = useSelector(selectCurrentDate);
   const navigationDate = useSelector(selectNavigationDate);
-  const events = useSelector(selectEvents);
   const isLoading = useSelector(selectIsLoading);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
-  const isTasksRefreshing = useSelector((state) => state.tasks.isRefreshing);
+  const isTasksRefreshing = useSelector((state: RootState) => state.tasks.isRefreshing);
 
-  const classNames = useCallback((...classes) => {
+  const classNames = useCallback((...classes: string[]) => {
     return classes.filter(Boolean).join(" ");
   }, []);
 
@@ -100,7 +94,7 @@ export default function Calendar() {
           await dispatch(initializeGoogleAPI()).unwrap();
         }
 
-        const auth2 = gapi.auth2?.getAuthInstance();
+        // const auth2 = gapi.auth2?.getAuthInstance();
         // if (!auth2) {
         //   navigate("/login");
         //   return;
@@ -129,9 +123,14 @@ export default function Calendar() {
     };
   }, [dispatch, isAuthenticated, navigate]);
 
+  interface NavigateDateParams {
+    amount: number;
+    view: typeof VIEW_OPTIONS[keyof typeof VIEW_OPTIONS];
+  }
+
   const navigateDate = useCallback(
-    (amount, view) => {
-      const newDate = new Date(navigationDate);
+    ({ amount, view }: NavigateDateParams): void => {
+      const newDate: Date = new Date(navigationDate);
       switch (view) {
         case VIEW_OPTIONS.DAY:
           newDate.setDate(navigationDate.getDate() + amount);
@@ -152,11 +151,11 @@ export default function Calendar() {
   );
 
   const handleNext = useCallback(() => {
-    navigateDate(1, calendarView);
+    navigateDate({ amount: 1, view: calendarView });
   }, [navigateDate, calendarView]);
 
   const handlePrevious = useCallback(() => {
-    navigateDate(-1, calendarView);
+    navigateDate({ amount: -1, view: calendarView });
   }, [navigateDate, calendarView]);
 
   const handleToday = useCallback(() => {
@@ -199,25 +198,15 @@ export default function Calendar() {
   }, [calendarView]);
 
   const renderCalendarView = () => {
-    const viewProps = {
-      navigationDate,
-      events,
-      isLoading,
-      onCreateEvent: (eventDetails) => dispatch(createEvent(eventDetails)),
-      onUpdateEvent: (eventId, details) =>
-        dispatch(updateEvent(eventId, details)),
-      onDeleteEvent: (eventId) => dispatch(deleteEvent(eventId)),
-    };
-
     switch (calendarView) {
       case VIEW_OPTIONS.DAY:
-        return <Day {...viewProps} />;
+        return <Day />;
       case VIEW_OPTIONS.WEEK:
-        return <Week {...viewProps} />;
+        return <Week />;
       case VIEW_OPTIONS.MONTH:
-        return <Month {...viewProps} />;
+        return <Month />;
       case VIEW_OPTIONS.YEAR:
-        return <Year {...viewProps} />;
+        return <Year />;
       default:
         return null;
     }
@@ -273,7 +262,6 @@ export default function Calendar() {
                       navigationDate.toLocaleDateString("default", {
                         year: "numeric",
                         month: "long",
-                        week: "numeric",
                       })}
                     {calendarView === "day" &&
                       navigationDate.toLocaleDateString("default", {

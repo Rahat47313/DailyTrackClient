@@ -12,12 +12,13 @@ import {
   updateCategory,
   deleteCategory,
 } from "../redux/tasks/categoriesThunks";
+import { AppDispatch } from "../redux/store";
 
 export default function Categories() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const categories = useSelector(selectCategories);
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [renameCategoryId, setRenameCategoryId] = useState(null);
+  const [renameCategoryId, setRenameCategoryId] = useState<string | null>(null);
   const [renameCategoryName, setRenameCategoryName] = useState("");
 
   const dropdownTheme = {
@@ -68,7 +69,7 @@ export default function Categories() {
     }
   };
 
-  const handleRenameCategory = async (id) => {
+  const handleRenameCategory = async (id: any) => {
     if (!renameCategoryName.trim()) return;
     try {
       await dispatch(updateCategory({ id, name: renameCategoryName })).unwrap();
@@ -79,7 +80,7 @@ export default function Categories() {
     }
   };
 
-  const handleDeleteCategory = async (id) => {
+  const handleDeleteCategory = async (id: any) => {
     try {
       await dispatch(deleteCategory(id)).unwrap();
     } catch (error) {

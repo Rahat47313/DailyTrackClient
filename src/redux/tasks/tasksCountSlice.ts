@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const tasksCountSlice = createSlice({
   name: 'tasksCount',
   initialState: {
-    counts: {}
+    counts: {} as { [key: string]: number }
   },
   reducers: {
     setTasksCount: (state, action) => {

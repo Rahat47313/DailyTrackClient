@@ -7,9 +7,11 @@ import { selectTasks, selectTasksLoading } from "../redux/tasks/tasksSelectors";
 import { useEffect } from "react";
 import { fetchAllUpcomingTasks } from "../redux/tasks/tasksThunks";
 import { clearSelectedTask } from "../redux/sidebarRight/selectedTaskSlice";
+import { AppDispatch } from "../redux/store";
+import type { Task } from "../types";
 
-function groupTasksByDate(tasks) {
-  if (!tasks) return { today: [], tomorrow: [], thisWeek: [] };
+function groupTasksByDate(tasks: Task[]) {
+  if (!tasks || tasks.length === 0) return { today: [], tomorrow: [], thisWeek: [] };
 
   const now = new Date();
   now.setHours(0, 0, 0, 0); // Start of today
@@ -27,17 +29,20 @@ function groupTasksByDate(tasks) {
 
   return {
     today: tasks.filter((task) => {
+      if (!task?.dueDate) return false;
       const taskDate = new Date(task.dueDate);
       taskDate.setHours(0, 0, 0, 0);
       return taskDate.getTime() === now.getTime();
     }), //task.dueDate?.split("T")[0] === today
 
     tomorrow: tasks.filter((task) => {
+      if (!task?.dueDate) return false;
       const taskDate = new Date(task.dueDate);
       taskDate.setHours(0, 0, 0, 0);
       return taskDate.getTime() === tomorrow.getTime();
     }), //task.dueDate?.split("T")[0] === tomorrow
     thisWeek: tasks.filter((task) => {
+      if (!task?.dueDate) return false;
       const taskDate = new Date(task.dueDate);
       taskDate.setHours(0, 0, 0, 0); //task.dueDate?.split("T")[0];
       return taskDate > tomorrow && taskDate <= weekFromNow;
@@ -46,8 +51,8 @@ function groupTasksByDate(tasks) {
 }
 
 export default function Upcoming() {
-  const dispatch = useDispatch();
-  const tasks = useSelector(selectTasks);
+  const dispatch = useDispatch<AppDispatch>();
+  const tasks = useSelector(selectTasks) as Task[];
   const isLoading = useSelector(selectTasksLoading);
   const groupedTasks = groupTasksByDate(tasks);
 
@@ -55,14 +60,14 @@ export default function Upcoming() {
     dispatch(fetchAllUpcomingTasks());
   }, [dispatch]);
 
-  const renderTaskSection = (title, tasks) => {
+  const renderTaskSection = (title: string, tasksToRender: Task[]) => {
     // If there are no tasks, don't render the section
-    if (!tasks || tasks.length === 0) return null;
+    if (!tasksToRender || tasksToRender.length === 0) return null;
 
     return (
       <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
         <div className="font-bold text-2xl mb-4">{title}</div>
-        {tasks.map((task) => (
+        {tasksToRender.map((task: Task) => (
           <UpcomingTasks key={task._id} task={task} />
         ))}
       </div>

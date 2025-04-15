@@ -1,11 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  userType: string;
-}
+import { User } from '../../types';
 
 interface UsersState {
   users: User[];

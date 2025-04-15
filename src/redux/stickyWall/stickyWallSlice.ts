@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { Note } from "../../types";
 
 const initialState = {
-  notes: [],
+  notes: [] as Note[],
   isLoading: false,
   error: null,
 };

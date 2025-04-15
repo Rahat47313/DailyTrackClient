@@ -1,3 +1,5 @@
-export const selectNotes = (state) => state.stickyWall.notes;
-export const selectIsLoading = (state) => state.stickyWall.isLoading;
-export const selectError = (state) => state.stickyWall.error;
+import { RootState } from "../store";
+
+export const selectNotes = (state: RootState) => state.stickyWall.notes;
+export const selectIsLoading = (state: RootState) => state.stickyWall.isLoading;
+export const selectError = (state: RootState) => state.stickyWall.error;

@@ -13,7 +13,12 @@ export const login = createAsyncThunk(
       dispatch(setToken(data.token));
       return data;
     } catch (error) {
-      dispatch(setError(error.message));
+      let errorMessage = "Error in login of authThunks";
+      if(error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
+      alert(error);
       throw error;
     } finally {
       dispatch(setIsLoading(false));

@@ -10,7 +10,11 @@ export const fetchCategories = createAsyncThunk(
       const { data } = await axiosInstance.get("/tasks/categories");
       dispatch(setCategories(data));
     } catch (error) {
-      dispatch(setError(error));
+      let errorMessage = "Error in fetchCategories of categoriesThunks";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
       throw error;
     } finally {
       dispatch(setIsLoading(false));
@@ -48,7 +52,11 @@ export const updateCategory = createAsyncThunk(
       dispatch(fetchCategories());
       return data;
     } catch (error) {
-      dispatch(setError(error));
+      let errorMessage = "Error in updateCategory of categoriesThunks";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
       throw error;
     } finally {
       dispatch(setIsLoading(false));
@@ -64,7 +72,11 @@ export const deleteCategory = createAsyncThunk(
       await axiosInstance.delete(`/tasks/categories/${id}`);
       dispatch(fetchCategories());
     } catch (error) {
-      dispatch(setError(error));
+      let errorMessage = "Error in deleteCategory of categoriesThunks";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
       throw error;
     } finally {
       dispatch(setIsLoading(false));

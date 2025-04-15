@@ -7,11 +7,22 @@ export const fetchAllTasksCounts = createAsyncThunk(
   async (_, { dispatch }) => {
     try {
       const { data } = await axiosInstance.get('/tasks');
-      const counts = data.reduce((acc, task) => {
+      interface Task {
+        category: {
+          _id: string;
+        };
+      }
+
+      interface TaskCounts {
+        [categoryId: string]: number;
+      }
+
+      const counts: TaskCounts = data.reduce((acc: TaskCounts, task: Task) => {
         const categoryId = task.category._id;
         acc[categoryId] = (acc[categoryId] || 0) + 1;
         return acc;
       }, {});
+
       dispatch(setTasksCount(counts));
     } catch (error) {
       console.error('Error fetching tasks counts:', error);

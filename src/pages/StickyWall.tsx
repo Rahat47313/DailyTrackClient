@@ -13,6 +13,8 @@ import {
   updateNote,
   deleteNote,
 } from "../redux/stickyWall/stickyWallThunks";
+import { AppDispatch } from "../redux/store";
+import type { Note } from "../types";
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: ReturnType<typeof setTimeout>;
@@ -23,7 +25,7 @@ function debounce(func: (...args: any[]) => void, wait: number) {
 }
 
 export default function StickyWall() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const notes = useSelector(selectNotes);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
@@ -57,7 +59,7 @@ export default function StickyWall() {
         for (const [id, content] of Object.entries(updates)) {
           await updateNote(id, content);
         }
-        console.log("Database updated with all pending changes");
+        // console.log("Database updated with all pending changes");
       } catch (error) {
         console.error("Failed to update notes:", error);
       }
@@ -66,10 +68,10 @@ export default function StickyWall() {
   );
 
   const handleUpdateNote = (id: string, content: string) => {
-    const currentNote = notes.find((note) => note._id === id);
+    const currentNote = notes.find((note: Note) => note._id === id);
     if (currentNote && currentNote.content !== content) {
       // Update local state immediately
-      const updatedNotes = notes.map((note) =>
+      const updatedNotes = notes.map((note: Note) =>
         note._id === id ? { ...note, content } : note
       );
       dispatch(setNotes(updatedNotes));
@@ -87,7 +89,7 @@ export default function StickyWall() {
     }
     try {
       await deleteNote(id);
-      const remainingNotes = notes.filter((note) => note._id !== id);
+      const remainingNotes = notes.filter((note: Note) => note._id !== id);
       dispatch(setNotes(remainingNotes));
     } catch (error) {
       console.error("Failed to delete note:", error);
@@ -110,7 +112,7 @@ export default function StickyWall() {
                 There are no notes :( Create one by using the + button
               </div>
             )}
-            {notes?.map((note) => (
+            {notes?.map((note: Note) => (
               <div key={note._id} className="relative group">
                 <textarea
                   value={note.content}
@@ -118,7 +120,7 @@ export default function StickyWall() {
                   // onChange={(e) => handleUpdateNote(note._id, e.target.value)}
                   onBlur={(e) => {
                     const currentNote = notes.find(
-                      (note) => note._id === note._id
+                      (note: Note) => note._id === note._id
                     );
                     if (currentNote && currentNote.content !== e.target.value) {
                       debouncedUpdateNote(note._id, e.target.value);

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AppDispatch } from "../store";
 import { gapi } from "gapi-script";
 import {
   setEvents,
@@ -34,14 +35,18 @@ export const initializeGoogleAPI = createAsyncThunk(
             const auth2 = gapi.auth2.getAuthInstance();
             const isSignedIn = auth2.isSignedIn.get();
             
-            auth2.isSignedIn.listen((signedIn) => {
+            auth2.isSignedIn.listen((signedIn: boolean) => {
               dispatch(setIsAuthenticated(signedIn));
             });
 
             dispatch(setIsAuthenticated(isSignedIn));
             resolve(isSignedIn);
           } catch (error) {
-            dispatch(setError(error.message));
+            let errorMessage = "Error in initializeGoogleAPI of calendarThunks";
+            if(error instanceof Error) {
+              errorMessage = error.message;
+            }
+            dispatch(setError(errorMessage));
             throw error;
           }
         });
@@ -78,7 +83,11 @@ export const fetchEvents = createAsyncThunk(
       dispatch(setEvents(response.result.items));
       return response.result.items;
     } catch (error) {
-      dispatch(setError(error.message));
+      let errorMessage = "Error in fetchEvents of calendarThunks";
+      if(error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
       console.error("Error fetching events:", error);
       throw error;
     } finally {
@@ -87,7 +96,7 @@ export const fetchEvents = createAsyncThunk(
   }
 );
 
-export const createEvent = (eventDetails) => async (dispatch) => {
+export const createEvent = (eventDetails: any) => async (dispatch: AppDispatch) => {
   dispatch(setIsLoading(true));
   dispatch(setError(null));
 
@@ -97,7 +106,7 @@ export const createEvent = (eventDetails) => async (dispatch) => {
       resource: eventDetails,
     });
 
-    await dispatch(fetchEvents(startDate, endDate));
+    await dispatch(fetchEvents());
     return response;
   } catch (error) {
     dispatch(setError("Failed to create event"));
@@ -108,7 +117,7 @@ export const createEvent = (eventDetails) => async (dispatch) => {
 };
 
 export const updateEvent =
-  (eventId, updatedEventDetails) => async (dispatch) => {
+  (eventId: any, updatedEventDetails: any) => async (dispatch: AppDispatch) => {
     dispatch(setIsLoading(true));
     dispatch(setError(null));
 
@@ -119,7 +128,7 @@ export const updateEvent =
         resource: updatedEventDetails,
       });
 
-      await dispatch(fetchEvents(startDate, endDate));
+      await dispatch(fetchEvents());
       return response;
     } catch (error) {
       dispatch(setError("Failed to update event"));
@@ -129,7 +138,7 @@ export const updateEvent =
     }
   };
 
-export const deleteEvent = (eventId) => async (dispatch) => {
+export const deleteEvent = (eventId: any) => async (dispatch: AppDispatch) => {
   dispatch(setIsLoading(true));
   dispatch(setError(null));
 
@@ -139,7 +148,7 @@ export const deleteEvent = (eventId) => async (dispatch) => {
       eventId,
     });
 
-    await dispatch(fetchEvents(startDate, endDate));
+    await dispatch(fetchEvents());
   } catch (error) {
     dispatch(setError("Failed to delete event"));
     console.error("Error deleting event:", error);
@@ -157,7 +166,11 @@ export const fetchAllTasks = createAsyncThunk(
       dispatch(setTasks(data));
       return data;
     } catch (error) {
-      dispatch(setError(error.message));
+      let errorMessage = "Error in fetchAllTasks of calendarThunks";
+      if(error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
       throw error;
     } finally {
       dispatch(setIsLoading(false));

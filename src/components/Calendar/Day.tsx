@@ -1,30 +1,31 @@
 import { Fragment, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch } from "../../redux/store";
 import {
   selectDays,
   selectNavigationDate,
-  selectEvents,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
 import { fetchEvents } from "../../redux/calendar/calendarThunks";
 import { selectEventsAndTasks } from '../../redux/calendar/calendarSelectors';
 import { setDays } from "../../redux/calendar/calendarSlice";
+import type { WeekDay } from "../../types";
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Day() {
-  const dispatch = useDispatch();
-  const days = useSelector(selectDays);
+  const dispatch = useDispatch<AppDispatch>();
+  const days = useSelector(selectDays) as WeekDay[];
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEventsAndTasks);
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const container = useRef(null);
-  const containerNav = useRef(null);
-  const containerOffset = useRef(null);
+  const container = useRef<HTMLDivElement>(null);
+  const containerNav = useRef<HTMLDivElement>(null);
+  const containerOffset = useRef<HTMLDivElement>(null);
 
-  const generateWeekDays = useCallback((date) => {
+  const generateWeekDays = useCallback((date: string | Date): WeekDay[] => {
     const currentDate = new Date(date);
     const startOfWeek = new Date(currentDate);
     startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
@@ -130,9 +131,9 @@ export default function Day() {
               >
                 {events.map((event) => {
                   const start = new Date(
-                    event.start.dateTime || event.start.date
+                    event.start.dateTime ?? event.start.date ?? new Date()
                   );
-                  const end = new Date(event.end.dateTime || event.end.date);
+                  const end = new Date(event.end.dateTime ?? event.end.date ?? new Date());
                   const isAllDay = !event.start.dateTime;
 
                   return (

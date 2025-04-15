@@ -12,9 +12,11 @@ import { selectTasks, selectTasksLoading } from "../../redux/tasks/tasksSelector
 import { fetchTasksByCategory } from "../../redux/tasks/tasksThunks";
 import { Fragment } from "react/jsx-runtime";
 import { setCurrentCategory } from "../../redux/tasks/categoriesSlice";
+import { AppDispatch } from "../../redux/store";
+import type { SelectedTaskInterface } from "../../types";
 
 export default function CategoryPage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { category } = useParams();
   const categories = useSelector(selectCategories);
   const tasks = useSelector(selectTasks);
@@ -29,7 +31,7 @@ export default function CategoryPage() {
     }
   }, [dispatch, categoryData]);
 
-  const handleTaskClick = (task) => {
+  const handleTaskClick = (task: SelectedTaskInterface) => {
     dispatch(
       setSelectedTask({
         ...task,
@@ -89,9 +91,9 @@ export default function CategoryPage() {
                         </div>
                         <div className="flex items-center gap-2 px-4">
                           <div
-                            className={`w-5 h-5 rounded-md ${categoryData.color}`}
+                            className={`w-5 h-5 rounded-md ${categoryData?.color}`}
                           />
-                          <div>{categoryData.name}</div>
+                          <div>{categoryData?.name}</div>
                         </div>
                       </div>
                     </div>

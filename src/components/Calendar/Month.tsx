@@ -2,17 +2,26 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   selectNavigationDate,
-  selectEvents,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
-import { selectEventsAndTasks } from '../../redux/calendar/calendarSelectors';
+import { selectEventsAndTasks } from "../../redux/calendar/calendarSelectors";
 import { ClockIcon } from "@heroicons/react/20/solid";
+import { Event } from "../../types"; // Adjust the import path as necessary
 
-function classNames(...classes) {
+interface CalendarDay {
+  date: string;
+  dayNumber: number;
+  isThisMonth: boolean;
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  events: Event[];
+}
+
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const isCurrentDate = (date) => {
+const isCurrentDate = (date: Date) => {
   const currentDate = new Date();
   return (
     currentDate.getFullYear() === date.getFullYear() &&
@@ -21,7 +30,7 @@ const isCurrentDate = (date) => {
   );
 };
 
-const isCurrentMonth = (date) => {
+const isCurrentMonth = (date: Date) => {
   const currentDate = new Date();
   return (
     currentDate.getFullYear() === date.getFullYear() &&
@@ -34,12 +43,16 @@ export default function Month() {
   const events = useSelector(selectEventsAndTasks);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigationMonth = navigationDate.getMonth();
-  const [days, setDays] = useState([]);
-  const [selectedDay, setSelectedDay] = useState(null);
+  const [days, setDays] = useState<CalendarDay[]>([]);
+  const [selectedDay, setSelectedDay] = useState<CalendarDay | null>(null);
 
   // Generates days in the month and assigns events to the appropriate days
-  const generateDaysInMonth = (month, year, monthEvents) => {
-    const days = [];
+  const generateDaysInMonth = (
+    month: number,
+    year: number,
+    monthEvents: Event[]
+  ): CalendarDay[] => {
+    const days: CalendarDay[] = [];
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
 
@@ -221,31 +234,27 @@ export default function Month() {
                       ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                       : // Adjacent months
                         "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
-                    (day === selectedDay || day.isToday) && "font-semibold",
-                    day === selectedDay && "text-white dark:text-black",
-                    !selectedDay && day.isToday && "text-red-500",
-                    !selectedDay &&
-                      day.isCurrentMonth &&
-                      !day.isToday &&
-                      "text-gray-700 dark:text-gray-200",
-                    !selectedDay &&
-                      !day.isCurrentMonth &&
-                      !day.isToday &&
-                      "text-gray-500",
+                    day === selectedDay || day.isToday ? "font-semibold" : "",
+                    day === selectedDay ? "text-white dark:text-black" : "",
+                    !selectedDay && day.isToday ? "text-red-500" : "",
+                    !selectedDay && day.isCurrentMonth && !day.isToday
+                      ? "text-gray-700 dark:text-gray-200"
+                      : "",
+                    !selectedDay && !day.isCurrentMonth && !day.isToday
+                      ? "text-gray-500"
+                      : "",
                     "relative px-3 py-2 hover:bg-red-300 hover:dark:bg-red-950"
                   )}
                 >
                   <time
                     dateTime={day.date}
                     className={classNames(
-                      day === selectedDay &&
-                        "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center p-4 rounded-full",
-                      day.isToday &&
-                        "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
+                      (day === selectedDay ? "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center p-4 rounded-full" : ""),
+                      (day.isToday ? "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900" : ""),
                       "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
                     )}
                   >
-                    {day.date.split("-").pop().replace(/^0/, "")}
+                    {day.date.split("-").pop()?.replace(/^0/, "")}
                   </time>
                   {day.events.length > 0 && (
                     <ol className="my-2">
@@ -260,11 +269,11 @@ export default function Month() {
                               {event.summary}
                             </p>
                             <time
-                              dateTime={event.start.datetime}
+                              dateTime={event.start.dateTime ?? undefined}
                               className="ml-3 hidden flex-none text-gray-900 dark:text-white group-hover:text-red-900 group-hover:dark:text-red-200 lg:block"
                             >
                               {new Date(
-                                event.start.dateTime || event.start.date
+                                event.start.dateTime || event.start.date || new Date()
                               ).toLocaleTimeString([], {
                                 hour: "numeric",
                                 minute: "2-digit",
@@ -298,31 +307,23 @@ export default function Month() {
                       ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                       : // Adjacent months
                         "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
-                    (day === selectedDay || day.isToday) && "font-semibold",
-                    day === selectedDay && "text-white dark:text-black",
-                    !selectedDay && day.isToday && "text-red-500",
-                    !selectedDay &&
-                      day.isCurrentMonth &&
-                      !day.isToday &&
-                      "text-gray-700 dark:text-gray-200",
-                    !selectedDay &&
-                      !day.isCurrentMonth &&
-                      !day.isToday &&
-                      "text-gray-500",
+                    (day === selectedDay || day.isToday) ? "font-semibold" : "",
+                    day === selectedDay ? "text-white dark:text-black" : "",
+                    !selectedDay && day.isToday ? "text-red-500" : "",
+                    !selectedDay && day.isCurrentMonth && !day.isToday ? "text-gray-700 dark:text-gray-200" : "",
+                    !selectedDay && !day.isCurrentMonth && !day.isToday ? "text-gray-500" : "",
                     "flex h-14 flex-col px-3 py-2 hover:bg-red-300 hover:dark:bg-red-950 focus:z-10"
                   )}
                 >
                   <time
                     dateTime={day.date}
                     className={classNames(
-                      day === selectedDay &&
-                        "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center p-4 rounded-full",
-                      day.isToday &&
-                        "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
+                      day === selectedDay ? "flex h-7 w-7 ring-2 ring-inset ring-red-500 items-center justify-center p-4 rounded-full" : "",
+                      day.isToday ? "flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900" : "",
                       "ml-auto flex h-7 w-7 items-center justify-center rounded-full"
                     )}
                   >
-                    {day.date.split("-").pop().replace(/^0/, "")}
+                    {day.date.split("-").pop()?.replace(/^0/, "")}
                   </time>
                   <span className="sr-only">{day.events.length} events</span>
                   {day.events.length > 0 && (
@@ -340,10 +341,10 @@ export default function Month() {
             </div>
           </div>
         </div>
-        {selectedDay?.events.length > 0 && (
+        {selectedDay && selectedDay.events && selectedDay.events.length > 0 && (
           <div className="px-4 py-10 sm:px-6">
             <ol className="divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-sm shadow ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-5">
-              {selectedDay.events.map((event) => (
+              {selectedDay?.events.map((event) => (
                 <li
                   key={event.id}
                   className="group flex p-4 pr-6 focus-within:bg-gray-50 dark:focus-within:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900"
@@ -354,7 +355,7 @@ export default function Month() {
                     </p>
                     <div className="flex items-center">
                       <time
-                        dateTime={event.start.datetime}
+                        dateTime={event.start.dateTime ?? undefined}
                         className="mt-2 flex items-center text-gray-700 dark:text-gray-200"
                       >
                         <ClockIcon
@@ -370,7 +371,7 @@ export default function Month() {
                       </time>
                       {!event.end.date && (
                         <time
-                          dateTime={event.end.datetime}
+                          dateTime={event.end.dateTime ?? undefined}
                           className="mt-2 flex items-center text-gray-700 dark:text-gray-200"
                         >
                           <p>&nbsp;~&nbsp;</p>

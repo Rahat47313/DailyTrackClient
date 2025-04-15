@@ -37,7 +37,7 @@ const tasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllTasks.pending, (state, action) => {
+      .addCase(fetchAllTasks.pending, (state) => {
         state.isRefreshing = true;
       })
       .addCase(fetchAllTasks.fulfilled, (state, action) => {
@@ -45,7 +45,7 @@ const tasksSlice = createSlice({
         state.isRefreshing = false;
       })
       .addCase(fetchAllTasks.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.error.message ?? null;
         state.isRefreshing = false;
       });
   },

@@ -1,4 +1,4 @@
-export const convertTaskToEvent = (task) => {
+export const convertTaskToEvent = (task: any) => {
   const dueDate = new Date(task.dueDate);
   const dueDateWithOffset = new Date(dueDate.getTime() - dueDate.getTimezoneOffset() * 60000);
   return {

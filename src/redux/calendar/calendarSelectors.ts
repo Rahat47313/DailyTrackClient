@@ -1,8 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { selectTasks } from '../tasks/tasksSelectors';
 import { convertTaskToEvent } from '../../utils/calendarUtils';
+import { RootState } from '../store';
 
-const selectCalendarState = (state) => state.calendar;
+const selectCalendarState = (state: RootState) => state.calendar;
 
 export const selectCalendarView = createSelector(
   [selectCalendarState],

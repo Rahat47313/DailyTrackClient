@@ -28,7 +28,8 @@ export const createUser = createAsyncThunk(
       await axiosInstance.post('/admin/users', userData);
       dispatch(fetchUsers());
     } catch (error) {
-      dispatch(setError(error.message));
+      const message = (error as any).message;
+      dispatch(setError(message));
       throw error;
     } finally {
       dispatch(setIsLoading(false));
@@ -44,7 +45,8 @@ export const deleteUser = createAsyncThunk(
       await axiosInstance.delete(`/admin/users/${userId}`);
       dispatch(fetchUsers());
     } catch (error) {
-      dispatch(setError(error.message));
+      const message = (error as any).message;
+      dispatch(setError(message));
     } finally {
       dispatch(setIsLoading(false));
     }

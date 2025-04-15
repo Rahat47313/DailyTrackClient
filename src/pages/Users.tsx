@@ -5,9 +5,10 @@ import { fetchUsers, createUser, deleteUser } from "../redux/users/usersThunks";
 import { selectUsers, selectUsersLoading } from "../redux/users/usersSelectors";
 import { selectCurrentUser } from "../redux/auth/authSelectors";
 import UserList from "../components/Users/UserList";
+import { AppDispatch } from "../redux/store";
 
 export default function Users() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectUsers);
   const currentUser = useSelector(selectCurrentUser);
   const isLoading = useSelector(selectUsersLoading);
@@ -55,23 +56,26 @@ export default function Users() {
 
   useEffect(() => {
     if (users.length === 0) {
-      dispatch(fetchUsers()).unwrap().then(fetchedUsers => {
-        console.log("All users:", fetchedUsers);
-      }).catch(error => {
-        console.error("Failed to fetch users:", error);
-      });
+      dispatch(fetchUsers())
+        .unwrap()
+        .then((fetchedUsers) => {
+          console.log("All users:", fetchedUsers);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch users:", error);
+        });
     }
   }, [dispatch, currentUser, users.length]);
 
   const filteredUsers = useMemo(() => {
-    if (currentUser.userType === "superAdmin") {
+    if (currentUser?.userType === "superAdmin") {
       return {
         superAdmins: users.filter((user) => user.userType === "superAdmin"),
         admins: users.filter((user) => user.userType === "admin"),
         employees: users.filter((user) => user.userType === "employee"),
       };
     }
-    if (currentUser.userType === "admin") {
+    if (currentUser?.userType === "admin") {
       return {
         admins: users.filter((user) => user.userType === "admin"),
         employees: users.filter((user) => user.userType === "employee"),
@@ -80,7 +84,7 @@ export default function Users() {
     return {};
   }, [users, currentUser]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       await dispatch(createUser(formData)).unwrap();
@@ -90,12 +94,12 @@ export default function Users() {
     }
   };
 
-  const handleDelete = async (userId: string, userType: string) => {
+  const handleDelete = async (userId: string) => {
     try {
-      if (currentUser.userType === "superAdmin") {
+      if (currentUser?.userType === "superAdmin") {
         // Permanently delete
         await dispatch(deleteUser(userId)).unwrap();
-      } else if (currentUser.userType === "admin") {
+      } else if (currentUser?.userType === "admin") {
         // Soft delete - just deactivate
         await dispatch(deactivateUser(userId)).unwrap();
       }
@@ -212,8 +216,10 @@ export default function Users() {
             </Button>
           </form>
         </div>
-        {currentUser.userType === "superAdmin" &&
-          filteredUsers.superAdmins?.length > 0 && (
+        {currentUser &&
+          currentUser.userType === "superAdmin" &&
+          filteredUsers.superAdmins &&
+          filteredUsers.superAdmins.length > 0 && (
             <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
               <div className="font-bold text-2xl mb-4">Super Admins</div>
               <UserList
@@ -223,21 +229,21 @@ export default function Users() {
               />
             </div>
           )}
-        {filteredUsers.admins?.length > 0 && (
+        {filteredUsers.admins && filteredUsers.admins.length > 0 && (
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
             <div className="font-bold text-2xl mb-4">Admins</div>
             <UserList
               users={filteredUsers.admins}
               onDelete={handleDelete}
-              canDelete={currentUser.userType === "superAdmin"}
+              canDelete={currentUser?.userType === "superAdmin"}
             />
           </div>
         )}
-        {filteredUsers.employees?.length > 0 && (
+        {(filteredUsers.employees?.length ?? 0) > 0 && (
           <div className="flex-grow p-4 border-2 rounded-lg border-gray-200 dark:border-gray-700">
             <div className="font-bold text-2xl mb-4">Employees</div>
             <UserList
-              users={filteredUsers.employees}
+              users={filteredUsers.employees ?? []}
               onDelete={handleDelete}
               canDelete={true}
             />
@@ -246,4 +252,8 @@ export default function Users() {
       </div>
     </div>
   );
+}
+function deactivateUser(userId: string): any {
+  console.log("deactivateUser", userId, "but function not implemented");
+  throw new Error("Function not implemented.");
 }

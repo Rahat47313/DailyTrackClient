@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import { gapi } from "gapi-script";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+// import { gapi } from "gapi-script";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useThemeMode } from "flowbite-react";
 import { login } from "../redux/auth/authThunks";
@@ -9,23 +9,24 @@ import {
   selectIsLoading,
   selectError,
 } from "../redux/auth/authSelectors";
-import { setIsAuthenticated } from "../redux/calendar/calendarSlice";
-import { selectIsAuthenticated } from "../redux/calendar/calendarSelectors";
-import {
-  initializeGoogleAPI,
-  fetchEvents,
-} from "../redux/calendar/calendarThunks";
+// import { setIsAuthenticated } from "../redux/calendar/calendarSlice";
+// import { selectIsAuthenticated } from "../redux/calendar/calendarSelectors";
+// import {
+//   initializeGoogleAPI,
+//   fetchEvents,
+// } from "../redux/calendar/calendarThunks";
 import { setNavAndSideVisibility } from "../redux/navAndSide/navAndSideSlice";
 import DailyTrack_dark from "../assets/logo/DailyTrack_dark.svg";
 import DailyTrack_light from "../assets/logo/DailyTrack_light.svg";
+import { AppDispatch } from "../redux/store";
 
 export default function Login() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const token = useSelector(selectToken);
   const isAuthLoading = useSelector(selectIsLoading);
   const authError = useSelector(selectError);
-  const isGoogleAuthenticated = useSelector(selectIsAuthenticated);
+  // const isGoogleAuthenticated = useSelector(selectIsAuthenticated);
   const { mode } = useThemeMode();
   const isDarkmode = mode === "dark";
   const [credentials, setCredentials] = useState({

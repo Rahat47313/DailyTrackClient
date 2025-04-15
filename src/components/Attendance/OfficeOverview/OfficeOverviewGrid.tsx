@@ -2,9 +2,11 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/auth/authSelectors";
 import { selectAttendanceData } from "../../../redux/attendance/attendanceSelectors";
+// import { selectUsers } from "../../../redux/users/usersSelectors"; // Import user selector
+// import { User, AttendanceRecord, DayAttendance } from "../../../types"; // Import defined types
 
-// Types to improve type safety
-type AttendanceStatus = "Present" | "Absent" | "-";
+// // Types to improve type safety
+// type AttendanceStatus = DayAttendance['status'];
 
 export default function OfficeOverviewGrid({
   navigationDate,
@@ -15,9 +17,10 @@ export default function OfficeOverviewGrid({
   const attendanceData = useSelector(selectAttendanceData);
 
   const usersAttendance = useMemo(() => {
+    if(!currentUser) return [];
     const year = navigationDate.getFullYear().toString();
     // const month = (navigationDate.getMonth() + 1).toString().padStart(2, "0");
-    const users = [];
+    const users: any[] = [];
 
     // Get all users' attendance for selected month
     Object.entries(attendanceData).forEach(([userId, userRecord]) => {
@@ -39,45 +42,46 @@ export default function OfficeOverviewGrid({
           ...attendance // Keep existing months structure
         }
       });
-
-      // users.push({
-      //   _id: userId,
-      //   name: userRecord.user.name,
-      //   userType: userRecord.user.userType,
-      //   attendance: userRecord.years?.[year]?.months?.[month]?.days || {},
-      // });
     });
 
-    // Debug logs
-    console.log('Users Attendance:', users);
-
     return users;
-  }, [navigationDate, attendanceData, currentUser.userType]);
-
-  // // Explicitly type the imported OfficeOverviewData
-  // const typedAttendanceData: YearAttendance =
-  // filteredAttendance as YearAttendance;
+  }, [navigationDate, attendanceData, currentUser?.userType]);
 
   // Function to determine the number of days in a month (accounting for leap years)
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month + 1, 0).getDate();
   };
 
-  // Type guard to check if a status is valid
-  const isValidStatus = (status: string): status is AttendanceStatus => {
-    return ["Present", "Absent", "-"].includes(status);
-  };
+  // // Type guard to check if a status is valid
+  // const isValidStatus = (status: string): status is AttendanceStatus => {
+  //   return ["Present", "Absent", "-"].includes(status);
+  // };
 
-  // Memoized attendance data for the current year and month
-  const currentMonthAttendance = useMemo(() => {
-    const year = navigationDate.getFullYear().toString();
-    const month = navigationDate.getMonth().toString().padStart(2, "0");
+  // // Memoized attendance data for the current year and month
+  // const currentMonthAttendance = useMemo(() => {
+  //   const year = navigationDate.getFullYear().toString()
+  //   const month = navigationDate.getMonth().toString().padStart(2, "0");
 
-    // Get the users and their attendance for this specific month
-    const monthAttendance = usersAttendance[year]?.[month] || {};
+  //   // Get the users and their attendance for this specific month
+  //   const monthAttendance = usersAttendance![year]?.[month] || {};
+  //   console.log("Month Attendance:", monthAttendance);
 
-    return monthAttendance;
-  }, [navigationDate]);
+  //   return monthAttendance;
+  // }, [navigationDate]);
+
+  // // Memoized attendance data for the current year and month
+  // const currentMonthAttendance = useMemo(() => {
+  //   if (!usersAttendance) return {};
+    
+  //   // Create a map of user attendance for easier lookup
+  //   const attendanceMap = usersAttendance.reduce((acc, user) => {
+  //     acc[user.name] = user.attendance;
+  //     return acc;
+  //   }, {} as Record<string, any>);
+
+  //   console.log("Month Attendance:", attendanceMap);
+  //   return attendanceMap;
+  // }, [navigationDate, usersAttendance]);
 
   // Get the number of days in the current month
   const daysInMonth = useMemo(() => {
@@ -86,15 +90,6 @@ export default function OfficeOverviewGrid({
       navigationDate.getMonth()
     );
   }, [navigationDate]);
-
-  // Function to get attendance status for a specific user and day
-  const getAttendanceStatus = (username: string, day: number) => {
-    const dayStr = day.toString().padStart(2, "0");
-    const userMonthAttendance = currentMonthAttendance[username];
-    const status = userMonthAttendance?.[dayStr];
-
-    return isValidStatus(status) ? status : "-";
-  };
 
   // Function to format status for display
   const formatStatus = (status: string) => {

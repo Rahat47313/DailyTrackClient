@@ -1,12 +1,11 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { gapi } from "gapi-script";
+// import { gapi } from "gapi-script";
 import { Dropdown } from "flowbite-react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { FaUserGear } from "react-icons/fa6";
 import { selectCategories } from "../redux/tasks/categoriesSelectors";
 import {
   fetchCategories,
@@ -14,19 +13,18 @@ import {
   updateCategory,
   deleteCategory,
 } from "../redux/tasks/categoriesThunks";
-import { selectTasks } from "../redux/tasks/tasksSelectors";
 import { selectTasksCount } from "../redux/tasks/tasksCountSelectors";
 import { fetchAllTasksCounts } from "../redux/tasks/tasksCountThunks";
 import { logoutUser } from '../redux/auth/authThunks';
+import { AppDispatch } from "../redux/store";
 
 export default function SidebarLeft() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const tasks = useSelector(selectTasks);
-  const tasksCounts = useSelector(selectTasksCount);
+  const tasksCounts: { [key: string]: number } = useSelector(selectTasksCount);
   const categories = useSelector(selectCategories) || [];
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [renameCategoryId, setRenameCategoryId] = useState(null);
+  const [renameCategoryId, setRenameCategoryId] = useState<string | null>(null);
   const [renameCategoryName, setRenameCategoryName] = useState("");
 
   const dropdownTheme = {
@@ -84,7 +82,7 @@ export default function SidebarLeft() {
     }
   };
 
-  const handleRenameCategory = async (id) => {
+  const handleRenameCategory = async (id: any) => {
     if (!renameCategoryName.trim()) return;
     try {
       await dispatch(updateCategory({ id, name: renameCategoryName })).unwrap();
@@ -95,7 +93,7 @@ export default function SidebarLeft() {
     }
   };
 
-  const handleDeleteCategory = async (id) => {
+  const handleDeleteCategory = async (id: any) => {
     try {
       await dispatch(deleteCategory(id)).unwrap();
     } catch (error) {
@@ -103,13 +101,13 @@ export default function SidebarLeft() {
     }
   };
 
-  const handleGoogleSignOut = useCallback(async () => {
-    try {
-      await gapi.auth2.getAuthInstance().signOut();
-    } catch (error) {
-      console.error("Sign out error:", error);
-    }
-  }, []);
+  // const handleGoogleSignOut = useCallback(async () => {
+  //   try {
+  //     await gapi.auth2.getAuthInstance().signOut();
+  //   } catch (error) {
+  //     console.error("Sign out error:", error);
+  //   }
+  // }, []);
 
   const handleSignOut = useCallback(async () => {
     try {

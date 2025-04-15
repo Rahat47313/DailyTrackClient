@@ -8,3 +8,7 @@
 <hr>
 <br>
 A web application to track attendance and daily tasks
+
+To try out:
+email: rahat47313@gmail.com
+pass: SuperAdminPassword

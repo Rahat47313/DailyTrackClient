@@ -1,1 +1,3 @@
-export const selectSidebarLeftSmallVisibility = (state) => state.sidebarLeft.sidebarLeftSmallVisibility;
+import { RootState } from "../store";
+
+export const selectSidebarLeftSmallVisibility = (state: RootState) => state.sidebarLeft.sidebarLeftSmallVisibility;

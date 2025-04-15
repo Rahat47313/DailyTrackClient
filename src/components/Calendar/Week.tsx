@@ -1,14 +1,26 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   selectNavigationDate,
-  selectEvents,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
 import { selectEventsAndTasks } from '../../redux/calendar/calendarSelectors';
+import type { Event } from "../../types";
+import type { WeekDay } from "../../types";
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
+}
+interface FormattedEvent {
+  id: string;
+  title: string;
+  start: Date;
+  end: Date;
+  column: number;
+  startRow: number;
+  endRow: number;
+  url: string;
+  isAllDay: boolean;
 }
 
 // Generate array of time slots
@@ -21,18 +33,17 @@ const TIME_SLOTS = Array.from({ length: 24 }, (_, hour) => ({
 }));
 
 export default function Week() {
-  const dispatch = useDispatch();
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEventsAndTasks);
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const [weekDays, setWeekDays] = useState([]);
-  const [weekEvents, setWeekEvents] = useState([]);
-  const container = useRef(null);
-  const containerNav = useRef(null);
-  const containerOffset = useRef(null);
+  const [weekDays, setWeekDays] = useState<WeekDay[]>([]);
+  const [weekEvents, setWeekEvents] = useState<FormattedEvent[]>([]);
+  const container = useRef<HTMLDivElement>(null);
+  const containerNav = useRef<HTMLDivElement>(null);
+  const containerOffset = useRef<HTMLDivElement>(null);
 
   // Get week days based on navigation date
-  const getWeekDays = (date) => {
+  const getWeekDays = (date: Date) => {
     const currentDate = new Date(date);
     const startOfWeek = new Date(currentDate);
     startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
@@ -41,7 +52,7 @@ export default function Week() {
       const day = new Date(startOfWeek);
       day.setDate(startOfWeek.getDate() + i);
       return {
-        date: day,
+        date: day.toISOString(),
         dayName: day.toLocaleDateString("default", { weekday: "short" }),
         dayNumber: day.getDate(),
         month: day.toLocaleDateString("default", { month: "long" }),
@@ -52,18 +63,18 @@ export default function Week() {
   };
 
   // Format events for display
-  const formatWeekEvents = (events, weekDays) => {
+  const formatWeekEvents = (events: Event[], weekDays: WeekDay[]) => {
     return events
       .filter((event) => {
-        const eventDate = new Date(event.start.dateTime || event.start.date);
-        const weekStart = weekDays[0].date;
-        const weekEnd = weekDays[6].date;
+        const eventDate = new Date(event.start.dateTime ?? event.start.date ?? new Date());
+        const weekStart = new Date(weekDays[0].date);
+        const weekEnd = new Date(weekDays[6].date);
         weekEnd.setHours(23, 59, 59);
         return eventDate >= weekStart && eventDate <= weekEnd;
       })
       .map((event) => {
-        const start = new Date(event.start.dateTime || event.start.date);
-        const end = new Date(event.end.dateTime || event.end.date);
+        const start = new Date(event.start.dateTime ?? event.start.date ?? new Date());
+        const end = new Date(event.end.dateTime ?? event.end.date ?? new Date());
         const isAllDay = !event.start.dateTime;
 
         return {
@@ -92,7 +103,7 @@ export default function Week() {
     const days = getWeekDays(new Date(navigationDate));
     setWeekDays(days);
 
-    const formattedEvents = formatWeekEvents(events, days);
+    const formattedEvents: FormattedEvent[] = formatWeekEvents(events, days);
     setWeekEvents(formattedEvents);
   }, [navigationDate, events, isAuthenticated]);
 

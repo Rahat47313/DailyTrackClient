@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectToken, selectCurrentUser, selectIsLoading } from "../redux/auth/authSelectors";
 
-export const ProtectedRoute = ({ children }) => {
+export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   const token = useSelector(selectToken);
   const user = useSelector(selectCurrentUser);

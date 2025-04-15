@@ -14,8 +14,8 @@ import {
   selectCategories,
   selectCurrentCategory,
   selectCategoriesLoading,
-  selectCategoriesError,
 } from "../redux/tasks/categoriesSelectors";
+import { AppDispatch } from "../redux/store.ts";
 
 export default function SidebarRight() {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ export default function SidebarRight() {
   const currentCategory = useSelector(selectCurrentCategory);
   const isLoading = useSelector(selectCategoriesLoading);
   const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
-  const [renameSubtaskIndex, setRenameSubtaskIndex] = useState(null);
+  const [renameSubtaskIndex, setRenameSubtaskIndex] = useState<number | null>(null);
   const [renameSubtaskTitle, setRenameSubtaskTitle] = useState("");
 
   const dropdownTheme = {
@@ -101,8 +101,16 @@ export default function SidebarRight() {
     },
   };
 
+  interface FormDataInterface {
+    title: string;
+    description: string;
+    dueDate: Date;
+    categoryId: string;
+    subtasks: Array<{ title: string; completed: boolean }>;
+  }
+
   // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataInterface>({
     title: "",
     description: "",
     dueDate: new Date(),
@@ -132,7 +140,17 @@ export default function SidebarRight() {
   }, [selectedTask, currentCategory]);
 
   // Form handlers
-  const handleInputChange = (field, value) => {
+  interface FormField {
+    title: string;
+    description: string;
+    dueDate: Date;
+    categoryId: string;
+  }
+
+  const handleInputChange = <K extends keyof FormField>(
+    field: K,
+    value: FormField[K]
+  ): void => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -151,7 +169,7 @@ export default function SidebarRight() {
     setNewSubtaskTitle("");
   };
 
-  const handleRenameSubtask = (index) => {
+  const handleRenameSubtask = (index: number) => {
     if (!renameSubtaskTitle.trim()) {
       setRenameSubtaskIndex(null);
       setRenameSubtaskTitle("");
@@ -169,7 +187,7 @@ export default function SidebarRight() {
     setRenameSubtaskTitle("");
   };
 
-  const handleDeleteSubtask = (index) => {
+  const handleDeleteSubtask = (index: number) => {
     const newSubtasks = formData.subtasks.filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,
@@ -177,7 +195,7 @@ export default function SidebarRight() {
     }));
   };
 
-  const handleToggleSubtask = (index) => {
+  const handleToggleSubtask = (index: number) => {
     const newSubtasks = [...formData.subtasks];
     newSubtasks[index].completed = !newSubtasks[index].completed;
     setFormData((prev) => ({
@@ -190,16 +208,24 @@ export default function SidebarRight() {
     if (!validateForm()) return;
 
     try {
-      if (selectedTask) {
-        await dispatch(
+      if (selectedTask?._id) {
+        await (dispatch as AppDispatch)(
           updateTask({
             id: selectedTask._id,
-            updates: formData,
+            updates: {
+              ...formData,
+              dueDate: formData.dueDate.toISOString(),
+            },
             categoryId: formData.categoryId,
           })
         );
       } else {
-        await dispatch(createTask(formData));
+        await (dispatch as AppDispatch)(
+          createTask({
+            ...formData,
+            dueDate: formData.dueDate.toISOString(),
+          })
+        );
       }
       handleClose();
     } catch (err) {
@@ -209,8 +235,8 @@ export default function SidebarRight() {
 
   const handleDelete = async () => {
     try {
-      if (selectedTask) {
-        await dispatch(
+      if (selectedTask?._id) {
+        await (dispatch as AppDispatch)(
           deleteTask({
             id: selectedTask._id,
             categoryId: formData.categoryId,
@@ -329,7 +355,7 @@ export default function SidebarRight() {
               </div>
               <Datepicker
                 value={formData.dueDate}
-                onChange={(date) => handleInputChange("dueDate", date)}
+                onChange={(date) => handleInputChange("dueDate", date || new Date())}
               />
             </div>
             <div className="font-bold text-xl text-gray-500 uppercase dark:text-gray-400">

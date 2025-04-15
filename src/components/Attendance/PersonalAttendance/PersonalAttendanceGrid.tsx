@@ -1,5 +1,5 @@
-import { useMemo, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/auth/authSelectors";
 import { selectAttendanceData } from "../../../redux/attendance/attendanceSelectors";
 
@@ -14,7 +14,6 @@ export default function PersonalAttendanceGrid({
 }: { 
   navigationDate: Date, 
 }) {
-  const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
   const attendanceData = useSelector(selectAttendanceData);
 
@@ -33,10 +32,10 @@ export default function PersonalAttendanceGrid({
     return new Date(year, monthIndex + 1, 0).getDate();
   };
 
-  // Type guard to check if a status is valid
-  const isValidStatus = (status: string): status is AttendanceStatus => {
-    return ['Present', 'Absent', '-'].includes(status);
-  };
+  // // Type guard to check if a status is valid
+  // const isValidStatus = (status: string): status is AttendanceStatus => {
+  //   return ['Present', 'Absent', '-'].includes(status);
+  // };
 
   // Memoized attendance data filtered for current user
   const currentUserAttendance = useMemo(() => {
@@ -48,7 +47,7 @@ export default function PersonalAttendanceGrid({
       const daysInMonth = getDaysInMonth(navigationDate.getFullYear(), month);
       
       // Get only current user's attendance
-      const userRecord = attendanceData[currentUser._id];
+      const userRecord = attendanceData[currentUser!._id];
       const monthData = userRecord?.years?.[year]?.months?.[month]?.days || {};
       
       // Populate attendance for each day
@@ -64,7 +63,7 @@ export default function PersonalAttendanceGrid({
     });
     
     return yearAttendance;
-  }, [navigationDate, attendanceData, currentUser._id]);
+  }, [navigationDate, attendanceData, currentUser?._id]);
 
   return (
     <div className="flex h-full flex-col text-gray-900 dark:text-white">

@@ -1,30 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-interface SubtaskInterface {
-  _id?: string; // MongoDB ID
-  title: string;
-  completed: boolean;
-}
-
-interface CategoryInterface {
-  _id: string; // MongoDB ID
-  name: string;
-  color: string;
-}
-
-interface SelectedTaskInterface {
-  selectedTask: {
-    _id?: string; // MongoDB ID
-    title: string;
-    description?: string;
-    dueDate: Date;
-    subtasks: SubtaskInterface[];
-    completed: boolean;
-    category: CategoryInterface;
-    createdAt?: Date; // From timestamps
-    updatedAt?: Date; // From timestamps
-  } | null;
-}
+import { SelectedTaskInterface } from "../../types";
 
 const initialState: SelectedTaskInterface = {
   selectedTask: null,

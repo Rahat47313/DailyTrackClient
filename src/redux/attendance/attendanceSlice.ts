@@ -1,36 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface DayAttendance {
-  status: string;
-  clockInTime: string | null;
-  clockOutTime: string | null;
-  specialCondition: string | null;
-  _id: string;
-}
-
-interface MonthData {
-  days: {
-    [day: string]: DayAttendance;
-  };
-  _id: string;
-}
-
-interface YearData {
-  months: {
-    [month: string]: MonthData;
-  };
-  _id: string;
-}
-
-interface AttendanceRecord {
-  _id: string;
-  years: {
-    [year: string]: YearData;
-  };
-  user: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { AttendanceRecord } from "../../types";
 
 interface AttendanceState {
   clockingInTime: string | null;

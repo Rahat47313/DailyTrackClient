@@ -1,12 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from "../../types";
 
 interface AuthState {
-  user: {
-    _id: string;
-    name: string;
-    email: string;
-    userType: "superAdmin" | "admin" | "employee";
-  } | null;
+  user: User | null;
   token: string | null;
   isLoading: boolean;
   error: string | null;

@@ -66,34 +66,6 @@ export const fetchAttendanceData = createAsyncThunk(
   }
 );
 
-// export const fetchAttendanceData = createAsyncThunk(
-//   "attendance/fetchData",
-//   async (year: string, { dispatch }) => {
-//     dispatch(setIsLoading(true));
-//     try {
-//       const { data } = await axiosInstance.get(`/attendance/${year}`);
-
-//       const formattedData = data.reduce((acc, record: AttendanceRecord) => {
-//         acc[record._id] = {
-//           years: record.years,
-//           user: record.user
-//         };
-//         return acc;
-//       }, {});
-
-//       dispatch(setAttendanceData(formattedData));
-//       return formattedData;
-//     } catch (error) {
-//       console.error("Error fetching attendance data:", error);
-//       dispatch(setError(error.message));
-//       dispatch(setAttendanceData({}));
-//       throw error;
-//     } finally {
-//       dispatch(setIsLoading(false));
-//     }
-//   }
-// );
-
 export const clockIn = createAsyncThunk(
   "attendance/clockIn",
   async (_, { dispatch }) => {
@@ -113,7 +85,11 @@ export const clockIn = createAsyncThunk(
       // Fetch updated data
       await dispatch(fetchAttendanceData(year.toString()));
     } catch (error) {
-      dispatch(setError(error.message));
+      let errorMessage = "Error in clockIn of attendanceThunks";
+      if(error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
       throw error;
     } finally {
       dispatch(setIsLoading(false));
@@ -140,7 +116,11 @@ export const clockOut = createAsyncThunk(
       // Fetch updated data
       await dispatch(fetchAttendanceData(year.toString()));
     } catch (error) {
-      dispatch(setError(error.message));
+      let errorMessage = "Error in clockOut of attendanceThunks";
+      if(error instanceof Error) {
+        errorMessage = error.message;
+      }
+      dispatch(setError(errorMessage));
       throw error;
     } finally {
       dispatch(setIsLoading(false));

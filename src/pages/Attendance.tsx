@@ -1,14 +1,13 @@
-import { Button, Tabs } from "flowbite-react";
-import { useEffect, useRef, useState } from "react";
+import { Tabs } from "flowbite-react";
+import { useEffect, useRef } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import axiosInstance from "../utils/axiosConfig";
+import type { AppDispatch } from "../redux/store";
+import { selectCurrentUser } from "../redux/auth/authSelectors";
 import { selectCurrentDate } from "../redux/calendar/calendarSelectors";
 import {
   selectClockingInTime,
   selectClockingOutTime,
-  selectIsLoading,
-  selectError,
   selectNavigationDate,
   selectAttendanceData,
 } from "../redux/attendance/attendanceSelectors";
@@ -19,19 +18,15 @@ import {
 } from "../redux/attendance/attendanceThunks";
 import PersonalAttendance from "../components/Attendance/PersonalAttendance/PersonalAttendance";
 import OfficeOverview from "../components/Attendance/OfficeOverview/OfficeOverview";
+import Time from "../components/Attendance/Time/Time";
 
 export default function Attendance() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const tabsRef = useRef(null);
-  const [activeTab, setActiveTab] = useState(0);
-  const [currentTime, setCurrentTime] = useState(
-    new Date().toLocaleTimeString()
-  );
+  const currentUser = useSelector(selectCurrentUser);
   const currentDate = useSelector(selectCurrentDate);
   const clockingInTime = useSelector(selectClockingInTime);
   const clockingOutTime = useSelector(selectClockingOutTime);
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
   const navigationDate = useSelector(selectNavigationDate);
   const attendanceData = useSelector(selectAttendanceData);
   const tabTheme = {
@@ -64,12 +59,6 @@ export default function Attendance() {
     },
     tabpanel: "py-3",
   };
-
-  useEffect(() => {
-    setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString());
-    }, 1000);
-  }, []);
 
   const handleClockIn = async () => {
     try {
@@ -114,9 +103,9 @@ export default function Attendance() {
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {currentDate.toLocaleString("default", { weekday: "long" })}
             </p>
-            <p>{currentTime}</p>
+            <Time />
           </div>
-          <p className="flex text-4xl mx-auto">Welcome, User</p>
+          <p className="flex text-4xl mx-auto">Welcome, {currentUser?.name}</p>
           <div className="flex flex-col items-center">
             <div className="flex justify-center items-center gap-10 mb-3">
               <button
@@ -141,7 +130,6 @@ export default function Attendance() {
             variant="underline"
             ref={tabsRef}
             theme={tabTheme}
-            onActiveTabChange={(tab) => setActiveTab(tab)}
           >
             <Tabs.Item active title="Personal Attendance" icon={BsPersonFill}>
               <PersonalAttendance />
@@ -150,17 +138,6 @@ export default function Attendance() {
               <OfficeOverview />
             </Tabs.Item>
           </Tabs>
-          {/* <div className="text-sm text-gray-500 dark:text-gray-400">
-          Active tab: {activeTab}
-        </div>
-        <Button.Group>
-          <Button color="gray" onClick={() => tabsRef.current?.setActiveTab(0)}>
-            Profile
-          </Button>
-          <Button color="gray" onClick={() => tabsRef.current?.setActiveTab(1)}>
-            Dashboard
-          </Button>
-        </Button.Group> */}
         </div>
       </div>
     </>

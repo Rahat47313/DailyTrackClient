@@ -1,19 +1,20 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  selectDays,
   selectMonths,
   selectNavigationDate,
   selectIsAuthenticated,
 } from "../../redux/calendar/calendarSelectors";
 import { selectEventsAndTasks } from '../../redux/calendar/calendarSelectors';
 import { setMonths } from "../../redux/calendar/calendarSlice";
+import type { Event } from "../../types";
+import type { Month } from "../../types";
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const isCurrentDate = (date) => {
+const isCurrentDate = (date: Date) => {
   const currentDate = new Date();
   return (
     currentDate.getFullYear() === date.getFullYear() &&
@@ -22,7 +23,7 @@ const isCurrentDate = (date) => {
   );
 };
 
-const isCurrentMonth = (date) => {
+const isCurrentMonth = (date: Date) => {
   const currentDate = new Date();
   return (
     currentDate.getFullYear() === date.getFullYear() &&
@@ -32,13 +33,13 @@ const isCurrentMonth = (date) => {
 
 export default function Year() {
   const dispatch = useDispatch();
-  const months = useSelector(selectMonths) || [];
+  const months = useSelector(selectMonths) as Month[];
   const navigationDate = useSelector(selectNavigationDate);
   const events = useSelector(selectEventsAndTasks) || [];
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigationYear = navigationDate.getFullYear();
 
-  const generateDaysInMonth = (month, year, monthEvents) => {
+  const generateDaysInMonth = (month: number, year: number, monthEvents: Event[]) => {
     const days = [];
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
@@ -170,18 +171,17 @@ export default function Year() {
                       ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                       : // Adjacent months
                         "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
-                    dayIdx === 0 && "rounded-tl-lg",
-                    dayIdx === 6 && "rounded-tr-lg",
-                    dayIdx === month.days.length - 7 && "rounded-bl-lg",
-                    dayIdx === month.days.length - 1 && "rounded-br-lg",
+                    dayIdx === 0 ? "rounded-tl-lg" : "",
+                    dayIdx === 6 ? "rounded-tr-lg" : "",
+                    dayIdx === month.days.length - 7 ? "rounded-bl-lg" : "",
+                    dayIdx === month.days.length - 1 ? "rounded-br-lg" : "",
                     "py-1.5 hover:bg-red-300 hover:dark:bg-red-950 focus:z-10"
                   )}
                 >
                   <time
                     dateTime={day.date}
                     className={classNames(
-                      day.isToday &&
-                        "bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900",
+                      day.isToday ? "bg-gray-900 dark:bg-white font-bold text-lg text-white dark:text-gray-900" : "",
                       "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
                     )}
                   >
