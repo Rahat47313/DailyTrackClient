@@ -1,7 +1,8 @@
-import { BrowserRouter } from "react-router-dom";
 import { useState } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { DarkThemeToggle, Flowbite } from "flowbite-react";
-import AppRoutes from "./AppRoutes"
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import AppRoutes from "./AppRoutes";
 // import Login from "./login/Login";
 
 // Define the interface for DarkThemeToggle props
@@ -43,6 +44,7 @@ function App() {
           </div>
         </Flowbite>
       </BrowserRouter>
+      <SpeedInsights />
     </>
   );
 }
