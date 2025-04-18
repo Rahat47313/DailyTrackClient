@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { gapi } from "gapi-script";
 import { Datepicker } from "flowbite-react";
@@ -23,7 +23,7 @@ import {
 } from "../redux/calendar/calendarThunks";
 import {
   selectCalendarView,
-  selectCurrentDate,
+  selectCurrentDateString,
   selectNavigationDate,
   selectIsLoading,
   selectIsAuthenticated,
@@ -63,12 +63,18 @@ const VIEW_OPTIONS = {
 export default function Calendar() {
   const dispatch = useDispatch<AppDispatch>();
   const calendarView = useSelector(selectCalendarView);
-  const currentDate = useSelector(selectCurrentDate);
+  const currentDateString = useSelector(selectCurrentDateString);
+  const currentDate = useMemo(
+    () => new Date(currentDateString),
+    [currentDateString]
+  );
   const navigationDate = useSelector(selectNavigationDate);
   const isLoading = useSelector(selectIsLoading);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
-  const isTasksRefreshing = useSelector((state: RootState) => state.tasks.isRefreshing);
+  const isTasksRefreshing = useSelector(
+    (state: RootState) => state.tasks.isRefreshing
+  );
 
   const classNames = useCallback((...classes: string[]) => {
     return classes.filter(Boolean).join(" ");
@@ -125,7 +131,7 @@ export default function Calendar() {
 
   interface NavigateDateParams {
     amount: number;
-    view: typeof VIEW_OPTIONS[keyof typeof VIEW_OPTIONS];
+    view: (typeof VIEW_OPTIONS)[keyof typeof VIEW_OPTIONS];
   }
 
   const navigateDate = useCallback(

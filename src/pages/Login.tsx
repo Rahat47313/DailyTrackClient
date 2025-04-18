@@ -105,7 +105,12 @@ export default function Login() {
 
   return (
     <>
-      <section className="bg-gray-50 dark:bg-gray-900">
+      <section className="relative bg-gray-50 dark:bg-gray-900 h-screen">
+        <div className="absolute bottom-0 left-[50%] -translate-x-[50%] text-center bg-gray-50 dark:bg-gray-900 dark:bg-opacity-70 dark:backdrop-blur-sm rounded-t-lg px-5 py-3">
+          <div className="font-bold mb-2">Credential for testing purpose</div>
+          <div>Email: rahat47313@gmail.com</div>
+          <div>Password: SuperAdminPassword</div>
+        </div>
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
             <img

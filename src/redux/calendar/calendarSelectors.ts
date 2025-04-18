@@ -1,7 +1,7 @@
-import { createSelector } from '@reduxjs/toolkit';
-import { selectTasks } from '../tasks/tasksSelectors';
-import { convertTaskToEvent } from '../../utils/calendarUtils';
-import { RootState } from '../store';
+import { createSelector } from "@reduxjs/toolkit";
+import { selectTasks } from "../tasks/tasksSelectors";
+import { convertTaskToEvent } from "../../utils/calendarUtils";
+import { RootState } from "../store";
 
 const selectCalendarState = (state: RootState) => state.calendar;
 
@@ -9,10 +9,8 @@ export const selectCalendarView = createSelector(
   [selectCalendarState],
   (calendar) => calendar.calendarView
 );
-export const selectCurrentDate = createSelector(
-  [selectCalendarState],
-  (calendar) => new Date(calendar.currentDate)
-);
+export const selectCurrentDateString = (state: RootState) =>
+  state.calendar.currentDate;
 export const selectCurrentMonth = createSelector(
   [selectCalendarState],
   (calendar) => calendar.currentMonth

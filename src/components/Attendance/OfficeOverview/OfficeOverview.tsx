@@ -1,13 +1,17 @@
-import { useCallback } from "react";
+import { useCallback, useMemo, memo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import OfficeOverviewGrid from "./OfficeOverviewGrid";
 import { useDispatch, useSelector } from "react-redux";
-import { selectNavigationDate } from "../../../redux/attendance/attendanceSelectors";
+import { selectNavigationDateString } from "../../../redux/attendance/attendanceSelectors";
 import { setNavigationDate } from "../../../redux/attendance/attendanceSlice";
 
-export default function OfficeOverview() {
+function OfficeOverviewComponent() {
   const dispatch = useDispatch();
-  const navigationDate = useSelector(selectNavigationDate);
+  const navigationDateString = useSelector(selectNavigationDateString);
+  const navigationDate = useMemo(
+    () => new Date(navigationDateString),
+    [navigationDateString]
+  );
 
   const navigateDate = useCallback(
     (amount: number) => {
@@ -15,7 +19,7 @@ export default function OfficeOverview() {
       newDate.setMonth(navigationDate.getMonth() + amount);
       dispatch(setNavigationDate(newDate.toISOString()));
     },
-    [navigationDate, dispatch]
+    [navigationDate]
   );
 
   const handleNext = useCallback(() => {
@@ -35,9 +39,9 @@ export default function OfficeOverview() {
       <header className="flex flex-none flex-col-reverse md:flex-row items-center justify-between rounded-t-md bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-500 px-6 py-4">
         <div className="flex items-center justify-center mx-auto">
           {navigationDate.toLocaleDateString("default", {
-              year: "numeric",
-              month: "long",
-            })}
+            year: "numeric",
+            month: "long",
+          })}
         </div>
         {/* Navigation Controls */}
         <div className="flex items-center gap-4">
@@ -69,3 +73,6 @@ export default function OfficeOverview() {
     </>
   );
 }
+
+const OfficeOverview = memo(OfficeOverviewComponent);
+export default OfficeOverview;

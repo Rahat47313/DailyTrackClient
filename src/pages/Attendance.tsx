@@ -1,14 +1,14 @@
 import { Tabs } from "flowbite-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo, useCallback } from "react";
 import { BsPersonFill, BsPeopleFill } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch } from "../redux/store";
 import { selectCurrentUser } from "../redux/auth/authSelectors";
-import { selectCurrentDate } from "../redux/calendar/calendarSelectors";
+import { selectCurrentDateString } from "../redux/calendar/calendarSelectors";
 import {
   selectClockingInTime,
   selectClockingOutTime,
-  selectNavigationDate,
+  selectNavigationDateString,
   selectAttendanceData,
 } from "../redux/attendance/attendanceSelectors";
 import {
@@ -24,66 +24,77 @@ export default function Attendance() {
   const dispatch = useDispatch<AppDispatch>();
   const tabsRef = useRef(null);
   const currentUser = useSelector(selectCurrentUser);
-  const currentDate = useSelector(selectCurrentDate);
+  const currentDateString = useSelector(selectCurrentDateString);
+  const currentDate = useMemo(
+    () => new Date(currentDateString),
+    [currentDateString]
+  );
   const clockingInTime = useSelector(selectClockingInTime);
   const clockingOutTime = useSelector(selectClockingOutTime);
-  const navigationDate = useSelector(selectNavigationDate);
   const attendanceData = useSelector(selectAttendanceData);
-  const tabTheme = {
-    base: "flex flex-col gap-2",
-    tablist: {
-      base: "flex text-center",
-      variant: {
-        underline:
-          "-mb-px flex-wrap justify-center border-b border-gray-200 dark:border-gray-700",
-      },
-      tabitem: {
-        base: "flex items-center justify-center rounded-t-lg p-4 text-sm font-medium first:ml-0 focus:outline-none focus:ring-1 focus:ring-gray-300 focus:dark:ring-gray-600 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
+  const navigationDateString = useSelector(selectNavigationDateString);
+  const navigationDate = useMemo(
+    () => new Date(navigationDateString),
+    [navigationDateString]
+  );
+  const tabTheme = useMemo(
+    () => ({
+      base: "flex flex-col gap-2",
+      tablist: {
+        base: "flex text-center",
         variant: {
-          underline: {
-            base: "rounded-t-lg",
-            active: {
-              on: "active rounded-t-lg border-b-2 border-red-600 text-red-600 dark:border-red-500 dark:text-red-500",
-              off: "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300",
+          underline:
+            "-mb-px flex-wrap justify-center border-b border-gray-200 dark:border-gray-700",
+        },
+        tabitem: {
+          base: "flex items-center justify-center rounded-t-lg p-4 text-sm font-medium first:ml-0 focus:outline-none focus:ring-1 focus:ring-gray-300 focus:dark:ring-gray-600 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
+          variant: {
+            underline: {
+              base: "rounded-t-lg",
+              active: {
+                on: "active rounded-t-lg border-b-2 border-red-600 text-red-600 dark:border-red-500 dark:text-red-500",
+                off: "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300",
+              },
             },
           },
+          icon: "mr-2 h-5 w-5",
         },
-        icon: "mr-2 h-5 w-5",
       },
-    },
-    tabitemcontainer: {
-      base: "",
-      variant: {
-        underline: "",
+      tabitemcontainer: {
+        base: "",
+        variant: {
+          underline: "",
+        },
       },
-    },
-    tabpanel: "py-3",
-  };
+      tabpanel: "py-3",
+    }),
+    []
+  );
 
-  const handleClockIn = async () => {
+  const handleClockIn = useCallback(async () => {
     try {
       await dispatch(clockIn()).unwrap();
     } catch (error) {
       console.error("Failed to clock in:", error);
     }
-  };
+  }, [dispatch]);
 
-  const handleClockOut = async () => {
+  const handleClockOut = useCallback(async () => {
     try {
       await dispatch(clockOut()).unwrap();
     } catch (error) {
       console.error("Failed to clock out:", error);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     const year = navigationDate.getFullYear().toString();
-    const shouldFetch = !attendanceData[year];
+    const shouldFetch = !attendanceData || !attendanceData[year];
 
     if (shouldFetch) {
       dispatch(fetchAttendanceData(year));
     }
-  }, [navigationDate, dispatch]);
+  }, [navigationDate]);
 
   return (
     <>
@@ -126,11 +137,7 @@ export default function Attendance() {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <Tabs
-            variant="underline"
-            ref={tabsRef}
-            theme={tabTheme}
-          >
+          <Tabs variant="underline" ref={tabsRef} theme={tabTheme}>
             <Tabs.Item active title="Personal Attendance" icon={BsPersonFill}>
               <PersonalAttendance />
             </Tabs.Item>
